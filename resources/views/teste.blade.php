@@ -7,7 +7,19 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>AAAAA</h1>
+    <nav class="nav">
+        <a href="logo">Logo<img src="" alt=""></a>
+        <ul class="navbar">
+            <li class="navlinks"><a href="#">Home</a></li>
+            <li class="navlinks"><a href="#">About</a></li>
+            <li class="navlinks"><a href="#">Services</a></li>
+            <li class="navlinks"><a href="#">Contact</a></li>
+        </ul>
+    </nav>
+    <main>
+        <h1>Welcome to My Website</h1>
+        <p>This is a sample webpage created using HTML and CSS. It includes a navigation bar and some content.</p>
+    </main>
     
 </body>
 </html>
