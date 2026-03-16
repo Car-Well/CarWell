@@ -44,6 +44,11 @@
             </div>
         </nav>
     </header>
+    <main class="main-container"> 
+        <section class="hero">
+
+        </section>
+    </main>
 </body>
 <script src="{{ asset('js/home.js') }}"></script>
 </html>

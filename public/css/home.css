@@ -16,7 +16,7 @@ body {
     top: 0;
     width: 100%;
     z-index: 50;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.4);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
@@ -179,44 +179,6 @@ body {
         height: 4rem;
     }
 
-    /* 
-        ADD O HAMBURGER PARA MOBILE
-    .navbar-menu {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .nav-link {
-        text-decoration: none;
-        color: #475569;
-        font-weight: 600;
-        font-size: 0.750rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        position: relative;
-        transition: color 0.2s ease;
-    }
-
-    .nav-link:hover {
-        color: #0f172a;
-    }
-
-    .nav-link::after {
-        content: '';
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background-color: #0f172a;
-        transition: width 0.3s ease;
-    }
-
-    .nav-link:hover::after {
-        width: 100%;
-    } */
-
     .navbar-actions {
         display: flex;
         align-items: center;
@@ -308,4 +270,13 @@ body {
         background-color: #f1f5f9;
         color: #0f172a;
     }
+}
+
+.main-container {
+    background-image: url(../img/teste-background.jpg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 100vh;
+    width: 100%;
 }
