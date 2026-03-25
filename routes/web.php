@@ -9,3 +9,19 @@ Route::get('/', function () {
 Route::get('/home', function () {
     return view('home');
 });
+
+Route::get('/storage', function () {
+    return view('storage');
+});
+
+Route::get('/services', function () {
+    return view('services');
+});
+
+Route::get('/about', function () {
+    return view('aboutus');
+});
+
+Route::get('/login', function () {
+    return view('/login/login');
+});
