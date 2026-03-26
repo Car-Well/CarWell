@@ -5,3 +5,12 @@
     justify-content: center;
     height: 100vh;
 }
+
+
+input {
+    border: none;        /* remove a borda preta */
+    outline: none;       /* remove a borda ao clicar (focus) */
+    background: #f5f5f5; /* só exemplo de fundo */
+    padding: 8px;
+    border-radius: 6px;  /* deixa mais bonito */
+  }
