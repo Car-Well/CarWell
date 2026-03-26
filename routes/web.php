@@ -19,9 +19,13 @@ Route::get('/services', function () {
 });
 
 Route::get('/about', function () {
-    return view('aboutus');
+    return view('aboutUs');
 });
 
 Route::get('/login', function () {
     return view('/login/login');
+});
+
+Route::get('/admHome', function () {
+    return view('/adm/admHome');
 });
