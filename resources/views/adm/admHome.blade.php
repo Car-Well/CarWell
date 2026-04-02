@@ -8,14 +8,29 @@
 </head>
 <body>
     <main class="content">
-        <div>
+        <nav class="nav-lateral">
+            <img class="nav-img" src="{{ asset('img/imgTeste.jpg') }}" alt="Lorem">
+            <div class="nav-container">
+                <a class="nav-link" href="#">Lorem</a>
+                <a class="nav-link" href="#">Ipsum</a>
+                <a class="nav-link" href="#">Dolor</a>
+                <a class="nav-link" href="#">Sit</a>
+            </div>
+        </nav>
+
+        <aside class= "aside-esquerda">
             <div class="pizza-chat">
+                
+            </div>
+            <div class="column-chart">
 
             </div>
-            <div class="bars-chart">
+        </aside>
+        <aside class="aside-direita">
+            <div class="line-chart">
 
             </div>
-        </div>
+        </aside>
     </main> 
 </body>
 </html> 
