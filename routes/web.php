@@ -22,10 +22,14 @@ Route::get('/about', function () {
     return view('aboutUs');
 });
 
-Route::get('/login', function () {
-    return view('/login/login');
+Route::get('/login-client', function () {
+    return view('/login/login-client');
 });
 
 Route::get('/admHome', function () {
     return view('/adm/admHome');
+});
+
+Route::get('/login-adm', function () {
+    return view('/login/login-adm');
 });
