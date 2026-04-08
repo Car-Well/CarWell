@@ -33,3 +33,7 @@ Route::get('/admHome', function () {
 Route::get('/login-adm', function () {
     return view('/login/login-adm');
 });
+
+Route::get('/confirmar-email', function () {
+    return view('/login/confirmar-email');
+});
