@@ -1,54 +1,210 @@
-*{
-    margin: 0;
-    border: none;
-    box-sizing: border-box;
-}
-.login {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: rgb(61, 61, 119);
-}
 
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
+      :root {
+        --bg: #d6e4f0;
+        --card-bg: #dce8f3;
+        --dark-navy: #1a2e4a;
+        --red: #b91c1c;
+        --blue: #1e4d8c;
+        --input-bg: #c8daea;
+        --input-border: #b0c8de;
+        --text-muted: #4a6280;
+        --font-main: "Montserrat", sans-serif;
+        --font-body: "Open Sans", sans-serif;
+      }
 
-.login-container{
-    width: 100%;
-    display: block;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2vw;
-    margin-bottom: 15px;    
-}
+      body {
+        min-height: 100vh;
+        background: var(--bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-body);
+        padding: 24px;
+      }
 
-.login-container input {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: center;
-    border: none;        /* remove a borda preta */
-    outline: none;       /* remove a borda ao clicar (focus) */
-    background: rgb(214, 211, 211); /* só exemplo de fundo */
-    padding: 8px;
-    border-radius: 6px;  /* deixa mais bonito */
-  }
+      .card {
+        background: var(--card-bg);
+        border-radius: 20px;
+        padding: 40px 36px 32px;
+        width: 100%;
+        max-width: 480px;
+        box-shadow: 0 8px 40px rgba(30, 77, 140, 0.1);
+      }
 
-.conta{
-    display: flex;
-    align-items: center;
-    justify-content: baseline;
-    text-wrap: nowrap;       
-}
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 32px;
+      }
+      .logo svg {
+        width: 52px;
+        height: 36px;
+      }
+      .logo-text {
+        font-family: var(--font-main);
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: var(--dark-navy);
+        letter-spacing: -0.5px;
+      }
 
-button{
-    width: 8vw;
-    height: 3vh;
-    border: none;
-    background-color: rgb(168, 168, 214);
-    outline: none; 
-    border-radius: 6px;
-    margin-top: 30px;
-}
+      .greeting {
+        font-family: var(--font-main);
+        font-size: 1.15rem;
+        font-weight: 800;
+        color: var(--dark-navy);
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        text-align: center;
+        margin-bottom: 4px;
+      }
+      .greeting em {
+        font-style: normal;
+        color: var(--dark-navy);
+      }
+
+      .subtitle {
+        font-family: var(--font-main);
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--dark-navy);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        text-align: center;
+        margin-bottom: 28px;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 16px;
+      }
+      .input-group input {
+        width: 100%;
+        background: var(--input-bg);
+        border: 1.5px solid var(--input-border);
+        border-radius: 30px;
+        padding: 14px 48px 14px 22px;
+        font-family: var(--font-main);
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--dark-navy);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+      .input-group input::placeholder {
+        color: var(--dark-navy);
+        opacity: 0.7;
+      }
+      .input-group input:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 3px rgba(30, 77, 140, 0.12);
+      }
+      .eye-icon {
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: var(--text-muted);
+        display: flex;
+        align-items: center;
+      }
+
+      .forgot {
+        font-family: var(--font-main);
+        font-size: 0.7rem;
+        font-weight: 600;
+        color: var(--dark-navy);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 28px;
+        display: block;
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .forgot:hover {
+        text-decoration: underline;
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 28px;
+      }
+      .btn {
+        flex: 1;
+        padding: 14px 10px;
+        border: none;
+        border-radius: 30px;
+        font-family: var(--font-main);
+        font-size: 0.9rem;
+        font-weight: 800;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition:
+          filter 0.18s,
+          transform 0.15s;
+      }
+      .btn:hover {
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+      }
+      .btn:active {
+        transform: translateY(0);
+      }
+      .btn-back {
+        background: var(--red);
+        color: #fff;
+      }
+      .btn-enter {
+        background: var(--blue);
+        color: #fff;
+      }
+
+      .signup-row {
+        text-align: center;
+        font-family: var(--font-body);
+        font-size: 0.92rem;
+        color: var(--dark-navy);
+        margin-bottom: 18px;
+      }
+      .signup-row a {
+        color: var(--blue);
+        font-weight: 700;
+        text-decoration: none;
+      }
+      .signup-row a:hover {
+        text-decoration: underline;
+      }
+
+      .terms {
+        font-family: var(--font-body);
+        font-size: 0.68rem;
+        color: var(--text-muted);
+        text-align: center;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 480px) {
+        .card {
+          padding: 32px 20px 24px;
+        }
+        .btn-row {
+          gap: 10px;
+        }
+      }
+   
