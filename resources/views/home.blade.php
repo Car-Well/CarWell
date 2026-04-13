@@ -30,11 +30,11 @@
     <div class="nav-right">
       <span class="nav-flag">🇧🇷</span>
       <a href="login.html" class="nav-login">LOGIN</a>
-      <div class="nav-profile">
+      <a href="{{ route('perfil') }}" class="nav-profile">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a2e4a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
         </svg>
-      </div>
+      </a>
       <div class="hamburger" onclick="toggleMenu()">
         <span></span><span></span><span></span>
       </div>
