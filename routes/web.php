@@ -37,3 +37,11 @@ Route::get('/login-adm', function () {
 Route::get('/confirmar-email', function () {
     return view('/login/confirmar-email');
 });
+
+Route::get('/registrar', function () {
+    return view('/login/registrar-cliente');
+});
+
+Route::get('/perfil', function () {
+    return view('/login/perfil');
+});
