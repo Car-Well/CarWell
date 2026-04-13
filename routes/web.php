@@ -34,6 +34,10 @@ Route::get('/login-adm', function () {
     return view('/login/login-adm');
 });
 
+Route::get('/admGerCar', function () {
+    return view('/adm/admGerCar');
+});
+
 Route::get('/confirmar-email', function () {
     return view('/login/confirmar-email');
 });
