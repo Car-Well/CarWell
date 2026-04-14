@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <!-- NAV -->
+  <!-- NAV-BAR -->
   <nav>
     <a class="nav-logo" href="#">
       <svg viewBox="0 0 80 52" fill="none" xmlns="http://www.w3.org/2000/svg">
