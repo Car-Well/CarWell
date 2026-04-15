@@ -85,12 +85,12 @@
 
                 @php
                 $carros = [
-                    ['id'=>1,'marca'=>'Honda',      'modelo'=>'Civic G8 EXS',       'ano'=>2009,'preco'=>'R$ 56.000','status'=>'disponivel','km'=>'140.000 km'],
-                    ['id'=>2,'marca'=>'BMW',        'modelo'=>'M8 Competition', 'ano'=>2024,'preco'=>'R$ 980.900','status'=>'disponivel','km'=>'3.200 km'],
-                    ['id'=>3,'marca'=>'Ford',       'modelo'=>'Mustang GT',     'ano'=>2025,'preco'=>'R$ 860.000','status'=>'reservado', 'km'=>'1.000 km'],
-                    ['id'=>4,'marca'=>'Toyota',     'modelo'=>'Corolla XEi',    'ano'=>2023,'preco'=>'R$ 179.990','status'=>'disponivel','km'=>'24.700 km'],
-                    ['id'=>5,'marca'=>'Mercedes',   'modelo'=>'AMG C63',        'ano'=>2024,'preco'=>'R$ 650.000','status'=>'vendido',   'km'=>'8.100 km'],
-                    ['id'=>6,'marca'=>'Volkswagen', 'modelo'=>'Golf GTI',       'ano'=>2023,'preco'=>'R$ 215.000','status'=>'disponivel','km'=>'12.300 km'],
+                    ['id'=>1,'marca'=>'Honda', 'modelo'=>'Civic G8 EXS', 'ano'=>2009, 'preco'=>'R$ 56.000', 'status'=>'reservado', 'km'=>'140.000 km'],
+                    ['id'=>2,'marca'=>'Honda', 'modelo'=>'WR-V', 'ano'=>2021, 'preco'=>'R$ 84.400', 'status'=>'reservado', 'km'=>'110.200 km'],
+                    ['id'=>3,'marca'=>'Fiat', 'modelo'=>'Toro', 'ano'=>2018, 'preco'=>'R$ 81.590', 'status'=>'reservado', 'km'=>'128.000 km'],
+                    ['id'=>4,'marca'=>'Gurgel', 'modelo'=>'BR-800', 'ano'=>1993, 'preco'=>'R$ 21.500', 'status'=>'disponivel', 'km'=>'240.700 km'],
+                    ['id'=>5,'marca'=>'Mercedes', 'modelo'=>'AMG C63', 'ano'=>2024, 'preco'=>'R$ 650.000', 'status'=>'vendido', 'km'=>'8.100 km'],
+                    ['id'=>6,'marca'=>'Volkswagen', 'modelo'=>'Golf GTI', 'ano'=>2023, 'preco'=>'R$ 215.000', 'status'=>'disponivel', 'km'=>'12.300 km'],
                 ];
                 $badgeClass = ['disponivel'=>'badge-success','reservado'=>'badge-warning','vendido'=>'badge-danger'];
                 $badgeLabel = ['disponivel'=>'Disponível','reservado'=>'Reservado','vendido'=>'Vendido'];
@@ -341,7 +341,7 @@
                     <div class="delete-icon">
                         <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
                     </div>
-                    <p class="delete-msg">Tem certeza que deseja excluir <strong id="deleteNome"></strong>?</p>
+                    <p class="delete-msg">Tem certeza que deseja excluir<strong id="deleteNome"></strong>?</p>
                     <p class="delete-hint">O veículo será removido permanentemente do estoque.</p>
 
                     <form action="#" method="POST" id="formDelete">
@@ -376,19 +376,19 @@
         }
 
         function openEdit(id, marca, modelo, ano, preco, status, km) {
-            document.getElementById('editId').value      = id;
-            document.getElementById('editMarca').value   = marca;
-            document.getElementById('editModelo').value  = modelo;
-            document.getElementById('editAno').value     = ano;
-            document.getElementById('editPreco').value   = preco;
-            document.getElementById('editStatus').value  = status;
-            document.getElementById('editKm').value      = km;
+            document.getElementById('editId').value = id;
+            document.getElementById('editMarca').value = marca;
+            document.getElementById('editModelo').value = modelo;
+            document.getElementById('editAno').value = ano;
+            document.getElementById('editPreco').value = preco;
+            document.getElementById('editStatus').value = status;
+            document.getElementById('editKm').value = km;
             document.getElementById('editSubtitle').textContent = marca + ' ' + modelo;
             openModal('edit');
         }
 
         function openDelete(id, nome) {
-            document.getElementById('deleteId').value        = id;
+            document.getElementById('deleteId').value = id;
             document.getElementById('deleteNome').textContent = nome;
             openModal('delete');
         }
