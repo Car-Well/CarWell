@@ -30,99 +30,86 @@ body {
     min-height: 100vh;
 }
 
-.navbar {
-    height: 62px;
-    background: var(--bg-card);
-    border-bottom: 1px solid var(--border);
+.main-nav {
     display: flex;
+    width: 100%;
+    height: 100%;
     align-items: center;
     justify-content: space-between;
-    padding: 0 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 50;
+    padding: 1rem;
 }
 
-.navbar-brand {
-    font-family: var(--font-display);
-    font-size: 19px;
-    font-weight: 700;
-    color: var(--text-primary);
+.nav-left {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 1.75rem; 
+}
+
+.nav-logo {
+    width: 2.5rem; 
+}
+
+.nav-right {
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+
+.nav-links {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .nav-links {
+        display: block;
+    }
+
+    .btn-products {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.25rem;
+        background-color: #eff6ff; 
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 0.25rem;
+        cursor: pointer;
+    }
+}
+
+.nav-hover-btn {
+    position: relative;
+    margin-left: 2.5rem; 
+    font-family: 'general', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #1A1C19;
     text-decoration: none;
-}
-
-.navbar-brand strong { color: var(--green); }
-
-.navbar-logo {
-    width: 30px;
-    height: 30px;
-    background: var(--text-primary);
-    border-radius: 7px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.navbar-logo svg { width: 17px; height: 17px; fill: white; }
-
-.navbar-nav {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    list-style: none;
-}
-
-.navbar-nav a {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-decoration: none;
-    padding: 6px 13px;
-    border-radius: var(--radius-sm);
-    transition: background 0.13s, color 0.13s;
-}
-
-.navbar-nav a:hover,
-.navbar-nav a.active {
-    background: var(--bg-secondary);
-    color: var(--text-primary);
-    font-weight: 600;
-}
-
-.navbar-right { display: flex; align-items: center; gap: 8px; }
-
-.icon-btn {
-    width: 34px;
-    height: 34px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    background: transparent;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-secondary);
-    transition: background 0.13s;
 }
 
-.icon-btn:hover { background: var(--bg-secondary); }
-.icon-btn svg { width: 16px; height: 16px; }
+.nav-hover-btn::after {
+    content: "";
+    position: absolute;
+    bottom: -0.125rem;
+    left: 0;
+    height: 0.125rem;
+    width: 100%;
+    background-color: #262626; 
+    transform-origin: bottom right; 
+    transform: scaleX(0);
+    transition: transform 300ms cubic-bezier(0.65, 0.05, 0.36, 1);
+}
 
-.avatar {
-    width: 34px;
-    height: 34px;
-    border-radius: 50%;
-    background: var(--green);
-    color: white;
-    font-size: 12px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+.nav-hover-btn:hover::after {
+    transform-origin: bottom left;
+    transform: scaleX(1);
+}
+
+@media (prefers-color-scheme: dark) {
+    .nav-hover-btn::after {
+        background-color: #1A1C19;
+    }
 }
 
 .main {

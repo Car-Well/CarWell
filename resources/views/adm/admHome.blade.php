@@ -48,7 +48,6 @@
         </div>
     </div>
 
-    {{-- KPIs --}}
     <div class="kpi-grid">
         <div class="kpi-card">
             <div class="kpi-head">
@@ -84,7 +83,6 @@
         </div>
     </div>
 
-    {{-- Gráficos --}}
     <div class="charts-grid">
         <div class="panel panel--lg">
             <div class="panel-head">
@@ -121,7 +119,6 @@
         </div>
     </div>
 
-    {{-- Tabela --}}
     <div class="table-section">
         <div class="panel panel--full">
             <div class="panel-head">
