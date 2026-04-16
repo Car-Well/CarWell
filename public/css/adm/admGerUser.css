@@ -96,7 +96,7 @@ body {
 }
 
 .nav-hover-btn:hover{
-    color: #0F6E56;
+    color: var(--green);
 }
 
 .main {
