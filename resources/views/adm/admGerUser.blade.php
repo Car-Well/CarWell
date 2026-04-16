@@ -16,7 +16,7 @@
                 <img src="{{ asset('img/logo.png') }}" alt="logo" class="nav-logo" />
             </div>
 
-            <div class="nav-right">
+            <div class="nav-center">
                 <div class="nav-links">
                     <a href="#" class="nav-hover-btn">Dashboard</a>
                     <a href="#" class="nav-hover-btn">Carros</a>
@@ -24,7 +24,9 @@
                     <a href="#" class="nav-hover-btn">Clientes</a>
                 </div>
             </div>
-        </nav> 
+
+            <div class="nav-right-spacer"></div>
+        </nav>
 
         <main class="main">
 
