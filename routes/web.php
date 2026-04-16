@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\RegistrarClienteController;
 use App\Http\Controllers\PerfilController;
 use Illuminate\Support\Facades\Route;
 
+
+// Páginas públicas do site
 Route::get('/', function () {
     return view('welcome');
 });
@@ -26,6 +28,8 @@ Route::get('/about', function () {
     return view('aboutUs');
 });
 
+
+// Área administrativa
 Route::get('/admHome', function () {
     return view('adm/admHome');
 });
@@ -34,23 +38,30 @@ Route::get('/login-adm', function () {
     return view('login/login-adm');
 })->name('login-adm');
 
-Route::get('/login-cliente', [LoginClienteController::class, 'showLogin'])->name('login-cliente');
-
 Route::get('/admGerCar', function () {
     return view('adm/admGerCar');
 });
 
+
+// Autenticação do cliente
+// ============================================================
+
+// Login
+Route::get('/login-cliente', [LoginClienteController::class, 'showLogin'])->name('login-cliente');
 Route::post('/login-cliente', [LoginClienteController::class, 'login']);
 
+// Cadastro
 Route::get('/registrar', [RegistrarClienteController::class, 'showRegistrar'])->name('registrar');
-
 Route::post('/registrar', [RegistrarClienteController::class, 'registrar']);
 
+// Confirmação de e-mail (verificação por código de 6 dígitos)
 Route::get('/confirmar-email', [ConfirmarEmailController::class, 'showConfirmar'])->name('confirmar-email');
-
 Route::post('/confirmar-email', [ConfirmarEmailController::class, 'confirmar']);
-
 Route::post('/reenviar-codigo', [ConfirmarEmailController::class, 'reenviar'])->name('reenviar-codigo');
+
+
+// Área do cliente (requer login)
+
 
 Route::middleware('cliente.autenticado')->group(function () {
 
@@ -59,5 +70,5 @@ Route::middleware('cliente.autenticado')->group(function () {
     Route::post('/perfil', [PerfilController::class, 'update'])->name('perfil.update');
 
     Route::post('/logout', [PerfilController::class, 'logout'])->name('cliente.logout');
-    
+
 });

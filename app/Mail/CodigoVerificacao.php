@@ -10,9 +10,9 @@ class CodigoVerificacao extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public string $code;
+    public $code;
 
-    public function __construct(string $code)
+    public function __construct($code)
     {
         $this->code = $code;
     }
