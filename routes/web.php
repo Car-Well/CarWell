@@ -36,9 +36,9 @@ Route::get('/login-adm', function () {
     return view('/login/login-adm');
 })->name('login-adm');
 
-<<<<<<< HEAD
+
 Route::get('/login-cliente', [LoginClienteController::class, 'showLogin'])->name('login-cliente');
-=======
+
 Route::get('/admGerCar', function () {
     return view('/adm/admGerCar');
 });
@@ -46,7 +46,7 @@ Route::get('/admGerCar', function () {
 Route::get('/confirmar-email', function () {
     return view('/login/confirmar-email');
 });
->>>>>>> 1b2e835d4f2f36edcc710a3256f966b0481d1a81
+
 
 Route::post('/login-cliente', [LoginClienteController::class, 'login']);
 
