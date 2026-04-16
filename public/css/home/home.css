@@ -5,7 +5,7 @@
 }
 
 :root {
-  --bg: #d6e4f0;
+  /* --bg: #d6e4f0;
   --white: #ffffff;
   --dark-navy: #1a2e4a;
   --red: #b91c1c;
@@ -13,69 +13,114 @@
   --card-bg: #e8f1f9;
   --input-bg: #c8daea;
   --input-border: #b0c8de;
-  --text-muted: #4a6280;
-  --font-main: 'Montserrat', sans-serif;
-  --font-body: 'Open Sans', sans-serif;
+  --text-muted: #4a6280; */
+
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --green: #1D9E75;
+  --green-light: #E1F5EE;
+  --green-mid: #5DCAA5;
+  --green-dark: #0F6E56;
+  --bg: #F4F5F3;
+  --bg-card: #ffffff;
+  --bg-secondary: #EEEFED;
+  --text-primary: #1A1C19;
+  --text-secondary:#6B6E69;
+  --text-muted: #9EA19C;
+  --border: rgba(0,0,0,0.08);
+  --border-mid: rgba(0,0,0,0.13);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md: 0 6px 20px rgba(0,0,0,0.09);
+  --shadow-lg: 0 20px 50px rgba(0,0,0,0.15);
 }
 
 body {
   background: var(--bg);
   font-family: var(--font-body);
-  color: var(--dark-navy);
+  color: var(--text-primary);
 }
 
-nav {
-  background: var(--white);
+.main-nav {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 1rem 2rem;
+  box-sizing: border-box;
+}
+
+.nav-left, 
+.nav-right-spacer {
+  flex: 1; 
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-  height: 60px;
-  box-shadow: 0 2px 12px rgba(30,77,140,0.07);
-  position: sticky;
-  top: 0;
-  z-index: 100;
 }
 
 .nav-logo {
+  width: 5rem;
+}
+
+.nav-right-spacer {
+  justify-content: flex-end;
+}
+
+.nav-center {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 8px;
-  text-decoration: none;
-}
-
-.nav-logo svg { 
-  width: 38px; 
-  height: 26px; 
-}
-
-.nav-logo-text {
-  font-family: var(--font-main);
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: var(--dark-navy);
 }
 
 .nav-links {
   display: flex;
-  align-items: center;
-  gap: 28px;
-  list-style: none;
+  gap: 1rem; 
 }
 
-.nav-links a {
-  font-family: var(--font-main);
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--dark-navy);
-  text-decoration: none;
+.nav-hover-btn {
+  position: relative;
+  margin: 0 1.25rem; 
+  font-family: var(--font-display);
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  transition: color 0.18s;
+  color: var(--text-primary); 
+  text-decoration: none;
+  cursor: pointer;
 }
 
-.nav-links a:hover { 
-  color: var(--blue); 
+.nav-hover-btn::after {
+  content: "";
+  position: absolute;
+  bottom: -0.125rem;
+  left: 0;
+  height: 0.125rem;
+  width: 100%;
+  background-color: currentColor;
+  transform-origin: bottom right;
+  transform: scaleX(0);
+  transition: transform 300ms cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+
+.nav-hover-btn:hover::after {
+  transition: 0.8s;
+  transform-origin: bottom left;
+  transform: scaleX(1);
+  color: var(--green);
+}
+
+.nav-hover-btn:hover{
+  color: var(--green);
+}
+
+.nav-active{
+  color: var(--green-dark);
+}
+
+.nav-active::after{
+  transition: 0.8s;
+  transform-origin: bottom left;
+  transform: scaleX(1);
+  color: var(--green-dark);
 }
 
 .nav-right {
@@ -90,10 +135,10 @@ nav {
 }
 
 .nav-login {
-  font-family: var(--font-main);
+  font-family: var(--font-display);
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--dark-navy);
+  color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   text-decoration: none;
@@ -101,12 +146,12 @@ nav {
 }
 
 .nav-login:hover { 
-  color: var(--blue); 
+  color: var(--green); 
 }
 
 .nav-profile {
   width: 32px; height: 32px;
-  background: var(--input-bg);
+  background: var(--green-light);
   border-radius: 50%;
   display: flex; 
   align-items: center; 
@@ -124,7 +169,7 @@ nav {
 
 .hamburger span {
   width: 24px; height: 2.5px;
-  background: var(--dark-navy);
+  background: var(--text-primary);
   border-radius: 2px;
   display: block;
 }
@@ -144,21 +189,22 @@ nav {
 }
 
 .hero-title {
-  font-family: var(--font-main);
+  font-family: var(--font-body);
   font-size: clamp(1.8rem, 4vw, 3rem);
   font-weight: 900;
-  color: var(--dark-navy);
+  color: var(--green-mid);
   line-height: 1.1;
   text-transform: uppercase;
   margin-bottom: 14px;
 }
 
 .hero-title span { 
-  color: var(--blue); 
+  font-family: var(--font-display);
+  color: var(--green); 
 }
 
 .hero-desc {
-  font-family: var(--font-main);
+  font-family: var(--font-display);
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--text-muted);
@@ -185,7 +231,7 @@ nav {
   background: transparent;
   border: none;
   outline: none;
-  font-family: var(--font-main);
+  font-family: var(--font-display);
   font-size: 0.8rem;
   font-weight: 600;
   color: var(--dark-navy);
@@ -261,7 +307,7 @@ nav {
 }
 
 .section-title {
-  font-family: var(--font-main);
+  font-family: var(--font-display);
   font-size: 1.4rem;
   font-weight: 900;
   color: var(--dark-navy);
@@ -307,7 +353,7 @@ nav {
 }
 
 .feature-title {
-  font-family: var(--font-main);
+  font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 800;
   color: var(--dark-navy);
@@ -352,7 +398,7 @@ nav {
   align-items: center; 
   justify-content: center;
   box-shadow: 0 2px 10px rgba(30,77,140,0.08);
-  font-family: var(--font-main);
+  font-family: var(--font-body);
   font-size: 0.6rem;
   font-weight: 800;
   color: var(--dark-navy);
@@ -412,7 +458,7 @@ nav {
   background: transparent;
   border: none;
   outline: none;
-  font-family: var(--font-main);
+  font-family: var(--font-display);
   font-size: 0.78rem;
   font-weight: 600;
   color: var(--dark-navy);
@@ -430,7 +476,7 @@ nav {
   border: 1.5px solid var(--input-border);
   border-radius: 30px;
   padding: 10px 20px;
-  font-family: var(--font-main);
+  font-family: var(--font-display);
   font-size: 0.78rem;
   font-weight: 700;
   color: var(--dark-navy);
@@ -496,7 +542,7 @@ nav {
 }
 
 .car-name {
-  font-family: var(--font-main);
+  font-family: var(--font-display);
   font-size: 0.78rem;
   font-weight: 800;
   color: var(--dark-navy);

@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Carwell – Encontre seu Carro</title>
-  <link rel="stylesheet" href="{{ asset('css/home/home.css') }}">
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Carwell – Encontre seu Carro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/home/home.css') }}">
+  </head>
 <body>
 
   <!-- NAV-BAR -->
-  <nav>
-    <a class="nav-logo" href="#">
-      <svg viewBox="0 0 80 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 30 Q20 12 40 12 Q60 12 70 30" stroke="#1a2e4a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-        <rect x="8" y="28" width="64" height="12" rx="6" fill="#1a2e4a"/>
-        <circle cx="22" cy="40" r="7" fill="#1a2e4a"/><circle cx="22" cy="40" r="4" fill="#f0f6fb"/>
-        <circle cx="58" cy="40" r="7" fill="#1a2e4a"/><circle cx="58" cy="40" r="4" fill="#f0f6fb"/>
-        <path d="M36 12 Q40 4 44 6" stroke="#1e4d8c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-        <circle cx="44" cy="5.5" r="2.5" fill="#1e4d8c"/>
-      </svg>
-      <span class="nav-logo-text">Carwell</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#">COMPRAR CARRO</a></li>
-      <li><a href="#">SOBRE NÓS</a></li>
-      <li><a href="#">AJUDA</a></li>
-      <li><a href="#">CARRINHO</a></li>
-    </ul>
+
+  <nav class="main-nav">
+    <div class="nav-left">
+      <img src="{{ asset('img/logo.png') }}" alt="logo" class="nav-logo" />
+    </div>
+
+    <div class="nav-center">
+      <div class="nav-links">
+          <a href="{{ route('home') }}" class="nav-active nav-hover-btn">Home</a>
+          <a href="#" class="nav-hover-btn">Comprar Carro</a>
+          <a href="#" class="nav-hover-btn">Sobre Nós</a>
+          <a href="#" class="nav-hover-btn">Ajuda</a>
+          <a href="" class="nav-hover-btn">Carrinho</a>
+      </div>
+    </div>
+
+    <div class="nav-right-spacer"></div>
     <div class="nav-right">
       <span class="nav-flag">🇧🇷</span>
       <a href="{{route('login-cliente')}}" class="nav-login">LOGIN</a>
       <a href="{{ route('perfil') }}" class="nav-profile">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a2e4a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
         </svg>
       </a>
