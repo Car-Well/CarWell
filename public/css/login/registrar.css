@@ -5,17 +5,17 @@
 }
  
 :root {
-  --bg:           #d6e4f0;
-  --card-bg:      #dce8f3;
-  --dark-navy:    #1a2e4a;
-  --red:          #b91c1c;
-  --green:        #166534;
-  --blue:         #1e4d8c;
-  --input-bg:     #c8daea;
+  --bg: #d6e4f0;
+  --card-bg: #dce8f3;
+  --dark-navy: #1a2e4a;
+  --red: #b91c1c;
+  --green: #166534;
+  --blue: #1e4d8c;
+  --input-bg: #c8daea;
   --input-border: #b0c8de;
-  --text-muted:   #4a6280;
-  --font-main:    'Montserrat', sans-serif;
-  --font-body:    'Open Sans', sans-serif;
+  --text-muted: #4a6280;
+  --font-main: 'Montserrat', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
 }
  
 body {
@@ -156,8 +156,15 @@ body {
   transform: translateY(-1px);
 }
  
-.btn-back   { background: var(--red);   color: #fff; }
-.btn-verify { background: var(--green); color: #fff; }
+.btn-back   { 
+  background: var(--red);   
+  color: #fff; 
+}
+
+.btn-verify { 
+  background: var(--green); 
+  color: #fff; 
+}
  
 .terms {
   font-family: var(--font-body);
@@ -168,5 +175,7 @@ body {
 }
  
 @media (max-width: 480px) {
-  .card { padding: 28px 18px 22px; }
+  .card { 
+    padding: 28px 18px 22px; 
+  }
 }

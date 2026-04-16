@@ -5,16 +5,16 @@
 }
  
 :root {
-  --bg:           #d6e4f0;
-  --card-bg:      #dce8f3;
-  --dark-navy:    #1a2e4a;
-  --red:          #b91c1c;
-  --blue:         #1e4d8c;
-  --input-bg:     #c8daea;
+  --bg: #d6e4f0;
+  --card-bg: #dce8f3;
+  --dark-navy: #1a2e4a;
+  --red: #b91c1c;
+  --blue: #1e4d8c;
+  --input-bg: #c8daea;
   --input-border: #b0c8de;
-  --text-muted:   #4a6280;
-  --font-main:    'Montserrat', sans-serif;
-  --font-body:    'Open Sans', sans-serif;
+  --text-muted: #4a6280;
+  --font-main: 'Montserrat', sans-serif;
+  --font-body: 'Open Sans', sans-serif;
 }
  
 body {
@@ -181,8 +181,15 @@ body {
   transform: translateY(-1px);
 }
  
-.btn-back  { background: var(--red);  color: #fff; }
-.btn-enter { background: var(--blue); color: #fff; }
+.btn-back  { 
+  background: var(--red);  
+  color: #fff; 
+}
+
+.btn-enter { 
+  background: var(--blue); 
+  color: #fff; 
+}
  
 .signup-row {
   text-align: center;
@@ -211,7 +218,11 @@ body {
 }
  
 @media (max-width: 480px) {
-  .card    { padding: 32px 20px 24px; }
-  .btn-row { gap: 10px; }
+  .card { 
+    padding: 32px 20px 24px; 
+  }
+  .btn-row { 
+    gap: 10px; 
+  }
 }
  
