@@ -36,7 +36,7 @@ Route::get('/about', function () {
 // Área administrativa
 Route::get('/admHome', function () {
     return view('adm/admHome');
-});
+})->name('admHome');
 
 Route::get('/login-adm', function () {
     return view('login/login-adm');
@@ -44,11 +44,11 @@ Route::get('/login-adm', function () {
 
 Route::get('/admGerCar', function () {
     return view('adm/admGerCar');
-});
+})->name('admGerCar');
 
 Route::get('/admGerUser', function(){
     return view('adm/admGerUser');
-});
+})->name('admGerUser');
 
 // Autenticação do cliente
 // ============================================================

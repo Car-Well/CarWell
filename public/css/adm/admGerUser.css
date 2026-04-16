@@ -99,6 +99,17 @@ body {
     color: var(--green);
 }
 
+.nav-active{
+    color: var(--green-dark);
+}
+
+.nav-active::after{
+    transition: 0.8s;
+    transform-origin: bottom left;
+    transform: scaleX(1);
+    color: var(--green-dark);
+}
+
 .main {
     max-width: 1200px;
     margin: 0 auto;

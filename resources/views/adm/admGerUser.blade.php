@@ -18,10 +18,10 @@
 
             <div class="nav-center">
                 <div class="nav-links">
-                    <a href="#" class="nav-hover-btn">Dashboard</a>
-                    <a href="#" class="nav-hover-btn">Carros</a>
+                    <a href="{{ route('admHome') }}" class="nav-hover-btn">Dashboard</a>
+                    <a href="{{ route('admGerCar') }}" class="nav-hover-btn">Carros</a>
                     <a href="#" class="nav-hover-btn">Pedidos</a>
-                    <a href="#" class="nav-hover-btn">Clientes</a>
+                    <a href="{{ route('admGerUser') }}" class="nav-active nav-hover-btn">Clientes</a>
                 </div>
             </div>
 
