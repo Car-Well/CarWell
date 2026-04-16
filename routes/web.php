@@ -42,6 +42,9 @@ Route::get('/admGerCar', function () {
     return view('adm/admGerCar');
 });
 
+Route::get('/admGerUser', function(){
+    return view('adm/admGerUser');
+});
 
 // Autenticação do cliente
 // ============================================================
