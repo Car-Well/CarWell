@@ -6,6 +6,10 @@ use App\Http\Controllers\Auth\RegistrarClienteController;
 use App\Http\Controllers\PerfilController;
 use Illuminate\Support\Facades\Route;
 
+// Rota TESTE
+Route::get('/teste', function(){
+    return view('teste');
+});
 
 // Páginas públicas do site
 Route::get('/', function () {
