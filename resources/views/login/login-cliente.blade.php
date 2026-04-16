@@ -41,7 +41,7 @@
         </span>
       </div>
 
-      <a href="#" class="forgot">ESQUECI MINHA SENHA</a>
+      <a href="{{ route('registrar') }}" class="forgot">ESQUECI MINHA SENHA</a>
 
       <div class="btn-row">
         <button type="button" class="btn btn-back"
