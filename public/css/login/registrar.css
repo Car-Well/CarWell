@@ -9,7 +9,7 @@
   --card-bg: #ffffff;
   --dark-navy: #1A1C19;
   --red: #b91c1c;
-  --blue: #1D9E75;
+  --green: #1D9E75;
   --input-bg: #EEEFED;
   --input-border: rgba(0,0,0,0.13);
   --text-muted: #9EA19C;
@@ -98,7 +98,7 @@ body {
 }
  
 .input-group input:focus {
-  border-color: var(--blue);
+  border-color: var(--green);
   box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.12);
 }
  
@@ -161,7 +161,7 @@ body {
 }
 
 .btn-verify {
-  background: var(--blue);
+  background: var(--green);
   color: #fff;
 }
  

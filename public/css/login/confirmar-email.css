@@ -9,7 +9,7 @@
   --card-bg: #ffffff;
   --dark-navy: #1A1C19;
   --red: #b91c1c;
-  --blue: #1D9E75;
+  --green: #1D9E75;
   --input-bg: #EEEFED;
   --input-border: rgba(0,0,0,0.13);
   --text-muted: #9EA19C;
@@ -118,7 +118,7 @@ body {
 }
  
 .code-input:focus {
-  border-color: var(--blue);
+  border-color: var(--green);
   box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.12);
 }
  
@@ -145,7 +145,7 @@ body {
 .no-code button {
   background: none;
   border: none;
-  color: var(--blue);
+  color: var(--green);
   font-weight: 700;
   text-transform: uppercase;
   cursor: pointer;
@@ -164,7 +164,7 @@ body {
 }
  
 .btn-enter {
-  background: var(--blue);
+  background: var(--green);
   color: #fff;
   border: none;
   border-radius: 30px;
