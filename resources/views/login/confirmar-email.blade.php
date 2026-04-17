@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Carwell – Confirmar Email</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="{{ asset('css/login/confirmar-email.css') }}"/>
 </head>
 <body>
@@ -47,7 +49,7 @@
       <form method="POST" action="{{ route('reenviar-codigo') }}" style="display:inline">
         @csrf
         <button type="submit" style="background:none;border:none;cursor:pointer;
-                color:#1e4d8c;font-weight:700;font-size:inherit;padding:0;
+                color:#1D9E75;font-weight:700;font-size:inherit;padding:0;
                 font-family:inherit;">REENVIAR CÓDIGO</button>
       </form>
     </p>
