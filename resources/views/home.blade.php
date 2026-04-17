@@ -31,7 +31,15 @@
     <div class="nav-right-spacer"></div>
     <div class="nav-right">
       <span class="nav-flag">🇧🇷</span>
-      <a href="{{route('login-cliente')}}" class="nav-login">LOGIN</a>
+
+      @auth('cliente')
+        <a href="{{ route('perfil') }}" class="nav-login">
+          {{ explode(' ', Auth::guard('cliente')->user()->name)[0] }}
+        </a>
+      @else
+        <a href="{{ route('login-cliente') }}" class="nav-login">LOGIN</a>
+      @endauth
+
       <a href="{{ route('perfil') }}" class="nav-profile">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
