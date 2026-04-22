@@ -40,6 +40,24 @@ Route::get('/about', function () {
     return view('aboutUs');
 });
 
+Route::get('/infocar', function () {
+    return view('info_carro');
+});
+
+Route::get('/carrinho', function () {
+    return view('carrinho');
+})->name('carrinho');
+
+Route::get('/checkout', function () {
+    return view('checkout');
+})->name('checkout');
+
+Route::get('/pedido', function () {
+    return view('pedido');
+})->name('pedido');
+
+
+
 
 // Área administrativa
 Route::get('/admHome', function () {
