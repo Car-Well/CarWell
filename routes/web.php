@@ -44,6 +44,10 @@ Route::get('/checkout', function () {
     return view('checkout');
 })->name('checkout');
 
+Route::get('/pedido', function () {
+    return view('pedido');
+})->name('pedido');
+
 
 
 
