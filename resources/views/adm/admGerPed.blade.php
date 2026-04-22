@@ -28,6 +28,25 @@
     </nav>
 
     <main class="main">
+        @if(session('success'))
+            <div class="alert alert-success" style="margin-bottom:14px;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-danger" style="margin-bottom:14px;">
+                <strong>Não foi possível salvar.</strong>
+                <ul style="margin:8px 0 0 18px;">
+                    @foreach($errors->all() as $msg)
+                        <li>{{ $msg }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            <script>
+                window.addEventListener('DOMContentLoaded', () => openPopUp('create'));
+            </script>
+        @endif
 
         <div class="page-header">
             <div>
@@ -43,22 +62,22 @@
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-label">Total</div>
-                <div class="kpi-value">38</div>
+                <div class="kpi-value">{{ $kpis['total'] ?? 0 }}</div>
                 <div class="kpi-foot">pedidos realizados</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Em separação</div>
-                <div class="kpi-value blue">12</div>
+                <div class="kpi-value blue">{{ $kpis['em_separacao'] ?? 0 }}</div>
                 <div class="kpi-foot">sendo processados</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">A caminho</div>
-                <div class="kpi-value amber">8</div>
+                <div class="kpi-value amber">{{ $kpis['a_caminho'] ?? 0 }}</div>
                 <div class="kpi-foot">em trânsito</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-label">Entregues</div>
-                <div class="kpi-value green">18</div>
+                <div class="kpi-value green">{{ $kpis['entregue'] ?? 0 }}</div>
                 <div class="kpi-foot">concluídos</div>
             </div>
         </div>
@@ -92,54 +111,50 @@
                     </tr>
                 </thead>
                 <tbody id="tableBody">
-
                     @php
-                    $pedidos = [
-                        ['id'=>1,'num'=>'#0001','cliente'=>'Lorem Ipsum', 'initials'=>'LI','veiculo'=>'Honda Civic G12', 'pagamento'=>'credito', 'valor'=>'R$ 108.900','status'=>'entregue', 'data'=>'01/04/2026'],
-                        ['id'=>2,'num'=>'#0002','cliente'=>'Dolor Sit Amet', 'initials'=>'DS','veiculo'=>'BMW M8 Competition', 'pagamento'=>'pix', 'valor'=>'R$ 980.900','status'=>'a_caminho', 'data'=>'03/04/2026'],
-                        ['id'=>3,'num'=>'#0003','cliente'=>'Consectetur Elit', 'initials'=>'CE','veiculo'=>'Ford Mustang GT', 'pagamento'=>'boleto', 'valor'=>'R$ 860.000','status'=>'em_separacao','data'=>'05/04/2026'],
-                        ['id'=>4,'num'=>'#0004','cliente'=>'Adipiscing Tempor', 'initials'=>'AT','veiculo'=>'Toyota Corolla XEi', 'pagamento'=>'debito', 'valor'=>'R$ 179.990','status'=>'finalizado',  'data'=>'06/04/2026'],
-                        ['id'=>5,'num'=>'#0005','cliente'=>'Sed Do Eiusmod', 'initials'=>'SE','veiculo'=>'Mercedes AMG C63', 'pagamento'=>'credito', 'valor'=>'R$ 650.000','status'=>'em_separacao','data'=>'07/04/2026'],
-                        ['id'=>6,'num'=>'#0006','cliente'=>'Ut Labore Dolore', 'initials'=>'UL','veiculo'=>'Volkswagen Golf GTI', 'pagamento'=>'pix', 'valor'=>'R$ 215.000','status'=>'entregue',    'data'=>'08/04/2026'],
-                    ];
-
-                    $statusClass = ['em_separacao'=>'badge-blue','a_caminho'=>'badge-amber','entregue'=>'badge-green','finalizado'=>'badge-gray'];
-                    $statusLabel = ['em_separacao'=>'Em separação','a_caminho'=>'A caminho','entregue'=>'Entregue','finalizado'=>'Finalizado'];
-                    $pagLabel = ['credito'=>'Crédito','debito'=>'Débito','pix'=>'PIX','boleto'=>'Boleto'];
-                    $pagIcon = [
-                        'credito'=>'<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
-                        'debito' =>'<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
-                        'pix' =>'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.354 3.854a2 2 0 0 1 2.828 0l5.964 5.964a2 2 0 0 1 0 2.828l-5.964 5.964a2 2 0 0 1-2.828 0L5.39 12.646a2 2 0 0 1 0-2.828l5.964-5.964z"/></svg>',
-                        'boleto' =>'<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>',
-                    ];
+                        $statusClass = ['em_separacao'=>'badge-blue','a_caminho'=>'badge-amber','entregue'=>'badge-green','finalizado'=>'badge-gray'];
+                        $statusLabel = ['em_separacao'=>'Em separação','a_caminho'=>'A caminho','entregue'=>'Entregue','finalizado'=>'Finalizado'];
+                        $pagLabel = ['credito'=>'Crédito','debito'=>'Débito','pix'=>'PIX','boleto'=>'Boleto'];
+                        $pagIcon = [
+                            'credito'=>'<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+                            'debito' =>'<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+                            'pix' =>'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.354 3.854a2 2 0 0 1 2.828 0l5.964 5.964a2 2 0 0 1 0 2.828l-5.964 5.964a2 2 0 0 1-2.828 0L5.39 12.646a2 2 0 0 1 0-2.828l5.964-5.964z"/></svg>',
+                            'boleto' =>'<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>',
+                        ];
                     @endphp
 
-                    @foreach($pedidos as $p)
-                    <tr data-status="{{ $p['status'] }}" data-search="{{ strtolower($p['num'].' '.$p['cliente'].' '.$p['veiculo']) }}">
-                        <td><span class="order-num">{{ $p['num'] }}</span></td>
+                    @foreach(($pedidos ?? []) as $p)
+                    @php
+                        $nome = $p->cliente_nome ?? '';
+                        $parts = preg_split('/\s+/', trim($nome)) ?: [];
+                        $initials = strtoupper(substr($parts[0] ?? '', 0, 1) . substr($parts[1] ?? '', 0, 1));
+                        $dataBr = $p->data_pedido ? $p->data_pedido->format('d/m/Y') : ($p->created_at?->format('d/m/Y') ?? '');
+                    @endphp
+                    <tr data-status="{{ $p->status }}" data-search="{{ strtolower(($p->numero ?? '').' '.($p->cliente_nome ?? '').' '.($p->veiculo_nome ?? '')) }}">
+                        <td><span class="order-num">{{ $p->numero }}</span></td>
                         <td>
                             <div class="user-cell">
-                                <div class="user-initials">{{ $p['initials'] }}</div>
-                                <span class="user-name">{{ $p['cliente'] }}</span>
+                                <div class="user-initials">{{ $initials ?: '—' }}</div>
+                                <span class="user-name">{{ $p->cliente_nome }}</span>
                             </div>
                         </td>
-                        <td class="text-muted">{{ $p['veiculo'] }}</td>
+                        <td class="text-muted">{{ $p->veiculo_nome }}</td>
                         <td>
                             <div class="pag-cell">
-                                <span class="pag-icon">{!! $pagIcon[$p['pagamento']] !!}</span>
-                                {{ $pagLabel[$p['pagamento']] }}
+                                <span class="pag-icon">{!! $pagIcon[$p->pagamento] ?? '' !!}</span>
+                                {{ $pagLabel[$p->pagamento] ?? $p->pagamento }}
                             </div>
                         </td>
-                        <td class="text-bold">{{ $p['valor'] }}</td>
-                        <td><span class="badge {{ $statusClass[$p['status']] }}">{{ $statusLabel[$p['status']] }}</span></td>
-                        <td class="text-muted">{{ $p['data'] }}</td>
+                        <td class="text-bold">R$ {{ number_format((float) $p->valor, 2, ',', '.') }}</td>
+                        <td><span class="badge {{ $statusClass[$p->status] ?? 'badge-gray' }}">{{ $statusLabel[$p->status] ?? $p->status }}</span></td>
+                        <td class="text-muted">{{ $dataBr ?: '—' }}</td>
                         <td>
                             <div class="row-actions">
-                                <button class="btn btn-secondary btn-sm" onclick="openEdit({{ $p['id'] }}, '{{ $p['cliente'] }}', '{{ $p['veiculo'] }}', '{{ $p['pagamento'] }}', '{{ $p['valor'] }}', '{{ $p['status'] }}', '{{ $p['num'] }}')">
+                                <button class="btn btn-secondary btn-sm" onclick="openEdit({{ $p->id }}, '{{ addslashes($p->cliente_nome) }}', '{{ addslashes($p->veiculo_nome) }}', '{{ $p->pagamento }}', '{{ $p->valor }}', '{{ $p->status }}', '{{ $p->numero }}')">
                                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                     Editar
                                 </button>
-                                <button class="btn btn-danger btn-sm" onclick="openDelete({{ $p['id'] }}, '{{ $p['num'] }}')">
+                                <button class="btn btn-danger btn-sm" onclick="openDelete({{ $p->id }}, '{{ $p->numero }}')">
                                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
                                     Excluir
                                 </button>
@@ -173,7 +188,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="#" method="POST" id="formCreate">
+                <form action="{{ route('adm.pedidos.store') }}" method="POST" id="formCreate">
                     @csrf
 
                     <div class="form-row">
@@ -362,7 +377,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Valor *</label>
-                            <input type="text" name="valor" id="editValor" class="form-control">
+                            <input type="number" name="valor" id="editValor" class="form-control" min="0" step="0.01">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Forma de pagamento</label>
@@ -482,6 +497,7 @@
                 if(i === idx) s.classList.add('active');
             });
             document.getElementById('editStatus').value = status;
+            document.getElementById('formEdit').action = "{{ url('/adm/pedidos') }}/" + id;
             openPopUp('edit');
         }
 
@@ -499,6 +515,7 @@
         function openDelete(id, num) {
             document.getElementById('deleteId').value = id;
             document.getElementById('deleteNum').textContent = num;
+            document.getElementById('formDelete').action = "{{ url('/adm/pedidos') }}/" + id;
             openPopUp('delete');
         }
 
