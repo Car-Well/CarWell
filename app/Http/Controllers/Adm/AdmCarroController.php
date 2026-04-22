@@ -12,7 +12,7 @@ class AdmCarroController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Carro::query()->orderByDesc('id');
+        $query = Carro::orderBy('id', 'desc');
 
         if ($request->filled('q')) {
             $q = trim((string) $request->get('q'));

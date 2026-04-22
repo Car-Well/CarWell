@@ -65,9 +65,9 @@ class AdmPedidoController extends Controller
 
         $cliente = Cliente::where('name', $data['cliente'])->orderByDesc('id')->first();
         $carro = Carro::whereRaw("TRIM(CONCAT(marca,' ',modelo)) = ?", [$data['veiculo']])->orderByDesc('id')->first();
-
-        $pedido->cliente_id = $cliente?->id;
-        $pedido->carro_id = $carro?->id;
+        
+        $pedido->cliente_id = $cliente ? $cliente->id : null;
+        $pedido->carro_id = $carro ? $carro->id : null;
 
         $pedido->valor = $data['valor'];
         $pedido->status = $data['status'];
@@ -108,8 +108,8 @@ class AdmPedidoController extends Controller
         $cliente = Cliente::where('name', $data['cliente'])->orderByDesc('id')->first();
         $carro = Carro::whereRaw("TRIM(CONCAT(marca,' ',modelo)) = ?", [$data['veiculo']])->orderByDesc('id')->first();
 
-        $pedido->cliente_id = $cliente?->id;
-        $pedido->carro_id = $carro?->id;
+        $pedido->cliente_id = $cliente ? $cliente->id : null;
+        $pedido->carro_id = $carro ? $carro->id : null;
 
         $pedido->save();
 

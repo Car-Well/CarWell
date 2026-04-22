@@ -74,9 +74,9 @@ Route::prefix('adm')->name('adm.')->group(function () {
 });
 
 // Alias p/ não quebrar os links atuais das views
-Route::get('/admGerCar', fn () => redirect()->route('adm.carros.index'))->name('admGerCar');
-Route::get('/admGerUser', fn () => redirect()->route('adm.usuarios.index'))->name('admGerUser');
-Route::get('/admGerPed', fn () => redirect()->route('adm.pedidos.index'))->name('admGerPed');
+Route::get('/admGerCar', function () { return redirect()->route('adm.carros.index'); })->name('admGerCar');
+Route::get('/admGerUser', function () { return redirect()->route('adm.usuarios.index'); })->name('admGerUser');
+Route::get('/admGerPed', function () { return redirect()->route('adm.pedidos.index'); })->name('admGerPed');
 
 // Autenticação do cliente
 // ============================================================

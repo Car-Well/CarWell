@@ -43,7 +43,7 @@ class Carro extends Model
 
     public function getCapaPathAttribute(): ?string
     {
-        return $this->capa?->path ?: $this->foto;
+        return $this->capa ? $this->capa->path : $this->foto;
     }
 
     public function getVeiculoNomeAttribute(): string

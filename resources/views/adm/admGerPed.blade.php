@@ -128,7 +128,7 @@
                         $nome = $p->cliente_nome ?? '';
                         $parts = preg_split('/\s+/', trim($nome)) ?: [];
                         $initials = strtoupper(substr($parts[0] ?? '', 0, 1) . substr($parts[1] ?? '', 0, 1));
-                        $dataBr = $p->data_pedido ? $p->data_pedido->format('d/m/Y') : ($p->created_at?->format('d/m/Y') ?? '');
+                        $dataBr = $p->data_pedido ? $p->data_pedido->format('d/m/Y') : ($p->created_at ? $p->created_at->format('d/m/Y') : '');
                     @endphp
                     <tr data-status="{{ $p->status }}" data-search="{{ strtolower(($p->numero ?? '').' '.($p->cliente_nome ?? '').' '.($p->veiculo_nome ?? '')) }}">
                         <td><span class="order-num">{{ $p->numero }}</span></td>
