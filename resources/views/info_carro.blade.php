@@ -103,7 +103,7 @@
     <div class="product-info-area">
       <p class="product-label">HONDA CIVIC G12 2025(34)</p>
       <p class="product-price">R$ 708.900</p>
-      <button class="btn-comprar">{{ __('info_carro.comprar') }}</button>
+      <a href="{{ route('carrinho') }}" class="btn-comprar">{{ __('info_carro.comprar') }}</a>
 
       <!-- Informações Básicas -->
       <div class="info-section">

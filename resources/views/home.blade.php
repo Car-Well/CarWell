@@ -24,7 +24,7 @@
           <a href="#" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
           <a href="#" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
           <a href="#" class="nav-hover-btn">{{ __('nav.ajuda') }}</a>
-          <a href="" class="nav-hover-btn">{{ __('nav.carrinho') }}</a>
+          <a href="{{ route('carrinho') }}" class="nav-hover-btn">{{ __('nav.carrinho') }}</a>
       </div>
     </div>
 
@@ -67,7 +67,7 @@
       <button class="carousel-btn left">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
-      <div class="hero-car-placeholder">
+      <a href="{{ route('info-carro') }}" class="hero-car-placeholder">
         <svg width="160" height="80" viewBox="0 0 200 90" fill="none">
           <path d="M20 60 Q40 25 100 25 Q160 25 180 60" stroke="rgba(255,255,255,0.7)" stroke-width="4" fill="none" stroke-linecap="round"/>
           <rect x="10" y="57" width="180" height="22" rx="11" fill="rgba(255,255,255,0.7)"/>
@@ -75,7 +75,7 @@
           <circle cx="155" cy="82" r="14" fill="rgba(255,255,255,0.5)"/><circle cx="155" cy="82" r="8" fill="rgba(255,255,255,0.8)"/>
           <rect x="60" y="30" width="80" height="28" rx="6" fill="rgba(255,255,255,0.15)"/>
         </svg>
-      </div>
+      </a>
       <button class="carousel-btn right">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
@@ -176,7 +176,7 @@
   <div class="cars-grid">
 
     <!-- Card 1 -->
-    <div class="car-card">
+    <a href="{{ route('info-carro') }}" class="car-card">
       <div class="car-img-placeholder">
         <svg viewBox="0 0 120 70" fill="none">
           <path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1e4d8c" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -185,7 +185,7 @@
           <circle cx="92" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="92" cy="60" r="5" fill="#c8daea"/>
         </svg>
       </div>
-      <div class="car-heart" onclick="toggleHeart(this)">
+      <div class="car-heart" onclick="event.preventDefault(); toggleHeart(this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
@@ -197,10 +197,10 @@
       <div class="car-arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-    </div>
+    </a>
 
     <!-- Card 2 -->
-    <div class="car-card">
+    <a href="{{ route('info-carro') }}" class="car-card">
       <div class="car-img-placeholder" style="background: linear-gradient(135deg, #f5c6cb 0%, #f8d7da 100%);">
         <svg viewBox="0 0 120 70" fill="none">
           <path d="M12 46 Q25 16 60 14 Q95 16 108 46" stroke="#b91c1c" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -209,7 +209,7 @@
           <circle cx="94" cy="61" r="9" fill="#b91c1c" opacity="0.6"/><circle cx="94" cy="61" r="5" fill="#f8d7da"/>
         </svg>
       </div>
-      <div class="car-heart" onclick="toggleHeart(this)">
+      <div class="car-heart" onclick="event.preventDefault(); toggleHeart(this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
@@ -221,10 +221,10 @@
       <div class="car-arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-    </div>
+    </a>
 
     <!-- Card 3 -->
-    <div class="car-card">
+    <a href="{{ route('info-carro') }}" class="car-card">
       <div class="car-img-placeholder" style="background: linear-gradient(135deg, #1a2e4a 0%, #0d1b2e 100%);">
         <svg viewBox="0 0 120 70" fill="none">
           <path d="M10 46 Q28 16 60 14 Q92 16 110 46" stroke="rgba(255,255,255,0.6)" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -233,7 +233,7 @@
           <circle cx="95" cy="61" r="9" fill="rgba(255,255,255,0.3)"/><circle cx="95" cy="61" r="5" fill="rgba(255,255,255,0.7)"/>
         </svg>
       </div>
-      <div class="car-heart" onclick="toggleHeart(this)">
+      <div class="car-heart" onclick="event.preventDefault(); toggleHeart(this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
@@ -245,7 +245,7 @@
       <div class="car-arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-    </div>
+    </a>
 
   </div>
 
