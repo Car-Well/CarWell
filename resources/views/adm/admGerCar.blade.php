@@ -21,7 +21,7 @@
                 <div class="nav-links">
                     <a href="{{ route('admHome') }}" class="nav-hover-btn">Dashboard</a>
                     <a href="{{ route('admGerCar') }}" class="nav-active nav-hover-btn">Carros</a>
-                    <a href="#" class="nav-hover-btn">Pedidos</a>
+                    <a href="{{ route('admGerPed') }}" class="nav-hover-btn">Pedidos</a>
                     <a href="{{ route('admGerUser') }}" class="nav-hover-btn">Clientes</a>
                 </div>
             </div>
@@ -30,6 +30,26 @@
         </nav>
 
         <main class="main">
+            @if(session('success'))
+                <div class="alert alert-success" style="margin-bottom:14px;">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert alert-danger" style="margin-bottom:14px;">
+                    <strong>Não foi possível salvar.</strong>
+                    <ul style="margin:8px 0 0 18px;">
+                        @foreach($errors->all() as $msg)
+                            <li>{{ $msg }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <script>
+                    window.addEventListener('DOMContentLoaded', () => openModal('create'));
+                </script>
+            @endif
+
             <div class="page-header">
                 <div>
                     <h1 class="page-title">Gerenciar <span>Carros</span></h1>
@@ -44,22 +64,22 @@
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <div class="kpi-label">Total</div>
-                    <div class="kpi-value">24</div>
+                    <div class="kpi-value">{{ $kpis['total'] ?? 0 }}</div>
                     <div class="kpi-foot">no estoque</div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-label">Disponíveis</div>
-                    <div class="kpi-value green">18</div>
+                    <div class="kpi-value green">{{ $kpis['disponivel'] ?? 0 }}</div>
                     <div class="kpi-foot">prontos para venda</div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-label">Reservados</div>
-                    <div class="kpi-value amber">4</div>
+                    <div class="kpi-value amber">{{ $kpis['reservado'] ?? 0 }}</div>
                     <div class="kpi-foot">em negociação</div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-label">Vendidos</div>
-                    <div class="kpi-value red">2</div>
+                    <div class="kpi-value red">{{ $kpis['vendido'] ?? 0 }}</div>
                     <div class="kpi-foot">este mês</div>
                 </div>
             </div>
@@ -78,42 +98,36 @@
             </div>
 
             <div class="cars-grid" id="carsGrid">
-
                 @php
-                $carros = [
-                    ['id'=>1,'marca'=>'Honda', 'modelo'=>'Civic G8 EXS', 'ano'=>2009, 'preco'=>'R$ 56.000', 'status'=>'reservado', 'km'=>'140.000 km'],
-                    ['id'=>2,'marca'=>'Honda', 'modelo'=>'WR-V', 'ano'=>2021, 'preco'=>'R$ 84.400', 'status'=>'reservado', 'km'=>'110.200 km'],
-                    ['id'=>3,'marca'=>'Fiat', 'modelo'=>'Toro', 'ano'=>2018, 'preco'=>'R$ 81.590', 'status'=>'reservado', 'km'=>'128.000 km'],
-                    ['id'=>4,'marca'=>'Gurgel', 'modelo'=>'BR-800', 'ano'=>1993, 'preco'=>'R$ 21.500', 'status'=>'disponivel', 'km'=>'240.700 km'],
-                    ['id'=>5,'marca'=>'Mercedes', 'modelo'=>'AMG C63', 'ano'=>2024, 'preco'=>'R$ 650.000', 'status'=>'vendido', 'km'=>'8.100 km'],
-                    ['id'=>6,'marca'=>'Volkswagen', 'modelo'=>'Golf GTI', 'ano'=>2023, 'preco'=>'R$ 215.000', 'status'=>'disponivel', 'km'=>'12.300 km'],
-                ];
-                $badgeClass = ['disponivel'=>'badge-success','reservado'=>'badge-warning','vendido'=>'badge-danger'];
-                $badgeLabel = ['disponivel'=>'Disponível','reservado'=>'Reservado','vendido'=>'Vendido'];
+                    $badgeClass = ['disponivel'=>'badge-success','reservado'=>'badge-warning','vendido'=>'badge-danger'];
+                    $badgeLabel = ['disponivel'=>'Disponível','reservado'=>'Reservado','vendido'=>'Vendido'];
                 @endphp
 
-                @foreach($carros as $i => $carro)
-                <div class="car-card" data-status="{{ $carro['status'] }}" data-search="{{ strtolower($carro['marca'].' '.$carro['modelo'].' '.$carro['ano']) }}" style="animation-delay:{{ $i * 0.06 }}s">
+                @foreach(($carros ?? []) as $i => $carro)
+                <div class="car-card" data-status="{{ $carro->status }}" data-search="{{ strtolower($carro->marca.' '.$carro->modelo.' '.$carro->ano) }}" style="animation-delay:{{ $i * 0.06 }}s">
                     <div class="car-thumb">
+                        @if(!empty($carro->capa_path))
+                            <img class="car-photo" src="{{ asset('storage/' . $carro->capa_path) }}" alt="Foto do carro">
+                        @endif
                         <div class="car-thumb-inner">
                             <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
                         </div>
-                        <span class="badge {{ $badgeClass[$carro['status']] }}">{{ $badgeLabel[$carro['status']] }}</span>
+                        <span class="badge {{ $badgeClass[$carro->status] ?? 'badge-success' }}">{{ $badgeLabel[$carro->status] ?? $carro->status }}</span>
                     </div>
                     <div class="car-body">
                         <div class="car-meta">
-                            <span class="car-brand">{{ $carro['marca'] }}</span>
-                            <span class="car-year">{{ $carro['ano'] }}</span>
+                            <span class="car-brand">{{ $carro->marca }}</span>
+                            <span class="car-year">{{ $carro->ano }}</span>
                         </div>
-                        <div class="car-model">{{ $carro['modelo'] }}</div>
-                        <div class="car-info">{{ $carro['km'] }} · Seminovo</div>
-                        <div class="car-price">{{ $carro['preco'] }}</div>
+                        <div class="car-model">{{ $carro->modelo }}</div>
+                        <div class="car-info">{{ $carro->km ? number_format($carro->km, 0, ',', '.') . ' km' : '—' }} · Seminovo</div>
+                        <div class="car-price">R$ {{ number_format((float) $carro->preco, 2, ',', '.') }}</div>
                         <div class="car-actions">
-                            <button class="btn btn-secondary btn-sm" onclick="openEdit({{ $carro['id'] }}, '{{ $carro['marca'] }}', '{{ $carro['modelo'] }}', {{ $carro['ano'] }}, '{{ $carro['preco'] }}', '{{ $carro['status'] }}', '{{ $carro['km'] }}')">
+                            <button class="btn btn-secondary btn-sm" onclick="openEdit({{ $carro->id }}, '{{ addslashes($carro->marca) }}', '{{ addslashes($carro->modelo) }}', {{ (int) $carro->ano }}, '{{ $carro->preco }}', '{{ $carro->status }}', '{{ $carro->km ?? '' }}', '{{ addslashes($carro->cor ?? '') }}', '{{ $carro->combustivel ?? '' }}', '{{ $carro->cambio ?? '' }}', '{{ addslashes($carro->descricao ?? '') }}')">
                                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                 Editar
                             </button>
-                            <button class="btn btn-danger btn-sm" onclick="openDelete({{ $carro['id'] }}, '{{ $carro['marca'] }} {{ $carro['modelo'] }}')">
+                            <button class="btn btn-danger btn-sm" onclick="openDelete({{ $carro->id }}, '{{ addslashes($carro->marca . ' ' . $carro->modelo) }}')">
                                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
                                 Excluir
                             </button>
@@ -143,7 +157,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="#" method="POST" id="formCreate">
+                    <form action="{{ route('adm.carros.store') }}" method="POST" id="formCreate" enctype="multipart/form-data">
                         @csrf
                         <div class="form-row">
                             <div class="form-group">
@@ -210,15 +224,20 @@
                             <textarea name="descricao" class="form-control" rows="3" placeholder="Destaque os pontos do veículo..."></textarea>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Foto</label>
+                            <label class="form-label">Foto de capa</label>
                             <div class="upload-area" id="uploadCreate">
-                                <input type="file" name="foto" accept="image/*" onchange="previewPhoto(event, 'previewCreate')">
+                                <input type="file" name="capa" accept="image/*" onchange="previewPhoto(event, 'previewCreate')">
                                 <div class="upload-content" id="uploadCreateContent">
                                     <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
                                     <span>Clique ou arraste a foto</span>
                                 </div>
                                 <img id="previewCreate" class="upload-preview" style="display:none;">
                             </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Mais fotos (galeria)</label>
+                            <input type="file" name="fotos[]" accept="image/*" multiple class="form-control">
                         </div>
                     </form>
                 </div>
@@ -244,7 +263,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="#" method="POST" id="formEdit">
+                    <form action="#" method="POST" id="formEdit" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <input type="hidden" name="id" id="editId">
@@ -269,13 +288,13 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Quilometragem</label>
-                                <input type="text" name="km" id="editKm" class="form-control">
+                                <input type="number" name="km" id="editKm" class="form-control" min="0" step="1">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label">Valor de venda *</label>
-                                <input type="text" name="preco" id="editPreco" class="form-control">
+                                <input type="number" name="preco" id="editPreco" class="form-control" min="0" step="0.01">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Combustível</label>
@@ -309,6 +328,16 @@
                         <div class="form-group">
                             <label class="form-label">Descrição</label>
                             <textarea name="descricao" id="editDescricao" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Trocar foto de capa</label>
+                            <input type="file" name="capa" accept="image/*" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Adicionar mais fotos (galeria)</label>
+                            <input type="file" name="fotos[]" accept="image/*" multiple class="form-control">
                         </div>
                     </form>
                 </div>
@@ -371,7 +400,7 @@
             if (e.target === e.currentTarget) closeModal(name);
         }
 
-        function openEdit(id, marca, modelo, ano, preco, status, km) {
+        function openEdit(id, marca, modelo, ano, preco, status, km, cor, combustivel, cambio, descricao) {
             document.getElementById('editId').value = id;
             document.getElementById('editMarca').value = marca;
             document.getElementById('editModelo').value = modelo;
@@ -379,13 +408,19 @@
             document.getElementById('editPreco').value = preco;
             document.getElementById('editStatus').value = status;
             document.getElementById('editKm').value = km;
+            document.getElementById('editCor').value = cor || '';
+            document.getElementById('editCombustivel').value = combustivel || '';
+            document.getElementById('editCambio').value = cambio || '';
+            document.getElementById('editDescricao').value = descricao || '';
             document.getElementById('editSubtitle').textContent = marca + ' ' + modelo;
+            document.getElementById('formEdit').action = "{{ url('/adm/carros') }}/" + id;
             openModal('edit');
         }
 
         function openDelete(id, nome) {
             document.getElementById('deleteId').value = id;
             document.getElementById('deleteNome').textContent = nome;
+            document.getElementById('formDelete').action = "{{ url('/adm/carros') }}/" + id;
             openModal('delete');
         }
 

@@ -20,7 +20,7 @@
                 <div class="nav-links">
                     <a href="{{ route('admHome') }}" class="nav-hover-btn">Dashboard</a>
                     <a href="{{ route('admGerCar') }}" class="nav-hover-btn">Carros</a>
-                    <a href="#" class="nav-hover-btn">Pedidos</a>
+                    <a href="{{ route('admGerPed') }}" class="nav-hover-btn">Pedidos</a>
                     <a href="{{ route('admGerUser') }}" class="nav-active nav-hover-btn">Clientes</a>
                 </div>
             </div>
@@ -29,6 +29,25 @@
         </nav>
 
         <main class="main">
+            @if(session('success'))
+                <div class="alert alert-success" style="margin-bottom:14px;">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="alert alert-danger" style="margin-bottom:14px;">
+                    <strong>Não foi possível salvar.</strong>
+                    <ul style="margin:8px 0 0 18px;">
+                        @foreach($errors->all() as $msg)
+                            <li>{{ $msg }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                <script>
+                    window.addEventListener('DOMContentLoaded', () => openModal('create'));
+                </script>
+            @endif
 
             <div class="page-header">
                 <div>
@@ -44,22 +63,22 @@
             <div class="kpi-grid">
                 <div class="kpi-card">
                     <div class="kpi-label">Total</div>
-                    <div class="kpi-value">128</div>
+                    <div class="kpi-value">{{ $kpis['total'] ?? 0 }}</div>
                     <div class="kpi-foot">usuários cadastrados</div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-label">Admins</div>
-                    <div class="kpi-value green">4</div>
+                    <div class="kpi-value green">{{ $kpis['admin'] ?? 0 }}</div>
                     <div class="kpi-foot">com acesso total</div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-label">Clientes</div>
-                    <div class="kpi-value blue">120</div>
+                    <div class="kpi-value blue">{{ $kpis['cliente'] ?? 0 }}</div>
                     <div class="kpi-foot">contas ativas</div>
                 </div>
                 <div class="kpi-card">
                     <div class="kpi-label">Inativos</div>
-                    <div class="kpi-value amber">4</div>
+                    <div class="kpi-value amber">{{ $kpis['inativo'] ?? 0 }}</div>
                     <div class="kpi-foot">sem acesso</div>
                 </div>
             </div>
@@ -90,40 +109,36 @@
                         </tr>
                     </thead>
                     <tbody id="tableBody">
-
                         @php
-                        $usuarios = [
-                            ['id'=>1, 'nome'=>'Lorem Ipsum', 'email'=>'lorem@carwell.com', 'perfil'=>'admin', 'nascimento'=>'12/03/1990', 'endereco'=>'Rua Lorem, 123 — SP', 'initials'=>'LI'],
-                            ['id'=>2, 'nome'=>'Dolor Sit Amet', 'email'=>'dolor@carwell.com', 'perfil'=>'cliente', 'nascimento'=>'05/07/1995', 'endereco'=>'Av. Ipsum, 456 — RJ', 'initials'=>'DS'],
-                            ['id'=>3, 'nome'=>'Consectetur Elit', 'email'=>'consec@carwell.com', 'perfil'=>'cliente', 'nascimento'=>'22/11/1988', 'endereco'=>'Rua Dolor, 789 — MG', 'initials'=>'CE'],
-                            ['id'=>4, 'nome'=>'Adipiscing Tempor', 'email'=>'adip@carwell.com', 'perfil'=>'inativo', 'nascimento'=>'30/01/2000', 'endereco'=>'Rua Sit, 321 — RS', 'initials'=>'AT'],
-                            ['id'=>5, 'nome'=>'Sed Do Eiusmod', 'email'=>'sed@carwell.com', 'perfil'=>'admin', 'nascimento'=>'14/06/1985', 'endereco'=>'Av. Amet, 654 — BA', 'initials'=>'SE'],
-                            ['id'=>6, 'nome'=>'Ut Labore Dolore', 'email'=>'utlab@carwell.com', 'perfil'=>'cliente', 'nascimento'=>'09/09/1997', 'endereco'=>'Rua Elit, 987 — PR', 'initials'=>'UL'],
-                        ];
-
-                        $perfilClass = ['admin'=>'badge-green', 'cliente'=>'badge-blue', 'inativo'=>'badge-amber'];
-                        $perfilLabel = ['admin'=>'Admin', 'cliente'=>'Cliente', 'inativo'=>'Inativo'];
+                            $perfilClass = ['admin'=>'badge-green', 'cliente'=>'badge-blue', 'inativo'=>'badge-amber'];
+                            $perfilLabel = ['admin'=>'Admin', 'cliente'=>'Cliente', 'inativo'=>'Inativo'];
                         @endphp
 
-                        @foreach($usuarios as $u)
-                        <tr data-perfil="{{ $u['perfil'] }}" data-search="{{ strtolower($u['nome'].' '.$u['email'].' '.$u['perfil']) }}">
+                        @foreach(($usuarios ?? []) as $u)
+                        @php
+                            $nome = $u->name ?? '';
+                            $parts = preg_split('/\s+/', trim($nome)) ?: [];
+                            $initials = strtoupper(substr($parts[0] ?? '', 0, 1) . substr($parts[1] ?? '', 0, 1));
+                            $nascimentoBr = $u->nascimento ? $u->nascimento->format('d/m/Y') : '';
+                        @endphp
+                        <tr data-perfil="{{ $u->perfil }}" data-search="{{ strtolower(($u->name ?? '').' '.($u->email ?? '').' '.($u->perfil ?? '')) }}">
                             <td>
                                 <div class="user-cell">
-                                    <div class="user-initials">{{ $u['initials'] }}</div>
-                                    <span class="user-name">{{ $u['nome'] }}</span>
+                                    <div class="user-initials">{{ $initials ?: '—' }}</div>
+                                    <span class="user-name">{{ $u->name }}</span>
                                 </div>
                             </td>
-                            <td class="text-muted">{{ $u['email'] }}</td>
-                            <td><span class="badge {{ $perfilClass[$u['perfil']] }}">{{ $perfilLabel[$u['perfil']] }}</span></td>
-                            <td class="text-muted">{{ $u['nascimento'] }}</td>
-                            <td class="text-muted">{{ $u['endereco'] }}</td>
+                            <td class="text-muted">{{ $u->email }}</td>
+                            <td><span class="badge {{ $perfilClass[$u->perfil] ?? 'badge-blue' }}">{{ $perfilLabel[$u->perfil] ?? $u->perfil }}</span></td>
+                            <td class="text-muted">{{ $nascimentoBr ?: '—' }}</td>
+                            <td class="text-muted">{{ $u->endereco ?: '—' }}</td>
                             <td>
                                 <div class="row-actions">
-                                    <button class="btn btn-secondary btn-sm" onclick="openEdit({{ $u['id'] }}, '{{ $u['nome'] }}', '{{ $u['email'] }}', '{{ $u['perfil'] }}', '{{ $u['nascimento'] }}', '{{ $u['endereco'] }}')">
+                                    <button class="btn btn-secondary btn-sm" onclick="openEdit({{ $u->id }}, '{{ addslashes($u->name ?? '') }}', '{{ addslashes($u->email ?? '') }}', '{{ $u->perfil ?? 'cliente' }}', '{{ $nascimentoBr }}', '{{ addslashes($u->endereco ?? '') }}')">
                                         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                         Editar
                                     </button>
-                                    <button class="btn btn-danger btn-sm" onclick="openDelete({{ $u['id'] }}, '{{ $u['nome'] }}')">
+                                    <button class="btn btn-danger btn-sm" onclick="openDelete({{ $u->id }}, '{{ addslashes($u->name ?? '') }}')">
                                         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
                                         Excluir
                                     </button>
@@ -157,7 +172,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="#" method="POST" id="formCreate" enctype="multipart/form-data">
+                    <form action="{{ route('adm.usuarios.store') }}" method="POST" id="formCreate" enctype="multipart/form-data">
                         @csrf
 
                         <div class="avatar-upload" id="avatarUploadCreate">
@@ -366,12 +381,14 @@
                     document.getElementById('editNascimento').value = parts[2] + '-' + parts[1] + '-' + parts[0];
                 }
 
+                document.getElementById('formEdit').action = "{{ url('/adm/usuarios') }}/" + id;
                 openModal('edit');
             }
 
             function openDelete(id, nome) {
                 document.getElementById('deleteId').value = id;
                 document.getElementById('deleteNome').textContent = nome;
+                document.getElementById('formDelete').action = "{{ url('/adm/usuarios') }}/" + id;
                 openModal('delete');
             }
 

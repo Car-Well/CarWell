@@ -16,6 +16,8 @@ class Cliente extends Authenticatable
         'telefone',
         'email',
         'password',
+        'nascimento',
+        'perfil',
         'foto',
         'endereco',
         'email_verification_code',
@@ -32,5 +34,6 @@ class Cliente extends Authenticatable
     protected $casts = [
         'email_verified_at'             => 'datetime',
         'email_verification_expires_at' => 'datetime',
+        'nascimento'                    => 'date',
     ];
 }

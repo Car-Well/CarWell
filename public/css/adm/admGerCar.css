@@ -342,6 +342,23 @@ body {
     position: relative;
 }
 
+.car-thumb .car-photo{
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.car-thumb-inner{
+    position: relative;
+    z-index: 1;
+}
+
+.car-thumb .badge{
+    z-index: 2;
+}
+
 .car-thumb-inner svg {
     width: 56px;
     height: 56px;
