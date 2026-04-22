@@ -11,6 +11,14 @@ Route::get('/teste', function(){
     return view('teste');
 });
 
+// Troca de idioma
+Route::get('/locale/{lang}', function ($lang) {
+    if (in_array($lang, ['pt_BR', 'en'])) {
+        session(['locale' => $lang]);
+    }
+    return redirect()->back();
+})->name('locale.set');
+
 // Páginas públicas do site
 Route::get('/', function () {
     return view('welcome');
