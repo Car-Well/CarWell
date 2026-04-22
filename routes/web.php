@@ -64,6 +64,10 @@ Route::get('/admGerUser', function(){
     return view('adm/admGerUser');
 })->name('admGerUser');
 
+Route::get('/admGerPed', function(){
+    return view('adm/admGerPed');
+})->name('admGerPed');
+
 // Autenticação do cliente
 // ============================================================
 
