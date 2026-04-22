@@ -8,6 +8,7 @@ return [
     'id_pedido'             => 'ID DO PEDIDO',
     'pedidos_realizados'    => 'PEDIDOS REALIZADOS',
     'pedido_realizado'      => 'PEDIDO REALIZADO',
+    'em_transporte'         => 'EM TRANSPORTE – ROTA PARA :cidade',
     'saiu_para_entrega'     => 'SAIU PARA ENTREGA',
     'pedido_entregue'       => 'PEDIDO ENTREGUE!',
 ];

@@ -151,7 +151,7 @@
           </div>
         </div>
         <div class="timeline-content">
-          <p class="timeline-title">EM TRANSPORTE – ROTA PARA CURITIBA</p>
+          <p class="timeline-title">{{ __('pedido.em_transporte', ['cidade' => 'CURITIBA']) }}</p>
           <p class="timeline-date">02/02/2026 – 10:34</p>
         </div>
       </div>
