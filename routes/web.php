@@ -42,19 +42,7 @@ Route::get('/about', function () {
 
 Route::get('/infocar', function () {
     return view('info_carro');
-});
-
-Route::get('/carrinho', function () {
-    return view('carrinho');
-})->name('carrinho');
-
-Route::get('/checkout', function () {
-    return view('checkout');
-})->name('checkout');
-
-Route::get('/pedido', function () {
-    return view('pedido');
-})->name('pedido');
+})->name('info-carro');
 
 
 
@@ -94,14 +82,22 @@ Route::post('/reenviar-codigo', [ConfirmarEmailController::class, 'reenviar'])->
 
 
 // Área do cliente (requer login)
-
-
 Route::middleware('cliente.autenticado')->group(function () {
 
     Route::get('/perfil', [PerfilController::class, 'show'])->name('perfil');
-
     Route::post('/perfil', [PerfilController::class, 'update'])->name('perfil.update');
-
     Route::post('/logout', [PerfilController::class, 'logout'])->name('cliente.logout');
+
+    Route::get('/carrinho', function () {
+        return view('carrinho');
+    })->name('carrinho');
+
+    Route::get('/checkout', function () {
+        return view('checkout');
+    })->name('checkout');
+
+    Route::get('/pedido', function () {
+        return view('pedido');
+    })->name('pedido');
 
 });
