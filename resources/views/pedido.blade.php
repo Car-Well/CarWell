@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Carwell – Pedido #17289</title>
+    <title>{{ __('pedido.titulo') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -19,11 +19,11 @@
 
     <div class="nav-center">
       <div class="nav-links">
-        <a href="{{ route('home') }}" class="nav-hover-btn">Home</a>
-        <a href="#" class="nav-hover-btn">Comprar Carro</a>
-        <a href="#" class="nav-hover-btn">Sobre Nós</a>
-        <a href="#" class="nav-hover-btn">Ajuda</a>
-        <a href="{{ route('carrinho') }}" class="nav-hover-btn">Carrinho</a>
+        <a href="{{ route('home') }}" class="nav-hover-btn">{{ __('nav.home') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.ajuda') }}</a>
+        <a href="{{ route('carrinho') }}" class="nav-hover-btn">{{ __('nav.carrinho') }}</a>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
           {{ explode(' ', Auth::guard('cliente')->user()->name)[0] }}
         </a>
       @else
-        <a href="{{ route('login-cliente') }}" class="nav-login">LOGIN</a>
+        <a href="{{ route('login-cliente') }}" class="nav-login">{{ __('nav.login') }}</a>
       @endauth
 
       <!-- Sino com popup -->
@@ -50,7 +50,7 @@
 
         <div class="notif-popup" id="notifPopup">
           <div class="notif-popup-header">
-            <p class="notif-popup-title">NOTIFICAÇÕES</p>
+            <p class="notif-popup-title">{{ __('pedido.notificacoes') }}</p>
             <button class="notif-popup-close" onclick="toggleNotifPopup(event)">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
@@ -89,7 +89,7 @@
               </div>
             </div>
           </div>
-          <a href="#" class="notif-see-all">Ver todas as notificações</a>
+          <a href="#" class="notif-see-all">{{ __('pedido.ver_todas_notificacoes') }}</a>
         </div>
       </div>
 
@@ -113,16 +113,16 @@
         <div class="pedido-car-placeholder" style="display:none"></div>
       </div>
       <div class="pedido-header-info">
-        <p class="pedido-header-label">SEUS PEDIDOS</p>
+        <p class="pedido-header-label">{{ __('pedido.seus_pedidos') }}</p>
         <p class="pedido-car-name">PORSCHE PINK</p>
         <p class="pedido-car-price">R$ 3.200.000</p>
       </div>
     </div>
 
     <div class="pedido-id-block">
-      <p class="pedido-id-label">ID DO PEDIDO</p>
+      <p class="pedido-id-label">{{ __('pedido.id_pedido') }}</p>
       <p class="pedido-id">#17289</p>
-      <p class="pedido-realizados-label">PEDIDOS REALIZADOS</p>
+      <p class="pedido-realizados-label">{{ __('pedido.pedidos_realizados') }}</p>
     </div>
 
     <div class="pedido-timeline">
@@ -136,7 +136,7 @@
           </div>
         </div>
         <div class="timeline-content">
-          <p class="timeline-title">PEDIDO REALIZADO</p>
+          <p class="timeline-title">{{ __('pedido.pedido_realizado') }}</p>
           <p class="timeline-date">28/01/2026 – 23:34</p>
         </div>
       </div>
@@ -165,7 +165,7 @@
           </div>
         </div>
         <div class="timeline-content">
-          <p class="timeline-title">SAIU PARA ENTREGA</p>
+          <p class="timeline-title">{{ __('pedido.saiu_para_entrega') }}</p>
           <p class="timeline-date">04/02/2026 – 15:34</p>
         </div>
       </div>
@@ -179,7 +179,7 @@
           </div>
         </div>
         <div class="timeline-content">
-          <p class="timeline-title">PEDIDO ENTREGUE! – RECEBIDO POR: FULANO</p>
+          <p class="timeline-title">{{ __('pedido.pedido_entregue') }}</p>
           <p class="timeline-date">04/02/2026 – 18:34</p>
         </div>
       </div>

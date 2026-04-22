@@ -68,11 +68,11 @@
 <body>
   <div class="card">
     <span class="logo-text">CARWELL</span>
-    <h2>Confirme o seu e-mail</h2>
-    <p>Use o código abaixo para concluir o seu cadastro:</p>
+    <h2>{{ __('emails.confirme_email') }}</h2>
+    <p>{{ __('emails.use_codigo') }}</p>
     <div class="code">{{ $code }}</div>
-    <p>O código é válido por <strong>15 minutos</strong>.</p>
-    <p class="note">Se você não solicitou este cadastro, ignore este e-mail.</p>
+    <p>{!! __('emails.valido_por') !!}</p>
+    <p class="note">{{ __('emails.nao_solicitou') }}</p>
   </div>
 </body>
 </html>

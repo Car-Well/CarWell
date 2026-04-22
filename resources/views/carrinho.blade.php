@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Carwell – Carrinho</title>
+    <title>{{ __('carrinho.titulo') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -19,11 +19,11 @@
 
     <div class="nav-center">
       <div class="nav-links">
-        <a href="{{ route('home') }}" class="nav-hover-btn">Home</a>
-        <a href="#" class="nav-hover-btn">Comprar Carro</a>
-        <a href="#" class="nav-hover-btn">Sobre Nós</a>
-        <a href="#" class="nav-hover-btn">Ajuda</a>
-        <a href="{{ route('carrinho') }}" class="nav-active nav-hover-btn">Carrinho</a>
+        <a href="{{ route('home') }}" class="nav-hover-btn">{{ __('nav.home') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.ajuda') }}</a>
+        <a href="{{ route('carrinho') }}" class="nav-active nav-hover-btn">{{ __('nav.carrinho') }}</a>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
           {{ explode(' ', Auth::guard('cliente')->user()->name)[0] }}
         </a>
       @else
-        <a href="{{ route('login-cliente') }}" class="nav-login">LOGIN</a>
+        <a href="{{ route('login-cliente') }}" class="nav-login">{{ __('nav.login') }}</a>
       @endauth
 
       <a href="{{ route('perfil') }}" class="nav-profile">
@@ -77,7 +77,7 @@
         </div>
         <p class="cart-item-price-final">R$ 708.900</p>
         <a href="#" class="adicionar-seguro">
-          Adicionar seguro
+          {{ __('carrinho.adicionar_seguro') }}
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
         </a>
       </div>
@@ -107,7 +107,7 @@
         </div>
         <p class="cart-item-price-final">R$ 880.900</p>
         <a href="#" class="adicionar-seguro">
-          Adicionar seguro
+          {{ __('carrinho.adicionar_seguro') }}
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
         </a>
       </div>
@@ -137,7 +137,7 @@
         </div>
         <p class="cart-item-price-final">R$ 3.200.000</p>
         <a href="#" class="adicionar-seguro">
-          Adicionar seguro
+          {{ __('carrinho.adicionar_seguro') }}
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
         </a>
       </div>
@@ -145,27 +145,27 @@
 
     <!-- Adicionar mais carros -->
     <div class="add-more-wrap">
-      <a href="{{ route('home') }}" class="add-more-link">+ Adicionar mais carros</a>
+      <a href="{{ route('home') }}" class="add-more-link">{{ __('carrinho.adicionar_mais') }}</a>
     </div>
 
     <!-- Resumo -->
     <div class="cart-summary">
       <div class="summary-row">
-        <span class="summary-label">Subtotal</span>
+        <span class="summary-label">{{ __('carrinho.subtotal') }}</span>
         <span class="summary-value" id="subtotal">R$ 4.868.900</span>
       </div>
       <div class="summary-row">
-        <span class="summary-label">Frete</span>
-        <span class="summary-value free">Grátis</span>
+        <span class="summary-label">{{ __('carrinho.frete') }}</span>
+        <span class="summary-value free">{{ __('carrinho.gratis') }}</span>
       </div>
       <div class="summary-row total-row">
-        <span class="summary-label total-label">Total</span>
+        <span class="summary-label total-label">{{ __('carrinho.total') }}</span>
         <span class="summary-value total-value" id="total">R$ 4.868.900</span>
       </div>
     </div>
 
     <!-- Botão finalizar -->
-    <a href="{{ route('checkout') }}" class="btn-finalizar">FINALIZAR COMPRA</a>
+    <a href="{{ route('checkout') }}" class="btn-finalizar">{{ __('carrinho.finalizar') }}</a>
 
     <!-- Métodos de pagamento -->
     <div class="payment-methods">

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Carwell – Encontre seu Carro</title>
+    <title>{{ __('home.titulo') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -20,11 +20,11 @@
 
     <div class="nav-center">
       <div class="nav-links">
-          <a href="{{ route('home') }}" class="nav-active nav-hover-btn">Home</a>
-          <a href="#" class="nav-hover-btn">Comprar Carro</a>
-          <a href="#" class="nav-hover-btn">Sobre Nós</a>
-          <a href="#" class="nav-hover-btn">Ajuda</a>
-          <a href="" class="nav-hover-btn">Carrinho</a>
+          <a href="{{ route('home') }}" class="nav-active nav-hover-btn">{{ __('nav.home') }}</a>
+          <a href="#" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
+          <a href="#" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
+          <a href="#" class="nav-hover-btn">{{ __('nav.ajuda') }}</a>
+          <a href="" class="nav-hover-btn">{{ __('nav.carrinho') }}</a>
       </div>
     </div>
 
@@ -37,7 +37,7 @@
           {{ explode(' ', Auth::guard('cliente')->user()->name)[0] }}
         </a>
       @else
-        <a href="{{ route('login-cliente') }}" class="nav-login">LOGIN</a>
+        <a href="{{ route('login-cliente') }}" class="nav-login">{{ __('nav.login') }}</a>
       @endauth
 
       <a href="{{ route('perfil') }}" class="nav-profile">
@@ -54,10 +54,10 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-content">
-      <h1 class="hero-title">TODA JORNADA<br>MERECE<br><span>O CARRO CERTO</span></h1>
-      <p class="hero-desc">ENCONTRE QUALIDADE, PROCEDÊNCIA E AS MELHORES OPORTUNIDADES EM UM SÓ LUGAR</p>
+      <h1 class="hero-title">{{ __('home.hero_titulo') }}<br><span>{{ __('home.hero_titulo_span') }}</span></h1>
+      <p class="hero-desc">{{ __('home.hero_desc') }}</p>
       <div class="hero-search">
-        <input type="text" placeholder="Explorar veículos"/>
+        <input type="text" placeholder="{{ __('home.hero_busca') }}"/>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
@@ -84,7 +84,7 @@
 
   <!-- WHY CARWELL -->
   <section class="section">
-    <h2 class="section-title">POR QUE ESCOLHER A CARWELL?</h2>
+    <h2 class="section-title">{{ __('home.por_que') }}</h2>
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon">
@@ -93,8 +93,8 @@
             <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
           </svg>
         </div>
-        <p class="feature-title">GARANTIA DE CONFIANÇA</p>
-        <p class="feature-desc">OFERECEMOS GARANTIA E SUPORTE MESMO APÓS A COMPRA</p>
+        <p class="feature-title">{{ __('home.garantia_titulo') }}</p>
+        <p class="feature-desc">{{ __('home.garantia_desc') }}</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">
@@ -102,8 +102,8 @@
             <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
         </div>
-        <p class="feature-title">TEST DRIVE IMEDIATO</p>
-        <p class="feature-desc">AGENDE EM UMA HORA E TRATE O CARRO ANTES DE DECIDIR</p>
+        <p class="feature-title">{{ __('home.test_drive_titulo') }}</p>
+        <p class="feature-desc">{{ __('home.test_drive_desc') }}</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">
@@ -111,15 +111,15 @@
             <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
           </svg>
         </div>
-        <p class="feature-title">CONDIÇÕES QUE CABEM NO BOLSO</p>
-        <p class="feature-desc">PARCELE COM AS PRINCIPAIS FINANCEIRAS E PLANOS QUE SE ENCAIXAM NA SUA REALIDADE</p>
+        <p class="feature-title">{{ __('home.financiamento_titulo') }}</p>
+        <p class="feature-desc">{{ __('home.financiamento_desc') }}</p>
       </div>
     </div>
   </section>
 
   <!-- BRANDS -->
   <div class="brands-section">
-    <h2 class="section-title">MARCAS MAIS BUSCADAS</h2>
+    <h2 class="section-title">{{ __('home.marcas') }}</h2>
     <div style="display:flex; align-items:center; gap:10px;">
       <div class="brands-row" id="brands-row">
         <div class="brand-item">
@@ -159,13 +159,13 @@
   <!-- FILTER BAR -->
   <div class="filter-bar">
     <div class="filter-search">
-      <input type="text" placeholder="BUSQUE POR MODELO DE VEÍCULO"/>
+      <input type="text" placeholder="{{ __('home.busca_modelo') }}"/>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
     </div>
     <button class="filter-btn">
-      FILTRAR CATEGORIA
+      {{ __('home.filtrar') }}
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
       </svg>

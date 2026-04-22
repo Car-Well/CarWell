@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Carwell – Perfil</title>
+  <title>{{ __('perfil.titulo') }}</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="{{ asset('css/login/perfil.css') }}"/>
 </head>
@@ -22,7 +22,7 @@
 
       <!-- Foto -->
       <div class="photo-section">
-        <p class="add-photo-label">ADICIONAR FOTO</p>
+        <p class="add-photo-label">{{ __('perfil.adicionar_foto') }}</p>
         <div class="photo-circle" id="photo-circle">
           @if($cliente->foto)
             <img id="preview-img" src="{{ asset('storage/' . $cliente->foto) }}"
@@ -44,14 +44,14 @@
       <!-- Nome Completo -->
       <div class="field-group">
         <input class="field-box editable" id="nome" name="name" type="text"
-               placeholder="NOME COMPLETO"
+               placeholder="{{ __('perfil.placeholder_nome') }}"
                value="{{ old('name', $cliente->name) }}" readonly/>
       </div>
 
       <!-- Telefone -->
       <div class="field-group">
         <input class="field-box editable" id="telefone" name="telefone" type="tel"
-               placeholder="(11) 99999-9999"
+               placeholder="{{ __('perfil.placeholder_tel') }}"
                pattern="[\+\d\s\(\)\-]{10,20}"
                title="Digite um telefone válido com DDD. Ex: (11) 99999-9999"
                value="{{ old('telefone', $cliente->telefone) }}" readonly/>
@@ -61,14 +61,16 @@
       <div class="field-group">
         <textarea class="field-box address editable" id="endereco" name="endereco"
                   rows="2" readonly
-                  placeholder="ENDEREÇO DE ENTREGA:&#10;RUA EXEMPLO, 123, SÃO PAULO">{{ old('endereco', $cliente->endereco) }}</textarea>
+                  placeholder="{{ __('perfil.placeholder_end') }}">{{ old('endereco', $cliente->endereco) }}</textarea>
       </div>
 
       <div class="btn-row">
         <button type="button" class="btn btn-back"
-                onclick="window.location.href='{{ route('home') }}'">VOLTAR</button>
+                onclick="window.location.href='{{ route('home') }}'">{{ __('perfil.voltar') }}</button>
         <button type="button" class="btn btn-edit" id="btn-edit"
-                onclick="toggleEdit()">EDITAR INFORMAÇÕES</button>
+                data-label-edit="{{ __('perfil.editar') }}"
+                data-label-save="{{ __('perfil.salvar') }}"
+                onclick="toggleEdit()">{{ __('perfil.editar') }}</button>
       </div>
     </form>
 
@@ -78,7 +80,7 @@
       <button type="submit"
               style="background:none;border:none;color:#b91c1c;font-size:13px;
                      font-family:inherit;font-weight:600;cursor:pointer;letter-spacing:1px;">
-        SAIR DA CONTA
+        {{ __('perfil.sair') }}
       </button>
     </form>
   </div>
@@ -101,7 +103,7 @@
       document.getElementById('photo-circle').style.cursor = 'pointer';
       document.getElementById('photo-circle').onclick = () => document.getElementById('photo-input').click();
       const btn = document.getElementById('btn-edit');
-      btn.textContent = 'SALVAR INFORMAÇÕES';
+      btn.textContent = btn.dataset.labelSave;
       btn.style.background = '#1e4d8c';
     }
 

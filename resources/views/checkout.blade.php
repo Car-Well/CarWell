@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Carwell – Finalizar Compra</title>
+    <title>{{ __('checkout.titulo') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -19,11 +19,11 @@
 
     <div class="nav-center">
       <div class="nav-links">
-        <a href="{{ route('home') }}" class="nav-hover-btn">Home</a>
-        <a href="#" class="nav-hover-btn">Comprar Carro</a>
-        <a href="#" class="nav-hover-btn">Sobre Nós</a>
-        <a href="#" class="nav-hover-btn">Ajuda</a>
-        <a href="{{ route('carrinho') }}" class="nav-hover-btn">Carrinho</a>
+        <a href="{{ route('home') }}" class="nav-hover-btn">{{ __('nav.home') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.ajuda') }}</a>
+        <a href="{{ route('carrinho') }}" class="nav-hover-btn">{{ __('nav.carrinho') }}</a>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
           {{ explode(' ', Auth::guard('cliente')->user()->name)[0] }}
         </a>
       @else
-        <a href="{{ route('login-cliente') }}" class="nav-login">LOGIN</a>
+        <a href="{{ route('login-cliente') }}" class="nav-login">{{ __('nav.login') }}</a>
       @endauth
 
       <a href="{{ route('perfil') }}" class="nav-profile">
@@ -53,11 +53,11 @@
   <!-- CHECKOUT -->
   <main class="checkout-container">
 
-    <h1 class="checkout-title">FINALIZAR COMPRA</h1>
+    <h1 class="checkout-title">{{ __('carrinho.finalizar') }}</h1>
 
     <!-- SEUS PEDIDOS -->
     <div class="checkout-block">
-      <p class="checkout-block-title">SEUS PEDIDOS</p>
+      <p class="checkout-block-title">{{ __('checkout.seus_pedidos') }}</p>
 
       <div class="checkout-order-item">
         <div class="checkout-order-img">
@@ -95,27 +95,27 @@
 
     <!-- DADOS DO PAGAMENTO -->
     <div class="checkout-block">
-      <p class="checkout-block-title">DADOS DO PAGAMENTO</p>
+      <p class="checkout-block-title">{{ __('checkout.dados_pagamento') }}</p>
 
       <form class="payment-form" onsubmit="handleCheckout(event)">
-        <input type="text" class="form-input" placeholder="Numero do cartão" maxlength="19" oninput="formatCard(this)">
-        <input type="text" class="form-input" placeholder="Titular do cartão">
+        <input type="text" class="form-input" placeholder="{{ __('checkout.numero_cartao') }}" maxlength="19" oninput="formatCard(this)">
+        <input type="text" class="form-input" placeholder="{{ __('checkout.titular_cartao') }}">
         <input type="text" class="form-input cvv-input" placeholder="CVV" maxlength="4">
 
         <div class="billing-address-row">
           <div class="billing-left">
-            <p class="billing-label">Endereço de Cobrança</p>
+            <p class="billing-label">{{ __('checkout.endereco_cobranca') }}</p>
             <input type="text" class="form-input" placeholder="CEP" maxlength="9">
-            <input type="text" class="form-input" placeholder="RUA">
-            <input type="text" class="form-input" placeholder="NÚMERO">
+            <input type="text" class="form-input" placeholder="{{ __('checkout.rua') }}">
+            <input type="text" class="form-input" placeholder="{{ __('checkout.numero') }}">
           </div>
           <div class="billing-right">
             <div class="order-summary-box">
-              <p class="order-summary-label">resumo de pedido</p>
+              <p class="order-summary-label">{{ __('checkout.resumo_pedido') }}</p>
               <p class="order-summary-value">R$ 9600.000</p>
-              <p class="order-summary-frete">Frete Grátis</p>
+              <p class="order-summary-frete">{{ __('checkout.frete_gratis') }}</p>
             </div>
-            <button type="submit" class="btn-pagar">PAGAR AGORA</button>
+            <button type="submit" class="btn-pagar">{{ __('checkout.pagar_agora') }}</button>
           </div>
         </div>
       </form>

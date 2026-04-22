@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -19,11 +19,11 @@
 
     <div class="nav-center">
       <div class="nav-links">
-        <a href="{{ route('home') }}" class="nav-hover-btn">Home</a>
-        <a href="#" class="nav-hover-btn">Comprar Carro</a>
-        <a href="#" class="nav-hover-btn">Sobre Nós</a>
-        <a href="#" class="nav-hover-btn">Ajuda</a>
-        <a href="{{ route('carrinho') }}" class="nav-hover-btn">Carrinho</a>
+        <a href="{{ route('home') }}" class="nav-hover-btn">{{ __('nav.home') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
+        <a href="#" class="nav-hover-btn">{{ __('nav.ajuda') }}</a>
+        <a href="{{ route('carrinho') }}" class="nav-hover-btn">{{ __('nav.carrinho') }}</a>
       </div>
     </div>
 
@@ -36,7 +36,7 @@
           {{ explode(' ', Auth::guard('cliente')->user()->name)[0] }}
         </a>
       @else
-        <a href="{{ route('login-cliente') }}" class="nav-login">LOGIN</a>
+        <a href="{{ route('login-cliente') }}" class="nav-login">{{ __('nav.login') }}</a>
       @endauth
 
       <a href="{{ route('perfil') }}" class="nav-profile">
@@ -103,16 +103,16 @@
     <div class="product-info-area">
       <p class="product-label">HONDA CIVIC G12 2025(34)</p>
       <p class="product-price">R$ 708.900</p>
-      <button class="btn-comprar">COMPRAR</button>
+      <button class="btn-comprar">{{ __('info_carro.comprar') }}</button>
 
       <!-- Informações Básicas -->
       <div class="info-section">
-        <p class="info-section-title">INFORMAÇÕES BÁSICAS</p>
+        <p class="info-section-title">{{ __('info_carro.info_basicas') }}</p>
 
         <!-- Cidade -->
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">CIDADE</span>
+            <span class="info-label">{{ __('info_carro.cidade') }}</span>
             <span class="accordion-right">
               <span class="accordion-preview">SÃO PAULO</span>
               <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -130,7 +130,7 @@
         <!-- Estoque ID -->
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">ESTOQUE ID</span>
+            <span class="info-label">{{ __('info_carro.estoque_id') }}</span>
             <span class="accordion-right">
               <span class="accordion-preview">1720</span>
               <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -147,7 +147,7 @@
         <!-- Ano -->
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">ANO</span>
+            <span class="info-label">{{ __('info_carro.ano') }}</span>
             <span class="accordion-right">
               <span class="accordion-preview">2026</span>
               <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
@@ -162,16 +162,16 @@
           </div>
         </div>
 
-        <a href="#" class="ver-mais-link">VER MAIS</a>
+        <a href="#" class="ver-mais-link">{{ __('info_carro.ver_mais') }}</a>
       </div>
 
       <!-- Características -->
       <div class="info-section">
-        <p class="info-section-title">CARACTERÍSTICAS</p>
+        <p class="info-section-title">{{ __('info_carro.caracteristicas') }}</p>
 
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">GERAL</span>
+            <span class="info-label">{{ __('info_carro.geral') }}</span>
             <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="accordion-body">
@@ -186,7 +186,7 @@
 
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">EXTERIOR</span>
+            <span class="info-label">{{ __('info_carro.exterior') }}</span>
             <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="accordion-body">
@@ -201,7 +201,7 @@
 
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">ENTRETENIMENTO E CONFORTO</span>
+            <span class="info-label">{{ __('info_carro.entretenimento') }}</span>
             <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="accordion-body">
@@ -217,7 +217,7 @@
 
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">SEGURANÇA</span>
+            <span class="info-label">{{ __('info_carro.seguranca') }}</span>
             <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="accordion-body">
@@ -234,11 +234,11 @@
 
       <!-- Dados Técnicos -->
       <div class="info-section">
-        <p class="info-section-title">DADOS TÉCNICOS</p>
+        <p class="info-section-title">{{ __('info_carro.dados_tecnicos') }}</p>
 
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">UNIDADE MOTOR</span>
+            <span class="info-label">{{ __('info_carro.unidade_motor') }}</span>
             <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="accordion-body">
@@ -253,7 +253,7 @@
 
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">DESEMPENHO</span>
+            <span class="info-label">{{ __('info_carro.desempenho') }}</span>
             <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="accordion-body">
@@ -268,7 +268,7 @@
 
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">CARROCERIA</span>
+            <span class="info-label">{{ __('info_carro.carroceria') }}</span>
             <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="accordion-body">
@@ -283,7 +283,7 @@
 
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">NÍVEL DE RUÍDO</span>
+            <span class="info-label">{{ __('info_carro.nivel_ruido') }}</span>
             <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
           <div class="accordion-body">
@@ -302,7 +302,7 @@
   <!-- VOCÊ TAMBÉM PODE SE INTERESSAR -->
   <section class="related-section">
     <div class="related-header">
-      <h2 class="section-title-sm">VOCÊ TAMBÉM PODE SE INTERESSAR</h2>
+      <h2 class="section-title-sm">{{ __('info_carro.tambem_interessar') }}</h2>
       <button class="related-arrow">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
@@ -392,7 +392,7 @@
   <!-- CATEGORIAS -->
   <section class="categories-section">
     <div class="related-header">
-      <h2 class="section-title-sm">CATEGORIAS</h2>
+      <h2 class="section-title-sm">{{ __('info_carro.categorias') }}</h2>
     </div>
     <div class="categories-grid">
       <div class="category-card">
