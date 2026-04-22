@@ -32,6 +32,10 @@ Route::get('/about', function () {
     return view('aboutUs');
 });
 
+Route::get('/infocar', function () {
+    return view('info_carro');
+});
+
 
 // Área administrativa
 Route::get('/admHome', function () {
