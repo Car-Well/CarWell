@@ -3,6 +3,9 @@
 use App\Http\Controllers\Auth\ConfirmarEmailController;
 use App\Http\Controllers\Auth\LoginClienteController;
 use App\Http\Controllers\Auth\RegistrarClienteController;
+use App\Http\Controllers\Adm\AdmCarroController;
+use App\Http\Controllers\Adm\AdmPedidoController;
+use App\Http\Controllers\Adm\AdmUserController;
 use App\Http\Controllers\PerfilController;
 use Illuminate\Support\Facades\Route;
 
@@ -44,9 +47,6 @@ Route::get('/infocar', function () {
     return view('info_carro');
 })->name('info-carro');
 
-
-
-
 // Área administrativa
 Route::get('/admHome', function () {
     return view('adm/admHome');
@@ -56,17 +56,27 @@ Route::get('/login-adm', function () {
     return view('login/login-adm');
 })->name('login-adm');
 
-Route::get('/admGerCar', function () {
-    return view('adm/admGerCar');
-})->name('admGerCar');
+Route::prefix('adm')->name('adm.')->group(function () {
+    Route::get('/carros', [AdmCarroController::class, 'index'])->name('carros.index');
+    Route::post('/carros', [AdmCarroController::class, 'store'])->name('carros.store');
+    Route::put('/carros/{carro}', [AdmCarroController::class, 'update'])->name('carros.update');
+    Route::delete('/carros/{carro}', [AdmCarroController::class, 'destroy'])->name('carros.destroy');
 
-Route::get('/admGerUser', function(){
-    return view('adm/admGerUser');
-})->name('admGerUser');
+    Route::get('/usuarios', [AdmUserController::class, 'index'])->name('usuarios.index');
+    Route::post('/usuarios', [AdmUserController::class, 'store'])->name('usuarios.store');
+    Route::put('/usuarios/{cliente}', [AdmUserController::class, 'update'])->name('usuarios.update');
+    Route::delete('/usuarios/{cliente}', [AdmUserController::class, 'destroy'])->name('usuarios.destroy');
 
-Route::get('/admGerPed', function(){
-    return view('adm/admGerPed');
-})->name('admGerPed');
+    Route::get('/pedidos', [AdmPedidoController::class, 'index'])->name('pedidos.index');
+    Route::post('/pedidos', [AdmPedidoController::class, 'store'])->name('pedidos.store');
+    Route::put('/pedidos/{pedido}', [AdmPedidoController::class, 'update'])->name('pedidos.update');
+    Route::delete('/pedidos/{pedido}', [AdmPedidoController::class, 'destroy'])->name('pedidos.destroy');
+});
+
+// Alias p/ não quebrar os links atuais das views
+Route::get('/admGerCar', fn () => redirect()->route('adm.carros.index'))->name('admGerCar');
+Route::get('/admGerUser', fn () => redirect()->route('adm.usuarios.index'))->name('admGerUser');
+Route::get('/admGerPed', fn () => redirect()->route('adm.pedidos.index'))->name('admGerPed');
 
 // Autenticação do cliente
 // ============================================================
