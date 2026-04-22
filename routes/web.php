@@ -36,6 +36,16 @@ Route::get('/infocar', function () {
     return view('info_carro');
 });
 
+Route::get('/carrinho', function () {
+    return view('carrinho');
+})->name('carrinho');
+
+Route::get('/checkout', function () {
+    return view('checkout');
+})->name('checkout');
+
+
+
 
 // Área administrativa
 Route::get('/admHome', function () {
