@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'titulo_login'           => 'Carwell – Login',
+    'titulo_registrar'       => 'Carwell – Criar Conta',
+    'titulo_confirmar'       => 'Carwell – Confirmar Email',
+    'ola_bem_vindo'          => 'OLÁ , SEJA BEM VINDO',
+    'digite_email_senha'     => 'DIGITE SEU EMAIL E SENHA',
+    'preencha_dados'         => 'PREENCHA OS SEUS DADOS',
+    'placeholder_email'      => 'EMAIL',
+    'placeholder_senha'      => 'SENHA',
+    'placeholder_nome'       => 'NOME COMPLETO',
+    'placeholder_telefone'   => '(11) 99999-9999',
+    'placeholder_conf_senha' => 'CONFIRMAR SENHA',
+    'esqueci_senha'          => 'ESQUECI MINHA SENHA',
+    'voltar'                 => 'VOLTAR',
+    'entrar'                 => 'ENTRAR',
+    'verificar_email'        => 'VERIFICAR EMAIL',
+    'nao_tem_conta'          => 'Não tem uma conta?',
+    'crie_uma'               => 'CRIE UMA',
+    'termos'                 => 'Ao prosseguir você está ciente e concorda em receber comunicações da CARWELL',
+    'ola_confirme'           => 'OLÁ , CONFIRME O SEU EMAIL',
+    'escreva_codigo'         => 'Escreva aqui o código que chegou no seu email',
+    'codigo_nao_chegou'      => 'O código não chegou?',
+    'reenviar_codigo'        => 'REENVIAR CÓDIGO',
+];
