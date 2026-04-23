@@ -542,11 +542,16 @@ body {
     margin-bottom: 12px;
 }
 
-.form-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+.form-row-3 { 
+    grid-template-columns: 1fr 1fr 1fr; 
+}
 
-.form-group { margin-bottom: 12px; }
-.form-row .form-group,
-.form-row-3 .form-group { margin-bottom: 0; }
+.form-group { 
+    margin-bottom: 12px; 
+}
+.form-row .form-group, .form-row-3 .form-group { 
+    margin-bottom: 0; 
+}
 
 .form-label {
     display: block;
@@ -599,7 +604,10 @@ textarea.form-control { resize: vertical; }
     overflow: hidden;
 }
 
-.upload-area:hover { border-color: var(--green); background: var(--green-light); }
+.upload-area:hover { 
+    border-color: var(--green); 
+    background: var(--green-light); 
+}
 
 .upload-area input[type="file"] {
     position: absolute;
@@ -620,13 +628,31 @@ textarea.form-control { resize: vertical; }
     pointer-events: none;
 }
 
-.upload-content svg { width: 24px; height: 24px; }
+.upload-content svg { 
+    width: 24px; 
+    height: 24px; 
+}
 
 .upload-preview {
     width: 100%;
     height: 140px;
     object-fit: cover;
     border-radius: var(--radius-sm);
+}
+
+.gallery-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px;
+}
+
+.gallery-preview-item {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ddd;
 }
 
 .delete-icon {

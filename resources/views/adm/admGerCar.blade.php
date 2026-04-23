@@ -237,7 +237,18 @@
 
                         <div class="form-group">
                             <label class="form-label">Mais fotos (galeria)</label>
-                            <input type="file" name="fotos[]" accept="image/*" multiple class="form-control">
+                            <div class="upload-area" id="uploadGallery">
+                                <input type="file" name="fotos[]" accept="image/*" multiple class="form-control" onchange="previewGallery(event, 'galleryPreviewContainer', 'uploadGalleryContent')">
+                                <div class="upload-content" id="uploadGalleryContent">
+                                    <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                                        <polyline points="16 16 12 12 8 16"/>
+                                        <line x1="12" y1="12" x2="12" y2="21"/>
+                                        <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+                                    </svg>
+                                    <span>Mais fotos (galeria)</span>
+                                </div>
+                                <div id="galleryPreviewContainer" class="gallery-preview-container"></div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -435,6 +446,29 @@
                 document.getElementById('uploadCreateContent').style.display = 'none';
             };
             reader.readAsDataURL(file);
+        }
+
+        function previewGallery(event, containerId, contentId) {
+            const files = event.target.files;
+            if (!files || files.length === 0) return;
+
+            const container = document.getElementById(containerId);
+            const content = document.getElementById(contentId);
+
+            container.innerHTML = ''; // Limpa previews anteriores
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('gallery-preview-item');
+                    container.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            content.style.display = 'none';
         }
 
         let currentFilter = 'all';
