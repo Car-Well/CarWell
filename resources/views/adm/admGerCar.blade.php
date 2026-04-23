@@ -455,20 +455,38 @@
             const container = document.getElementById(containerId);
             const content = document.getElementById(contentId);
 
-            container.innerHTML = ''; // Limpa previews anteriores
-
             Array.from(files).forEach(file => {
                 const reader = new FileReader();
                 reader.onload = e => {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('gallery-item-wrapper');
+
                     const img = document.createElement('img');
                     img.src = e.target.result;
                     img.classList.add('gallery-preview-item');
-                    container.appendChild(img);
+
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.classList.add('gallery-remove-btn');
+                    removeBtn.innerHTML = '&times;';
+                    removeBtn.onclick = () => {
+                        wrapper.remove();
+
+                        if (container.children.length === 0) {
+                            content.style.display = 'flex';
+                        }
+                    };
+
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(removeBtn);
+                    container.appendChild(wrapper);
                 };
                 reader.readAsDataURL(file);
             });
 
             content.style.display = 'none';
+
+            event.target.value = '';
         }
 
         let currentFilter = 'all';
