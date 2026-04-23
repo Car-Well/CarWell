@@ -162,41 +162,41 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label">Marca *</label>
-                                <input type="text" name="marca" class="form-control" placeholder="ex: Honda">
+                                <input type="text" name="marca" class="form-control" value="{{ old('marca') }}" placeholder="ex: Honda">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Modelo *</label>
-                                <input type="text" name="modelo" class="form-control" placeholder="ex: Civic G12">
+                                <input type="text" name="modelo" class="form-control" value="{{ old('modelo') }}" placeholder="ex: Civic G12">
                             </div>
                         </div>
                         <div class="form-row form-row-3">
                             <div class="form-group">
                                 <label class="form-label">Ano *</label>
-                                <input type="number" name="ano" class="form-control" placeholder="2024" min="1990" max="{{ date('Y') + 1 }}">
+                                <input type="number" name="ano" class="form-control" value="{{ old('ano') }}" placeholder="2024" min="1990" max="{{ date('Y') + 1 }}">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Cor</label>
-                                <input type="text" name="cor" class="form-control" placeholder="ex: Preto">
+                                <input type="text" name="cor" class="form-control" value="{{ old('cor') }}" placeholder="ex: Preto">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Quilometragem</label>
-                                <input type="number" name="km" class="form-control" placeholder="18400">
+                                <input type="number" name="km" class="form-control" value="{{ old('km') }}" placeholder="18400">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label class="form-label">Valor de venda *</label>
-                                <input type="number" name="preco" class="form-control" placeholder="0.00" step="0.01">
+                                <input type="number" name="preco" class="form-control" value="{{ old('preco') }}" placeholder="0.00" step="0.01">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Combustível</label>
                                 <select name="combustivel" class="form-control">
                                     <option value="">Selecionar...</option>
-                                    <option value="flex">Flex</option>
-                                    <option value="gasolina">Gasolina</option>
-                                    <option value="diesel">Diesel</option>
-                                    <option value="eletrico">Elétrico</option>
-                                    <option value="hibrido">Híbrido</option>
+                                    <option value="flex" {{ old('combustivel') == 'flex' ? 'selected' : '' }}>Flex</option>
+                                    <option value="gasolina" {{ old('combustivel') == 'gasolina' ? 'selected' : '' }}>Gasolina</option>
+                                    <option value="diesel" {{ old('combustivel') == 'diesel' ? 'selected' : '' }}>Diesel</option>
+                                    <option value="eletrico" {{ old('combustivel') == 'eletrico' ? 'selected' : '' }}>Elétrico</option>
+                                    <option value="hibrido" {{ old('combustivel') == 'hibrido' ? 'selected' : '' }}>Híbrido</option>
                                 </select>
                             </div>
                         </div>
@@ -205,23 +205,23 @@
                                 <label class="form-label">Câmbio</label>
                                 <select name="cambio" class="form-control">
                                     <option value="">Selecionar...</option>
-                                    <option value="manual">Manual</option>
-                                    <option value="automatico">Automático</option>
-                                    <option value="cvt">CVT</option>
+                                    <option value="manual" {{ old('cambio') == 'manual' ? 'selected' : '' }}>Manual</option>
+                                    <option value="automatico" {{ old('cambio') == 'automatico' ? 'selected' : '' }}>Automático</option>
+                                    <option value="cvt" {{ old('cambio') == 'cvt' ? 'selected' : '' }}>CVT</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Status</label>
                                 <select name="status" class="form-control">
-                                    <option value="disponivel">Disponível</option>
-                                    <option value="reservado">Reservado</option>
-                                    <option value="vendido">Vendido</option>
+                                    <option value="disponivel" {{ old('status', 'disponivel') == 'disponivel' ? 'selected' : '' }}>Disponível</option>
+                                    <option value="reservado" {{ old('status') == 'reservado' ? 'selected' : '' }}>Reservado</option>
+                                    <option value="vendido" {{ old('status') == 'vendido' ? 'selected' : '' }}>Vendido</option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Descrição</label>
-                            <textarea name="descricao" class="form-control" rows="3" placeholder="Destaque os pontos do veículo..."></textarea>
+                            <textarea name="descricao" class="form-control" rows="3" value="{{ old('descricao') }}" placeholder="Destaque os pontos do veículo..."></textarea>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Foto de capa</label>
@@ -374,12 +374,18 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="delete-icon">
-                        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
-                    </div>
-                    <p class="delete-msg">Tem certeza que deseja excluir<strong id="deleteNome"></strong>?</p>
+                    @if($errors->any())
+                        <div class="alert alert-danger" style="margin-bottom:14px;">
+                            <strong>Corrija os erros abaixo:</strong>
+                            <ul style="margin:8px 0 0 18px;">
+                                @foreach($errors->all() as $msg)
+                                    <li>{{ $msg }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <p class="delete-msg">Tem certeza que deseja excluir <strong id="deleteNome"></strong>?</p>
                     <p class="delete-hint">O veículo será removido permanentemente do estoque.</p>
-
                     <form action="#" method="POST" id="formDelete">
                         @csrf
                         @method('DELETE')
