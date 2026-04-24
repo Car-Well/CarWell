@@ -12,6 +12,24 @@
 <body>
 
   <!-- NAV-BAR -->
+  <nav>
+    <a class="nav-logo" href="#">
+      <svg viewBox="0 0 80 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 30 Q20 12 40 12 Q60 12 70 30" stroke="#1a2e4a" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <rect x="8" y="28" width="64" height="12" rx="6" fill="#1a2e4a"/>
+        <circle cx="22" cy="40" r="7" fill="#1a2e4a"/><circle cx="22" cy="40" r="4" fill="#f0f6fb"/>
+        <circle cx="58" cy="40" r="7" fill="#1a2e4a"/><circle cx="58" cy="40" r="4" fill="#f0f6fb"/>
+        <path d="M36 12 Q40 4 44 6" stroke="#1e4d8c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="44" cy="5.5" r="2.5" fill="#1e4d8c"/>
+      </svg>
+      <span class="nav-logo-text">Carwell</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#">COMPRAR CARRO</a></li>
+      <li><a href="#">SOBRE NÓS</a></li>
+      <li><a href="#">AJUDA</a></li>
+      <li><a href="#">CARRINHO</a></li>
+    </ul>
 
   <nav class="main-nav">
     <div class="nav-left">

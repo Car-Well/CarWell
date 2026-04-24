@@ -56,6 +56,16 @@ Route::get('/login-adm', function () {
     return view('login/login-adm');
 })->name('login-adm');
 
+Route::get('/login-cliente', [LoginClienteController::class, 'showLogin'])->name('login-cliente');
+
+Route::get('/admGerCar', function () {
+    return view('/adm/admGerCar');
+});
+
+Route::get('/confirmar-email', function () {
+    return view('/login/confirmar-email');
+});
+
 Route::prefix('adm')->name('adm.')->group(function () {
     Route::get('/carros', [AdmCarroController::class, 'index'])->name('carros.index');
     Route::post('/carros', [AdmCarroController::class, 'store'])->name('carros.store');
@@ -78,8 +88,6 @@ Route::get('/admGerCar', function () { return redirect()->route('adm.carros.inde
 Route::get('/admGerUser', function () { return redirect()->route('adm.usuarios.index'); })->name('admGerUser');
 Route::get('/admGerPed', function () { return redirect()->route('adm.pedidos.index'); })->name('admGerPed');
 
-// Autenticação do cliente
-// ============================================================
 
 // Login
 Route::get('/login-cliente', [LoginClienteController::class, 'showLogin'])->name('login-cliente');
