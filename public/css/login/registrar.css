@@ -5,17 +5,16 @@
 }
  
 :root {
-  --bg:           #d6e4f0;
-  --card-bg:      #dce8f3;
-  --dark-navy:    #1a2e4a;
-  --red:          #b91c1c;
-  --green:        #166534;
-  --blue:         #1e4d8c;
-  --input-bg:     #c8daea;
-  --input-border: #b0c8de;
-  --text-muted:   #4a6280;
-  --font-main:    'Montserrat', sans-serif;
-  --font-body:    'Open Sans', sans-serif;
+  --bg: #F4F5F3;
+  --card-bg: #ffffff;
+  --dark-navy: #1A1C19;
+  --red: #b91c1c;
+  --green: #1D9E75;
+  --input-bg: #EEEFED;
+  --input-border: rgba(0,0,0,0.13);
+  --text-muted: #9EA19C;
+  --font-main: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
 }
  
 body {
@@ -34,7 +33,7 @@ body {
   padding: 36px 36px 28px;
   width: 100%;
   max-width: 480px;
-  box-shadow: 0 8px 40px rgba(30, 77, 140, 0.10);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.06);
 }
  
 .logo {
@@ -99,8 +98,8 @@ body {
 }
  
 .input-group input:focus {
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(30, 77, 140, 0.12);
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.12);
 }
  
 .input-group input.is-invalid {
@@ -156,8 +155,15 @@ body {
   transform: translateY(-1px);
 }
  
-.btn-back   { background: var(--red);   color: #fff; }
-.btn-verify { background: var(--green); color: #fff; }
+.btn-back {
+  background: #EEEFED;
+  color: #1A1C19;
+}
+
+.btn-verify {
+  background: var(--green);
+  color: #fff;
+}
  
 .terms {
   font-family: var(--font-body);
@@ -168,5 +174,7 @@ body {
 }
  
 @media (max-width: 480px) {
-  .card { padding: 28px 18px 22px; }
+  .card { 
+    padding: 28px 18px 22px; 
+  }
 }

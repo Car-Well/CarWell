@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'titulo_login'           => 'Carwell – Login',
+    'titulo_registrar'       => 'Carwell – Create Account',
+    'titulo_confirmar'       => 'Carwell – Confirm Email',
+    'ola_bem_vindo'          => 'HELLO , WELCOME',
+    'digite_email_senha'     => 'ENTER YOUR EMAIL AND PASSWORD',
+    'preencha_dados'         => 'FILL IN YOUR DETAILS',
+    'placeholder_email'      => 'EMAIL',
+    'placeholder_senha'      => 'PASSWORD',
+    'placeholder_nome'       => 'FULL NAME',
+    'placeholder_telefone'   => '+55 (11) 99999-9999',
+    'placeholder_conf_senha' => 'CONFIRM PASSWORD',
+    'esqueci_senha'          => 'FORGOT MY PASSWORD',
+    'voltar'                 => 'BACK',
+    'entrar'                 => 'SIGN IN',
+    'verificar_email'        => 'VERIFY EMAIL',
+    'nao_tem_conta'          => "Don't have an account?",
+    'crie_uma'               => 'CREATE ONE',
+    'termos'                 => 'By proceeding you acknowledge and agree to receive communications from CARWELL',
+    'ola_confirme'           => 'HELLO , CONFIRM YOUR EMAIL',
+    'escreva_codigo'         => 'Enter the code that was sent to your email',
+    'codigo_nao_chegou'      => "Didn't receive the code?",
+    'reenviar_codigo'        => 'RESEND CODE',
+];

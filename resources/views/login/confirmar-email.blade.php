@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Carwell – Confirmar Email</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"/>
+  <title>{{ __('login.titulo_confirmar') }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="{{ asset('css/login/confirmar-email.css') }}"/>
 </head>
 <body>
@@ -14,8 +16,8 @@
       <span class="logo-text">Carwell</span>
     </div>
 
-    <h1 class="greeting">OLA , CONFIRME O SEU EMAIL</h1>
-    <p class="subtitle">Escreva aqui o código que chegou no seu email</p>
+    <h1 class="greeting">{{ __('login.ola_confirme') }}</h1>
+    <p class="subtitle">{{ __('login.escreva_codigo') }}</p>
 
     @if(session('reenvio'))
       <p style="color:#166534; font-size:13px; margin-bottom:8px;">{{ session('reenvio') }}</p>
@@ -38,17 +40,17 @@
       @enderror
 
       <div class="btn-row">
-        <button type="submit" class="btn-enter">ENTRAR</button>
+        <button type="submit" class="btn-enter">{{ __('login.entrar') }}</button>
       </div>
     </form>
 
     <p class="no-code">
-      O código não chegou?
+      {{ __('login.codigo_nao_chegou') }}
       <form method="POST" action="{{ route('reenviar-codigo') }}" style="display:inline">
         @csrf
         <button type="submit" style="background:none;border:none;cursor:pointer;
-                color:#1e4d8c;font-weight:700;font-size:inherit;padding:0;
-                font-family:inherit;">REENVIAR CÓDIGO</button>
+                color:#1D9E75;font-weight:700;font-size:inherit;padding:0;
+                font-family:inherit;">{{ __('login.reenviar_codigo') }}</button>
       </form>
     </p>
   </div>

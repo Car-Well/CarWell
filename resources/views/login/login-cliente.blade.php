@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Carwell – Login</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet"/>
+  <title>{{ __('login.titulo_login') }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="{{ asset('css/login/login.css') }}">
 </head>
 <body>
@@ -14,14 +16,14 @@
       <span class="logo-text">Carwell</span>
     </div>
 
-    <h1 class="greeting"><em>OLA ,</em> SEJA BEM VINDO</h1>
-    <p class="subtitle">DIGITE SEU EMAIL E SENHA</p>
+    <h1 class="greeting">{{ __('login.ola_bem_vindo') }}</h1>
+    <p class="subtitle">{{ __('login.digite_email_senha') }}</p>
 
     <form method="POST" action="{{ route('login-cliente') }}">
       @csrf
 
       <div class="input-group">
-        <input type="email" name="email" placeholder="EMAIL" autocomplete="email"
+        <input type="email" name="email" placeholder="{{ __('login.placeholder_email') }}" autocomplete="email"
                value="{{ old('email') }}" />
       </div>
       @error('email')
@@ -29,7 +31,7 @@
       @enderror
 
       <div class="input-group">
-        <input type="password" name="password" placeholder="SENHA"
+        <input type="password" name="password" placeholder="{{ __('login.placeholder_senha') }}"
                id="senha-input" autocomplete="current-password" />
         <span class="eye-icon" onclick="toggleSenha()">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -41,19 +43,19 @@
         </span>
       </div>
 
-      <a href="#" class="forgot">ESQUECI MINHA SENHA</a>
+      <a href="{{ route('registrar') }}" class="forgot">{{ __('login.esqueci_senha') }}</a>
 
       <div class="btn-row">
         <button type="button" class="btn btn-back"
-                onclick="window.location.href='{{ route('home') }}'">VOLTAR</button>
-        <button type="submit" class="btn btn-enter">ENTRAR</button>
+                onclick="window.location.href='{{ route('home') }}'">{{ __('login.voltar') }}</button>
+        <button type="submit" class="btn btn-enter">{{ __('login.entrar') }}</button>
       </div>
     </form>
 
-    <p class="signup-row">Não tem uma conta?
-      <a href="{{ route('registrar') }}">CRIE UMA</a>
+    <p class="signup-row">{{ __('login.nao_tem_conta') }}
+      <a href="{{ route('registrar') }}">{{ __('login.crie_uma') }}</a>
     </p>
-    <p class="terms">Ao prosseguir você está ciente e concorda em receber comunicações da CARWELL</p>
+    <p class="terms">{{ __('login.termos') }}</p>
   </div>
 
   <script>

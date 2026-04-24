@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Carwell – Encontre seu Carro</title>
-  <link rel="stylesheet" href="{{ asset('css/home/home.css') }}">
-</head>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{{ __('home.titulo') }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/home/home.css') }}">
+  </head>
 <body>
 
   <!-- NAV-BAR -->
@@ -27,11 +30,36 @@
       <li><a href="#">AJUDA</a></li>
       <li><a href="#">CARRINHO</a></li>
     </ul>
+
+  <nav class="main-nav">
+    <div class="nav-left">
+      <img src="{{ asset('img/logo.png') }}" alt="logo" class="nav-logo" />
+    </div>
+
+    <div class="nav-center">
+      <div class="nav-links">
+          <a href="{{ route('home') }}" class="nav-active nav-hover-btn">{{ __('nav.home') }}</a>
+          <a href="#" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
+          <a href="#" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
+          <a href="#" class="nav-hover-btn">{{ __('nav.ajuda') }}</a>
+          <a href="{{ route('carrinho') }}" class="nav-hover-btn">{{ __('nav.carrinho') }}</a>
+      </div>
+    </div>
+
+    <div class="nav-right-spacer"></div>
     <div class="nav-right">
       <span class="nav-flag">🇧🇷</span>
-      <a href="login.html" class="nav-login">LOGIN</a>
+
+      @auth('cliente')
+        <a href="{{ route('perfil') }}" class="nav-login">
+          {{ explode(' ', Auth::guard('cliente')->user()->name)[0] }}
+        </a>
+      @else
+        <a href="{{ route('login-cliente') }}" class="nav-login">{{ __('nav.login') }}</a>
+      @endauth
+
       <a href="{{ route('perfil') }}" class="nav-profile">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a2e4a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
         </svg>
       </a>
@@ -44,10 +72,10 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-content">
-      <h1 class="hero-title">TODA JORNADA<br>MERECE<br><span>O CARRO CERTO</span></h1>
-      <p class="hero-desc">ENCONTRE QUALIDADE, PROCEDÊNCIA E AS MELHORES OPORTUNIDADES EM UM SÓ LUGAR</p>
+      <h1 class="hero-title">{{ __('home.hero_titulo') }}<br><span>{{ __('home.hero_titulo_span') }}</span></h1>
+      <p class="hero-desc">{{ __('home.hero_desc') }}</p>
       <div class="hero-search">
-        <input type="text" placeholder="Explorar veículos"/>
+        <input type="text" placeholder="{{ __('home.hero_busca') }}"/>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
@@ -57,7 +85,7 @@
       <button class="carousel-btn left">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
-      <div class="hero-car-placeholder">
+      <a href="{{ route('info-carro') }}" class="hero-car-placeholder">
         <svg width="160" height="80" viewBox="0 0 200 90" fill="none">
           <path d="M20 60 Q40 25 100 25 Q160 25 180 60" stroke="rgba(255,255,255,0.7)" stroke-width="4" fill="none" stroke-linecap="round"/>
           <rect x="10" y="57" width="180" height="22" rx="11" fill="rgba(255,255,255,0.7)"/>
@@ -65,7 +93,7 @@
           <circle cx="155" cy="82" r="14" fill="rgba(255,255,255,0.5)"/><circle cx="155" cy="82" r="8" fill="rgba(255,255,255,0.8)"/>
           <rect x="60" y="30" width="80" height="28" rx="6" fill="rgba(255,255,255,0.15)"/>
         </svg>
-      </div>
+      </a>
       <button class="carousel-btn right">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
@@ -74,7 +102,7 @@
 
   <!-- WHY CARWELL -->
   <section class="section">
-    <h2 class="section-title">POR QUE ESCOLHER A CARWELL?</h2>
+    <h2 class="section-title">{{ __('home.por_que') }}</h2>
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon">
@@ -83,8 +111,8 @@
             <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
           </svg>
         </div>
-        <p class="feature-title">GARANTIA DE CONFIANÇA</p>
-        <p class="feature-desc">OFERECEMOS GARANTIA E SUPORTE MESMO APÓS A COMPRA</p>
+        <p class="feature-title">{{ __('home.garantia_titulo') }}</p>
+        <p class="feature-desc">{{ __('home.garantia_desc') }}</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">
@@ -92,8 +120,8 @@
             <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
           </svg>
         </div>
-        <p class="feature-title">TEST DRIVE IMEDIATO</p>
-        <p class="feature-desc">AGENDE EM UMA HORA E TRATE O CARRO ANTES DE DECIDIR</p>
+        <p class="feature-title">{{ __('home.test_drive_titulo') }}</p>
+        <p class="feature-desc">{{ __('home.test_drive_desc') }}</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">
@@ -101,15 +129,15 @@
             <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
           </svg>
         </div>
-        <p class="feature-title">CONDIÇÕES QUE CABEM NO BOLSO</p>
-        <p class="feature-desc">PARCELE COM AS PRINCIPAIS FINANCEIRAS E PLANOS QUE SE ENCAIXAM NA SUA REALIDADE</p>
+        <p class="feature-title">{{ __('home.financiamento_titulo') }}</p>
+        <p class="feature-desc">{{ __('home.financiamento_desc') }}</p>
       </div>
     </div>
   </section>
 
   <!-- BRANDS -->
   <div class="brands-section">
-    <h2 class="section-title">MARCAS MAIS BUSCADAS</h2>
+    <h2 class="section-title">{{ __('home.marcas') }}</h2>
     <div style="display:flex; align-items:center; gap:10px;">
       <div class="brands-row" id="brands-row">
         <div class="brand-item">
@@ -149,13 +177,13 @@
   <!-- FILTER BAR -->
   <div class="filter-bar">
     <div class="filter-search">
-      <input type="text" placeholder="BUSQUE POR MODELO DE VEÍCULO"/>
+      <input type="text" placeholder="{{ __('home.busca_modelo') }}"/>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
     </div>
     <button class="filter-btn">
-      FILTRAR CATEGORIA
+      {{ __('home.filtrar') }}
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
       </svg>
@@ -166,7 +194,7 @@
   <div class="cars-grid">
 
     <!-- Card 1 -->
-    <div class="car-card">
+    <a href="{{ route('info-carro') }}" class="car-card">
       <div class="car-img-placeholder">
         <svg viewBox="0 0 120 70" fill="none">
           <path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1e4d8c" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -175,7 +203,7 @@
           <circle cx="92" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="92" cy="60" r="5" fill="#c8daea"/>
         </svg>
       </div>
-      <div class="car-heart" onclick="toggleHeart(this)">
+      <div class="car-heart" onclick="event.preventDefault(); toggleHeart(this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
@@ -187,10 +215,10 @@
       <div class="car-arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-    </div>
+    </a>
 
     <!-- Card 2 -->
-    <div class="car-card">
+    <a href="{{ route('info-carro') }}" class="car-card">
       <div class="car-img-placeholder" style="background: linear-gradient(135deg, #f5c6cb 0%, #f8d7da 100%);">
         <svg viewBox="0 0 120 70" fill="none">
           <path d="M12 46 Q25 16 60 14 Q95 16 108 46" stroke="#b91c1c" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -199,7 +227,7 @@
           <circle cx="94" cy="61" r="9" fill="#b91c1c" opacity="0.6"/><circle cx="94" cy="61" r="5" fill="#f8d7da"/>
         </svg>
       </div>
-      <div class="car-heart" onclick="toggleHeart(this)">
+      <div class="car-heart" onclick="event.preventDefault(); toggleHeart(this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
@@ -211,10 +239,10 @@
       <div class="car-arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-    </div>
+    </a>
 
     <!-- Card 3 -->
-    <div class="car-card">
+    <a href="{{ route('info-carro') }}" class="car-card">
       <div class="car-img-placeholder" style="background: linear-gradient(135deg, #1a2e4a 0%, #0d1b2e 100%);">
         <svg viewBox="0 0 120 70" fill="none">
           <path d="M10 46 Q28 16 60 14 Q92 16 110 46" stroke="rgba(255,255,255,0.6)" stroke-width="3" fill="none" stroke-linecap="round"/>
@@ -223,7 +251,7 @@
           <circle cx="95" cy="61" r="9" fill="rgba(255,255,255,0.3)"/><circle cx="95" cy="61" r="5" fill="rgba(255,255,255,0.7)"/>
         </svg>
       </div>
-      <div class="car-heart" onclick="toggleHeart(this)">
+      <div class="car-heart" onclick="event.preventDefault(); toggleHeart(this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
@@ -235,7 +263,7 @@
       <div class="car-arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-    </div>
+    </a>
 
   </div>
 
