@@ -64,7 +64,6 @@ class AdmCarroController extends Controller
             @mkdir($dir, 0775, true);
         }
 
-        // capa
         if ($request->hasFile('capa')) {
             $path = $request->file('capa')->store('carros', 'public');
             CarroFoto::create([
@@ -73,12 +72,10 @@ class AdmCarroController extends Controller
                 'is_capa' => true,
                 'ordem' => 0,
             ]);
-            // compatibilidade: coluna antiga
             $carro->foto = $path;
             $carro->save();
         }
 
-        // fotos adicionais
         if ($request->hasFile('fotos')) {
             $ordem = 1;
             foreach ((array) $request->file('fotos') as $file) {
@@ -123,7 +120,6 @@ class AdmCarroController extends Controller
             @mkdir($dir, 0775, true);
         }
 
-        // trocar capa
         if ($request->hasFile('capa')) {
             $path = $request->file('capa')->store('carros', 'public');
 
@@ -140,7 +136,6 @@ class AdmCarroController extends Controller
                 ]);
             }
 
-            // compatibilidade: coluna antiga
             if ($carro->foto && $carro->foto !== $path) {
                 Storage::disk('public')->delete($carro->foto);
             }
@@ -148,7 +143,6 @@ class AdmCarroController extends Controller
             $carro->save();
         }
 
-        // adicionar fotos na galeria
         if ($request->hasFile('fotos')) {
             $ordem = (int) ($carro->fotos()->max('ordem') ?? 0);
             foreach ((array) $request->file('fotos') as $file) {
@@ -177,6 +171,9 @@ class AdmCarroController extends Controller
         $carro->delete();
 
         return redirect()->route('adm.carros.index')->with('success', 'Carro excluído com sucesso.');
+    }
+    public function __construct(){
+        $this->middleware('admin.autenticado');
     }
 }
 
