@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\Auth\ConfirmarEmailController;
 use App\Http\Controllers\Auth\LoginClienteController;
+use App\Http\Controllers\Auth\LoginAdmController;
 use App\Http\Controllers\Auth\RegistrarClienteController;
 use App\Http\Controllers\Adm\AdmCarroController;
 use App\Http\Controllers\Adm\AdmPedidoController;
 use App\Http\Controllers\Adm\AdmUserController;
+use App\Http\Controllers\Adm\AdmClienteController;
+use App\Http\Controllers\Adm\AdmDashboardController;
 use App\Http\Controllers\PerfilController;
 use Illuminate\Support\Facades\Route;
 
