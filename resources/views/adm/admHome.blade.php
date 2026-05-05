@@ -311,7 +311,258 @@
 </main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-<script src="{{ asset('js/adm/admDashboard.js') }}"></script>
+<script>
+const GREEN = '#1D9E75';
+const GREEN_LIGHT = '#5DCAA5';
+const GREEN_DARK = '#0F6E56';
+const BLUE = '#3B82F6';
+const AMBER = '#F59E0B';
+const RED = '#EF4444';
+const PURPLE = '#8B5CF6';
+const TEAL = '#14B8A6';
+const MUTED = '#9EA19C';
+const TEXT = '#1A1C19';
+const BG = '#F4F5F3';
+
+const tooltip = {
+    backgroundColor: '#fff',
+    borderColor: 'rgba(0,0,0,0.08)',
+    borderWidth: 1,
+    textStyle: { color: TEXT, fontFamily: 'DM Sans', fontSize: 12 },
+    extraCssText: 'box-shadow:0 4px 16px rgba(0,0,0,0.10); border-radius:10px; padding:10px 14px;'
+};
+
+const chartReceita = echarts.init(document.getElementById('chart-receita'));
+chartReceita.setOption({
+    tooltip: { ...tooltip, trigger: 'axis' },
+    grid: { left: 40, right: 16, top: 16, bottom: 32 },
+    xAxis: {
+        type: 'category',
+        data: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+        axisLine: { lineStyle: { color: 'rgba(0,0,0,0.08)' } },
+        axisTick: { show: false },
+        axisLabel: { color: MUTED, fontFamily: 'DM Sans', fontSize: 11 }
+    },
+    yAxis: {
+        type: 'value',
+        axisLabel: { color: MUTED, fontFamily: 'DM Sans', fontSize: 11, formatter: v => 'R$' + (v/1000) + 'k' },
+        splitLine: { lineStyle: { color: 'rgba(0,0,0,0.05)' } }
+    },
+    series: [{
+        name: 'Receita',
+        type: 'line',
+        smooth: true,
+        data: [520000, 320000, 290000, 410000, 380000, 280000, 490000, 610000, 580000, 650000, 720000, 840000],
+        lineStyle: { color: GREEN, width: 2.5 },
+        itemStyle: { color: GREEN },
+        symbol: 'circle',
+        symbolSize: 6,
+        areaStyle: {
+            color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: 'rgba(29,158,117,0.18)' },
+                    { offset: 1, color: 'rgba(29,158,117,0)' }
+                ]
+            }
+        }
+    }]
+});
+
+const chartMarcas = echarts.init(document.getElementById('chart-marcas'));
+chartMarcas.setOption({
+    tooltip: { ...tooltip, trigger: 'axis', axisPointer: { type: 'none' } },
+    grid: { left: 70, right: 20, top: 10, bottom: 10 },
+    xAxis: { type: 'value', axisLabel: { show: false }, splitLine: { lineStyle: { color: 'rgba(0,0,0,0.05)' } } },
+    yAxis: {
+        type: 'category',
+        data: ['Outros', 'Audi', 'Ford', 'Mercedes', 'BMW', 'Toyota', 'Honda', 'VW'],
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { color: TEXT, fontFamily: 'DM Sans', fontSize: 12 }
+    },
+    series: [{
+        type: 'bar',
+        data: [4, 6, 8, 10, 14, 18, 24, 28],
+        barMaxWidth: 18,
+        itemStyle: {
+            borderRadius: [0, 6, 6, 0],
+            color: params => {
+                const colors = [MUTED, '#94A3B8', AMBER, RED, BLUE, TEAL, GREEN_LIGHT, GREEN];
+                return colors[params.dataIndex];
+            }
+        },
+        label: { show: true, position: 'right', color: MUTED, fontFamily: 'DM Sans', fontSize: 11 }
+    }]
+});
+
+const chartEstoque = echarts.init(document.getElementById('chart-estoque'));
+chartEstoque.setOption({
+    tooltip: { ...tooltip, trigger: 'item' },
+    legend: {
+        bottom: 0, left: 'center',
+        textStyle: { color: TEXT, fontFamily: 'DM Sans', fontSize: 11 },
+        itemWidth: 10, itemHeight: 10,
+        icon: 'circle'
+    },
+    series: [{
+        type: 'pie',
+        radius: '65%',
+        center: ['50%', '50%'],
+        avoidLabelOverlap: false,
+        label: { show: false },
+        emphasis: { label: { show: true, fontSize: 14, fontWeight: 700, fontFamily: 'Syne' } },
+        data: [
+            { value: 18, name: 'Disponível', itemStyle: { color: GREEN } },
+            { value: 4,  name: 'Reservado',  itemStyle: { color: AMBER } },
+            { value: 2,  name: 'Vendido',    itemStyle: { color: RED } },
+            { value: 14, name: 'Em análise', itemStyle: { color: BLUE } },
+        ]
+    }]
+});
+
+const chartPagamento = echarts.init(document.getElementById('chart-pagamento'));
+chartPagamento.setOption({
+    tooltip: { ...tooltip, trigger: 'item' },
+    legend: {
+        bottom: 0, left: 'center',
+        textStyle: { color: TEXT, fontFamily: 'DM Sans', fontSize: 11 },
+        itemWidth: 10, itemHeight: 10,
+        icon: 'circle'
+    },
+    series: [{
+        type: 'pie',
+        radius: ['48%', '72%'],
+        center: ['50%', '44%'],
+        avoidLabelOverlap: false,
+        label: { show: false },
+        emphasis: { label: { show: true, fontSize: 14, fontWeight: 700, fontFamily: 'Syne' } },
+        data: [
+            { value: 48, name: 'Crédito', itemStyle: { color: BLUE } },
+            { value: 28, name: 'PIX', itemStyle: { color: GREEN } },
+            { value: 14, name: 'Débito',  itemStyle: { color: TEAL } },
+            { value: 10, name: 'Boleto',  itemStyle: { color: AMBER } },
+        ]
+    }]
+});
+
+const chartClientes = echarts.init(document.getElementById('chart-clientes'));
+chartClientes.setOption({
+    tooltip: { ...tooltip, trigger: 'axis' },
+    grid: { left: 30, right: 10, top: 10, bottom: 30 },
+    xAxis: {
+        type: 'category',
+        data: ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8'],
+        axisLine: { lineStyle: { color: 'rgba(0,0,0,0.08)' } },
+        axisTick: { show: false },
+        axisLabel: { color: MUTED, fontFamily: 'DM Sans', fontSize: 11 }
+    },
+    yAxis: {
+        type: 'value',
+        axisLabel: { color: MUTED, fontFamily: 'DM Sans', fontSize: 11 },
+        splitLine: { lineStyle: { color: 'rgba(0,0,0,0.05)' } }
+    },
+    series: [{
+        type: 'bar',
+        data: [8, 14, 11, 19, 16, 22, 18, 24],
+        barMaxWidth: 22,
+        itemStyle: {
+            borderRadius: [6,6,0,0],
+            color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1,
+                colorStops: [
+                    { offset: 0, color: GREEN },
+                    { offset: 1, color: GREEN_LIGHT }
+                ]
+            }
+        }
+    }]
+});
+
+const days   = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
+const hours  = ['8h', '9h', '10h', '11h', '12h', '13h', '14h', '15h', '16h', '17h', '18h', '19h', '20h'];
+const heatData = [];
+for (let d = 0; d < 7; d++) {
+    for (let h = 0; h < 13; h++) {
+        const base = (d >= 1 && d <= 5) ? 60 : 20;
+        const peak = (h >= 2 && h <= 5) ? 40 : 0;
+        heatData.push([h, d, Math.round(Math.random() * base + peak)]);
+    }
+}
+
+const chartHeatmap = echarts.init(document.getElementById('chart-heatmap'));
+chartHeatmap.setOption({
+    tooltip: {
+        ...tooltip,
+        formatter: p => `${days[p.data[1]]} às ${hours[p.data[0]]}<br><b>${p.data[2]} vendas</b>`
+    },
+    grid: { left: 40, right: 60, top: 10, bottom: 30 },
+    xAxis: {
+        type: 'category',
+        data: hours,
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { color: MUTED, fontFamily: 'DM Sans', fontSize: 11 }
+    },
+    yAxis: {
+        type: 'category',
+        data: days,
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: { color: MUTED, fontFamily: 'DM Sans', fontSize: 11 }
+    },
+    visualMap: {
+        min: 0, max: 100,
+        calculable: false,
+        orient: 'vertical',
+        right: 0, top: 'center',
+        inRange: { color: ['#E1F5EE', GREEN_LIGHT, GREEN, GREEN_DARK] },
+        textStyle: { color: MUTED, fontSize: 10, fontFamily: 'DM Sans' }
+    },
+    series: [{
+        type: 'heatmap',
+        data: heatData,
+        itemStyle: { borderRadius: 4, borderWidth: 2, borderColor: BG }
+    }]
+});
+
+const chartFunil = echarts.init(document.getElementById('chart-funil'));
+chartFunil.setOption({
+    tooltip: { ...tooltip, trigger: 'item' },
+    series: [{
+        type: 'funnel',
+        left: '5%', width: '90%',
+        top: 10, bottom: 10,
+        sort: 'descending',
+        gap: 4,
+        label: {
+            show: true, position: 'inside',
+            formatter: '{b}\n{c}',
+            color: '#fff',
+            fontFamily: 'DM Sans',
+            fontSize: 12,
+            fontWeight: 600
+        },
+        itemStyle: { borderWidth: 0 },
+        data: [
+            { value: 1200, name: 'Visitantes', itemStyle: { color: BLUE } },
+            { value: 480, name: 'Interessados', itemStyle: { color: PURPLE } },
+            { value: 210, name: 'Test drive', itemStyle: { color: TEAL } },
+            { value: 142, name: 'Vendas', itemStyle: { color: GREEN } },
+        ]
+    }]
+});
+
+window.addEventListener('resize', () => {
+    [chartReceita, chartMarcas, chartEstoque, chartPagamento, chartClientes, chartHeatmap, chartFunil]
+        .forEach(c => c.resize());
+});
+
+document.querySelectorAll('.period-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    });
+});
+</script>
 
 </body>
 </html>
