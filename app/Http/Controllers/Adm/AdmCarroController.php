@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Storage;
 
 class AdmCarroController extends Controller
 {
+    public function __construct(){
+        $this->middleware('admin.autenticado');
+    }
+    
     public function index(Request $request)
     {
         $query = Carro::orderBy('id', 'desc');
@@ -172,8 +176,6 @@ class AdmCarroController extends Controller
 
         return redirect()->route('adm.carros.index')->with('success', 'Carro excluído com sucesso.');
     }
-    public function __construct(){
-        $this->middleware('admin.autenticado');
-    }
+
 }
 
