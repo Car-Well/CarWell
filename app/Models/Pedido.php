@@ -12,25 +12,19 @@ class Pedido extends Model
     protected $table = 'pedidos';
 
     protected $fillable = [
-        'numero',
         'cliente_id',
         'carro_id',
-        'cliente_nome',
-        'veiculo_nome',
+        'status',
         'pagamento',
         'valor',
-        'status',
-        'cartao_ultimos4',
         'cartao_nome',
-        'cartao_validade',
+        'cartao_ultimos4',
         'parcelas',
-        'data_pedido',
     ];
 
     protected $casts = [
-        'valor' => 'decimal:2',
+        'valor'    => 'decimal:2',
         'parcelas' => 'integer',
-        'data_pedido' => 'datetime',
     ];
 
     public function cliente()
@@ -42,5 +36,9 @@ class Pedido extends Model
     {
         return $this->belongsTo(Carro::class);
     }
-}
 
+    public function getNumeroAttribute(): string
+    {
+        return '#' . str_pad($this->id, 4, '0', STR_PAD_LEFT);
+    }
+}
