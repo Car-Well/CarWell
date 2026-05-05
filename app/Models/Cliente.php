@@ -36,4 +36,15 @@ class Cliente extends Authenticatable
         'email_verification_expires_at' => 'datetime',
         'nascimento'                    => 'date',
     ];
+
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class);
+    }
+
+    public function getInitialsAttribute(): string
+    {
+        $parts = explode(' ', trim($this->name));
+        return strtoupper(($parts[0][0] ?? '') . ($parts[1][0] ?? ''));
+    }
 }
