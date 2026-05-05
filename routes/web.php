@@ -47,40 +47,37 @@ Route::get('/infocar', function () {
     return view('info_carro');
 })->name('info-carro');
 
-// Área administrativa
-Route::get('/admHome', function () {
-    return view('adm/admHome');
-})->name('admHome');
+// Login admin
+Route::get('/login-adm',  [LoginAdmController::class, 'showLogin'])->name('login-adm');
+Route::post('/login-adm', [LoginAdmController::class, 'login'])->name('login-adm.post');
+Route::post('/logout-adm',[LoginAdmController::class, 'logout'])->name('adm.logout');
 
-Route::get('/login-adm', function () {
-    return view('login/login-adm');
-})->name('login-adm');
+// Painel admin (protegido)
+Route::prefix('adm')->name('adm.')->middleware('admin.autenticado')->group(function () {
 
-Route::get('/login-cliente', [LoginClienteController::class, 'showLogin'])->name('login-cliente');
+    Route::get('/', [AdmDashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/admGerCar', function () {
-    return view('/adm/admGerCar');
-});
+    Route::prefix('carros')->name('carros.')->group(function () {
+        Route::get('/',           [AdmCarroController::class, 'index'])->name('index');
+        Route::post('/',          [AdmCarroController::class, 'store'])->name('store');
+        Route::put('/{carro}',    [AdmCarroController::class, 'update'])->name('update');
+        Route::delete('/{carro}', [AdmCarroController::class, 'destroy'])->name('destroy');
+    });
 
-Route::get('/confirmar-email', function () {
-    return view('/login/confirmar-email');
-});
+    Route::prefix('usuarios')->name('usuarios.')->group(function () {
+        Route::get('/',              [AdmClienteController::class, 'index'])->name('index');
+        Route::post('/',             [AdmClienteController::class, 'store'])->name('store');
+        Route::put('/{cliente}',     [AdmClienteController::class, 'update'])->name('update');
+        Route::delete('/{cliente}',  [AdmClienteController::class, 'destroy'])->name('destroy');
+    });
 
-Route::prefix('adm')->name('adm.')->group(function () {
-    Route::get('/carros', [AdmCarroController::class, 'index'])->name('carros.index');
-    Route::post('/carros', [AdmCarroController::class, 'store'])->name('carros.store');
-    Route::put('/carros/{carro}', [AdmCarroController::class, 'update'])->name('carros.update');
-    Route::delete('/carros/{carro}', [AdmCarroController::class, 'destroy'])->name('carros.destroy');
+    Route::prefix('pedidos')->name('pedidos.')->group(function () {
+        Route::get('/',             [AdmPedidoController::class, 'index'])->name('index');
+        Route::post('/',            [AdmPedidoController::class, 'store'])->name('store');
+        Route::put('/{pedido}',     [AdmPedidoController::class, 'update'])->name('update');
+        Route::delete('/{pedido}',  [AdmPedidoController::class, 'destroy'])->name('destroy');
+    });
 
-    Route::get('/usuarios', [AdmUserController::class, 'index'])->name('usuarios.index');
-    Route::post('/usuarios', [AdmUserController::class, 'store'])->name('usuarios.store');
-    Route::put('/usuarios/{cliente}', [AdmUserController::class, 'update'])->name('usuarios.update');
-    Route::delete('/usuarios/{cliente}', [AdmUserController::class, 'destroy'])->name('usuarios.destroy');
-
-    Route::get('/pedidos', [AdmPedidoController::class, 'index'])->name('pedidos.index');
-    Route::post('/pedidos', [AdmPedidoController::class, 'store'])->name('pedidos.store');
-    Route::put('/pedidos/{pedido}', [AdmPedidoController::class, 'update'])->name('pedidos.update');
-    Route::delete('/pedidos/{pedido}', [AdmPedidoController::class, 'destroy'])->name('pedidos.destroy');
 });
 
 // Alias p/ não quebrar os links atuais das views
