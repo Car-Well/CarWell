@@ -11,7 +11,7 @@ class LoginAdmController extends Controller
     public function showLogin()
     {
         if (Auth::guard('admin')->check()) {
-            return redirect()->route('adm.dashboard');
+            return redirect()->route('admHome');
         }
 
         return view('login.login-adm');
@@ -30,7 +30,7 @@ class LoginAdmController extends Controller
 
         if (Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->route('adm.dashboard');
+            return redirect()->route('admHome');
         }
 
         return back()

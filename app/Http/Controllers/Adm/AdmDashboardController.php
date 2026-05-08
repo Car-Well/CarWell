@@ -26,7 +26,7 @@ class AdmDashboardController extends Controller
 
         $receitaRaw = Pedido::whereIn('status', ['entregue', 'finalizado'])
             ->where('created_at', '>=', now()->subMonths(12))
-            ->selectRaw("DATE_FORMAT(created_at, '%Y-%m') as mes, SUM(valor) as total")
+            ->selectRaw("strftime('%Y-%m', created_at) as mes, SUM(valor) as total")
             ->groupBy('mes')
             ->orderBy('mes')
             ->pluck('total', 'mes');
@@ -41,7 +41,7 @@ class AdmDashboardController extends Controller
 
         $vendasPorMarca = Carro::join('pedidos', 'carros.id', '=', 'pedidos.carro_id')
             ->whereIn('pedidos.status', ['entregue', 'finalizado'])
-            ->selectRaw('carros.marca, COUNT(*) as total')
+            ->selectRaw('carros.marca, COUNT(*) as total')  
             ->groupBy('carros.marca')
             ->orderBy('total', 'desc')
             ->limit(8)
@@ -76,7 +76,7 @@ class AdmDashboardController extends Controller
         ];
 
         $heatmapData = Pedido::whereIn('status', ['entregue', 'finalizado'])
-            ->selectRaw('DAYOFWEEK(created_at) - 1 as dia, HOUR(created_at) as hora, COUNT(*) as total')
+            ->selectRaw("CAST(strftime('%H', created_at) AS INTEGER) as hora, CAST(strftime('%w', created_at) AS INTEGER) as dia, COUNT(*) as total")
             ->groupBy('dia', 'hora')
             ->get()
             ->map(fn($r) => [$r->hora, $r->dia, $r->total]);
@@ -91,7 +91,7 @@ class AdmDashboardController extends Controller
             ->limit(5)
             ->get();
 
-        return view('adm.admDashboard', compact(
+        return view('adm.admHome', compact(
             'kpis',
             'receitaLabels', 'receitaData',
             'vendasPorMarca',

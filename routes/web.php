@@ -13,9 +13,7 @@ use App\Http\Controllers\PerfilController;
 use Illuminate\Support\Facades\Route;
 
 // Rota TESTE
-Route::get('/teste', function(){
-    return view('teste');
-});
+Route::get('/admHome', [AdmDashboardController::class, 'index'])->middleware('admin.autenticado')->name('admHome');
 
 // Troca de idioma
 Route::get('/locale/{lang}', function ($lang) {
