@@ -14,38 +14,38 @@
 
     <nav class="main-nav">
         <div class="nav-left">
-            <img src="{{ asset('img/logo.png') }}" alt="logo" class="nav-logo" />
+            <img src="{{ asset('img/logo.png') }}" alt="logo" class="nav-logo">
         </div>
         <div class="nav-center">
             <div class="nav-links">
-                <a href="{{ route('admHome') }}" class="nav-hover-btn">Dashboard</a>
-                <a href="{{ route('admGerCar') }}" class="nav-hover-btn">Carros</a>
-                <a href="{{ route('admGerPed') }}" class="nav-active nav-hover-btn">Pedidos</a>
-                <a href="{{ route('admGerUser') }}" class="nav-hover-btn">Clientes</a>
+                <a href="{{ route('adm.dashboard') }}" class="nav-hover-btn">Dashboard</a>
+                <a href="{{ route('adm.carros.index') }}" class="nav-hover-btn">Carros</a>
+                <a href="{{ route('adm.pedidos.index') }}" class="nav-active nav-hover-btn">Pedidos</a>
+                <a href="{{ route('adm.usuarios.index') }}" class="nav-hover-btn">Clientes</a>
             </div>
         </div>
-        <div class="nav-right-spacer"></div>
+        <div class="nav-right">
+            <form action="{{ route('adm.logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="btn-logout">Sair</button>
+            </form>
+        </div>
     </nav>
 
     <main class="main">
+
         @if(session('success'))
-            <div class="alert alert-success" style="margin-bottom:14px;">
-                {{ session('success') }}
-            </div>
+            <div class="alert alert-success" style="margin-bottom:14px;">{{ session('success') }}</div>
         @endif
 
         @if($errors->any())
             <div class="alert alert-danger" style="margin-bottom:14px;">
                 <strong>Não foi possível salvar.</strong>
                 <ul style="margin:8px 0 0 18px;">
-                    @foreach($errors->all() as $msg)
-                        <li>{{ $msg }}</li>
-                    @endforeach
+                    @foreach($errors->all() as $msg)<li>{{ $msg }}</li>@endforeach
                 </ul>
             </div>
-            <script>
-                window.addEventListener('DOMContentLoaded', () => openPopUp('create'));
-            </script>
+            <script>window.addEventListener('DOMContentLoaded',()=>openPopUp('create'));</script>
         @endif
 
         <div class="page-header">
@@ -114,55 +114,70 @@
                     @php
                         $statusClass = ['em_separacao'=>'badge-blue','a_caminho'=>'badge-amber','entregue'=>'badge-green','finalizado'=>'badge-gray'];
                         $statusLabel = ['em_separacao'=>'Em separação','a_caminho'=>'A caminho','entregue'=>'Entregue','finalizado'=>'Finalizado'];
-                        $pagLabel = ['credito'=>'Crédito','debito'=>'Débito','pix'=>'PIX','boleto'=>'Boleto'];
-                        $pagIcon = [
-                            'credito'=>'<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
-                            'debito' =>'<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
-                            'pix' =>'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.354 3.854a2 2 0 0 1 2.828 0l5.964 5.964a2 2 0 0 1 0 2.828l-5.964 5.964a2 2 0 0 1-2.828 0L5.39 12.646a2 2 0 0 1 0-2.828l5.964-5.964z"/></svg>',
-                            'boleto' =>'<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>',
+                        $pagLabel    = ['credito'=>'Crédito','debito'=>'Débito','pix'=>'PIX','boleto'=>'Boleto'];
+                        $pagIcon     = [
+                            'credito' => '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+                            'debito'  => '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+                            'pix'     => '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.354 3.854a2 2 0 0 1 2.828 0l5.964 5.964a2 2 0 0 1 0 2.828l-5.964 5.964a2 2 0 0 1-2.828 0L5.39 12.646a2 2 0 0 1 0-2.828l5.964-5.964z"/></svg>',
+                            'boleto'  => '<svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>',
                         ];
                     @endphp
 
-                    @foreach(($pedidos ?? []) as $p)
+                    @forelse($pedidos as $p)
                     @php
-                        $nome = $p->cliente_nome ?? '';
-                        $parts = preg_split('/\s+/', trim($nome)) ?: [];
-                        $initials = strtoupper(substr($parts[0] ?? '', 0, 1) . substr($parts[1] ?? '', 0, 1));
-                        $dataBr = $p->data_pedido ? $p->data_pedido->format('d/m/Y') : ($p->created_at ? $p->created_at->format('d/m/Y') : '');
+                        $nomeCliente = $p->cliente->name ?? '—';
+                        $parts    = preg_split('/\s+/', trim($nomeCliente));
+                        $initials = strtoupper(substr($parts[0]??'',0,1).substr($parts[1]??'',0,1));
+                        $veiculo  = ($p->carro->marca ?? '').' '.($p->carro->modelo ?? '');
+                        $numero   = '#'.str_pad($p->id, 4, '0', STR_PAD_LEFT);
                     @endphp
-                    <tr data-status="{{ $p->status }}" data-search="{{ strtolower(($p->numero ?? '').' '.($p->cliente_nome ?? '').' '.($p->veiculo_nome ?? '')) }}">
-                        <td><span class="order-num">{{ $p->numero }}</span></td>
+                    <tr data-status="{{ $p->status }}"
+                        data-search="{{ strtolower($numero.' '.$nomeCliente.' '.$veiculo) }}">
+                        <td><span class="order-num">{{ $numero }}</span></td>
                         <td>
                             <div class="user-cell">
                                 <div class="user-initials">{{ $initials ?: '—' }}</div>
-                                <span class="user-name">{{ $p->cliente_nome }}</span>
+                                <span class="user-name">{{ $nomeCliente }}</span>
                             </div>
                         </td>
-                        <td class="text-muted">{{ $p->veiculo_nome }}</td>
+                        <td class="text-muted">{{ trim($veiculo) ?: '—' }}</td>
                         <td>
                             <div class="pag-cell">
                                 <span class="pag-icon">{!! $pagIcon[$p->pagamento] ?? '' !!}</span>
                                 {{ $pagLabel[$p->pagamento] ?? $p->pagamento }}
                             </div>
                         </td>
-                        <td class="text-bold">R$ {{ number_format((float) $p->valor, 2, ',', '.') }}</td>
+                        <td class="text-bold">R$ {{ number_format((float)$p->valor, 2, ',', '.') }}</td>
                         <td><span class="badge {{ $statusClass[$p->status] ?? 'badge-gray' }}">{{ $statusLabel[$p->status] ?? $p->status }}</span></td>
-                        <td class="text-muted">{{ $dataBr ?: '—' }}</td>
+                        <td class="text-muted">{{ $p->created_at->format('d/m/Y') }}</td>
                         <td>
                             <div class="row-actions">
-                                <button class="btn btn-secondary btn-sm" onclick="openEdit({{ $p->id }}, '{{ addslashes($p->cliente_nome) }}', '{{ addslashes($p->veiculo_nome) }}', '{{ $p->pagamento }}', '{{ $p->valor }}', '{{ $p->status }}', '{{ $p->numero }}')">
+                                <button class="btn btn-secondary btn-sm"
+                                    onclick="openEdit(
+                                        {{ $p->id }},
+                                        {{ $p->cliente_id }},
+                                        {{ $p->carro_id }},
+                                        '{{ $p->pagamento }}',
+                                        '{{ $p->valor }}',
+                                        '{{ $p->status }}',
+                                        '{{ $numero }}'
+                                    )">
                                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                     Editar
                                 </button>
-                                <button class="btn btn-danger btn-sm" onclick="openDelete({{ $p->id }}, '{{ $p->numero }}')">
+                                <button class="btn btn-danger btn-sm"
+                                    onclick="openDelete({{ $p->id }}, '{{ $numero }}')">
                                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
                                     Excluir
                                 </button>
                             </div>
                         </td>
                     </tr>
-                    @endforeach
-
+                    @empty
+                    <tr>
+                        <td colspan="8" style="text-align:center;color:#9EA19C;padding:2rem;">Nenhum pedido cadastrado</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
 
@@ -194,11 +209,21 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Cliente *</label>
-                            <input type="text" name="cliente" class="form-control" placeholder="Nome do cliente">
+                            <select name="cliente_id" class="form-control">
+                                <option value="">Selecionar cliente...</option>
+                                @foreach($clientes as $c)
+                                    <option value="{{ $c->id }}">{{ $c->name }} — {{ $c->email }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Veículo *</label>
-                            <input type="text" name="veiculo" class="form-control" placeholder="Marca e modelo">
+                            <select name="carro_id" class="form-control">
+                                <option value="">Selecionar veículo...</option>
+                                @foreach($carros as $c)
+                                    <option value="{{ $c->id }}">{{ $c->marca }} {{ $c->modelo }} ({{ $c->ano }}) — R$ {{ number_format((float)$c->preco, 0, ',', '.') }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
@@ -284,25 +309,14 @@
                             <div class="pix-qr">
                                 <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <rect width="100" height="100" fill="white"/>
-                                    <rect x="10" y="10" width="30" height="30" fill="#1A1C19"/>
-                                    <rect x="15" y="15" width="20" height="20" fill="white"/>
-                                    <rect x="18" y="18" width="14" height="14" fill="#1A1C19"/>
-                                    <rect x="60" y="10" width="30" height="30" fill="#1A1C19"/>
-                                    <rect x="65" y="15" width="20" height="20" fill="white"/>
-                                    <rect x="68" y="18" width="14" height="14" fill="#1A1C19"/>
-                                    <rect x="10" y="60" width="30" height="30" fill="#1A1C19"/>
-                                    <rect x="15" y="65" width="20" height="20" fill="white"/>
-                                    <rect x="18" y="68" width="14" height="14" fill="#1A1C19"/>
-                                    <rect x="50" y="50" width="6" height="6" fill="#1A1C19"/>
-                                    <rect x="60" y="50" width="6" height="6" fill="#1A1C19"/>
-                                    <rect x="70" y="50" width="6" height="6" fill="#1A1C19"/>
-                                    <rect x="80" y="50" width="6" height="6" fill="#1A1C19"/>
-                                    <rect x="50" y="60" width="6" height="6" fill="#1A1C19"/>
-                                    <rect x="70" y="60" width="6" height="6" fill="#1A1C19"/>
-                                    <rect x="50" y="70" width="6" height="6" fill="#1A1C19"/>
-                                    <rect x="60" y="70" width="6" height="6" fill="#1A1C19"/>
-                                    <rect x="80" y="70" width="6" height="6" fill="#1A1C19"/>
-                                    <rect x="60" y="80" width="6" height="6" fill="#1A1C19"/>
+                                    <rect x="10" y="10" width="30" height="30" fill="#1A1C19"/><rect x="15" y="15" width="20" height="20" fill="white"/><rect x="18" y="18" width="14" height="14" fill="#1A1C19"/>
+                                    <rect x="60" y="10" width="30" height="30" fill="#1A1C19"/><rect x="65" y="15" width="20" height="20" fill="white"/><rect x="68" y="18" width="14" height="14" fill="#1A1C19"/>
+                                    <rect x="10" y="60" width="30" height="30" fill="#1A1C19"/><rect x="15" y="65" width="20" height="20" fill="white"/><rect x="18" y="68" width="14" height="14" fill="#1A1C19"/>
+                                    <rect x="50" y="50" width="6" height="6" fill="#1A1C19"/><rect x="60" y="50" width="6" height="6" fill="#1A1C19"/>
+                                    <rect x="70" y="50" width="6" height="6" fill="#1A1C19"/><rect x="80" y="50" width="6" height="6" fill="#1A1C19"/>
+                                    <rect x="50" y="60" width="6" height="6" fill="#1A1C19"/><rect x="70" y="60" width="6" height="6" fill="#1A1C19"/>
+                                    <rect x="50" y="70" width="6" height="6" fill="#1A1C19"/><rect x="60" y="70" width="6" height="6" fill="#1A1C19"/>
+                                    <rect x="80" y="70" width="6" height="6" fill="#1A1C19"/><rect x="60" y="80" width="6" height="6" fill="#1A1C19"/>
                                     <rect x="80" y="80" width="6" height="6" fill="#1A1C19"/>
                                 </svg>
                             </div>
@@ -313,7 +327,7 @@
                                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                                     <span id="copyPixBtn">Copiar chave</span>
                                 </button>
-                                <div class="pix-hint">O pagamento é confirmado em até 1 minuto após o envio.</div>
+                                <div class="pix-hint">Confirmado em até 1 minuto após o envio.</div>
                             </div>
                         </div>
                     </div>
@@ -322,8 +336,8 @@
                         <div class="pag-fields-title">Pagamento via Boleto</div>
                         <div class="boleto-box">
                             <div class="boleto-barras">
-                                @for($i = 0; $i < 40; $i++)
-                                    <div class="barra" style="width: {{ rand(1,3) }}px;"></div>
+                                @for($i=0;$i<40;$i++)
+                                    <div class="barra" style="width:{{ rand(1,3) }}px;"></div>
                                 @endfor
                             </div>
                             <div class="boleto-codigo">34191.09008 12345.678901 23456.789012 3 10010000108900</div>
@@ -331,7 +345,7 @@
                                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                                 <span id="copyBoletoBtn">Copiar código</span>
                             </button>
-                            <div class="boleto-hint">Vencimento em 3 dias úteis. Pague em qualquer banco ou lotérica.</div>
+                            <div class="boleto-hint">Vencimento em 3 dias úteis.</div>
                         </div>
                     </div>
 
@@ -362,18 +376,26 @@
                 <form action="#" method="POST" id="formEdit">
                     @csrf
                     @method('PUT')
-                    <input type="hidden" name="id" id="editId">
 
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Cliente *</label>
-                            <input type="text" name="cliente" id="editCliente" class="form-control">
+                            <select name="cliente_id" id="editCliente" class="form-control">
+                                @foreach($clientes as $c)
+                                    <option value="{{ $c->id }}">{{ $c->name }} — {{ $c->email }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Veículo *</label>
-                            <input type="text" name="veiculo" id="editVeiculo" class="form-control">
+                            <select name="carro_id" id="editCarro" class="form-control">
+                                @foreach($carros as $c)
+                                    <option value="{{ $c->id }}">{{ $c->marca }} {{ $c->modelo }} ({{ $c->ano }})</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
+
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Valor *</label>
@@ -449,14 +471,13 @@
             </div>
             <div class="modal-body">
                 <div class="delete-icon">
-                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                    <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
                 </div>
                 <p class="delete-msg">Tem certeza que deseja excluir o pedido <strong id="deleteNum"></strong>?</p>
                 <p class="delete-hint">O pedido será removido permanentemente do sistema.</p>
                 <form action="#" method="POST" id="formDelete">
                     @csrf
                     @method('DELETE')
-                    <input type="hidden" name="id" id="deleteId">
                 </form>
             </div>
             <div class="modal-footer">
@@ -474,30 +495,32 @@
             document.getElementById('modal-'+name).classList.add('open'); 
             document.body.style.overflow='hidden'; 
         }
+
         function closePopUp(name) { 
             document.getElementById('modal-'+name).classList.remove('open'); 
             document.body.style.overflow=''; 
         }
+
         function closeOnBackdrop(e,name) { 
             if(e.target===e.currentTarget) closePopUp(name); 
         }
 
-        function openEdit(id, cliente, veiculo, pagamento, valor, status, num) {
-            document.getElementById('editId').value       = id;
-            document.getElementById('editCliente').value  = cliente;
-            document.getElementById('editVeiculo').value  = veiculo;
-            document.getElementById('editPagamento').value= pagamento;
-            document.getElementById('editValor').value    = valor;
+        function openEdit(id, clienteId, carroId, pagamento, valor, status, num) {
+            document.getElementById('editCliente').value = clienteId;
+            document.getElementById('editCarro').value = carroId;
+            document.getElementById('editPagamento').value = pagamento;
+            document.getElementById('editValor').value = valor;
             document.getElementById('editSubtitle').textContent = 'Pedido ' + num;
-            document.querySelectorAll('.step').forEach(s => s.classList.remove('active','done'));
+
             const steps = ['em_separacao','a_caminho','entregue','finalizado'];
             const idx = steps.indexOf(status);
             document.querySelectorAll('.step').forEach((s,i) => {
+                s.classList.remove('active','done');
                 if(i < idx) s.classList.add('done');
                 if(i === idx) s.classList.add('active');
             });
             document.getElementById('editStatus').value = status;
-            document.getElementById('formEdit').action = "{{ url('/adm/pedidos') }}/" + id;
+            document.getElementById('formEdit').action  = "{{ url('/adm/pedidos') }}/" + id;
             openPopUp('edit');
         }
 
@@ -513,94 +536,78 @@
         }
 
         function openDelete(id, num) {
-            document.getElementById('deleteId').value = id;
             document.getElementById('deleteNum').textContent = num;
             document.getElementById('formDelete').action = "{{ url('/adm/pedidos') }}/" + id;
             openPopUp('delete');
         }
 
         function switchPag(tipo) {
-            document.querySelectorAll('.pag-opt').forEach(o => o.classList.remove('selected'));
+            document.querySelectorAll('.pag-opt').forEach(o=>o.classList.remove('selected'));
             document.getElementById('opt-'+tipo).classList.add('selected');
-            document.querySelectorAll('.pag-fields').forEach(f => f.style.display='none');
-
+            document.querySelectorAll('.pag-fields').forEach(f=>f.style.display='none');
             const parcelasWrap = document.getElementById('parcelas-wrap');
-
-            if(tipo === 'credito') {
-                document.getElementById('fields-card').style.display='block';
-                parcelasWrap.style.display='block';
-            } else if(tipo === 'debito') {
-                document.getElementById('fields-card').style.display='block';
-                parcelasWrap.style.display='none';
-            } else if(tipo === 'pix') {
-                document.getElementById('fields-pix').style.display='block';
-            } else if(tipo === 'boleto') {
-                document.getElementById('fields-boleto').style.display='block';
-            }
+            if(tipo==='credito') { 
+                document.getElementById('fields-card').style.display='block'; 
+                parcelasWrap.style.display='block';  
+            } else if(tipo==='debito') { 
+                document.getElementById('fields-card').style.display='block'; 
+                parcelasWrap.style.display='none'; 
+            } else if(tipo==='pix') document.getElementById('fields-pix').style.display='block';
+            else if(tipo==='boleto') document.getElementById('fields-boleto').style.display='block'; 
         }
 
-        function maskCard(el) {
-            let v = el.value.replace(/\D/g,'').substring(0,16);
-            el.value = v.replace(/(.{4})/g,'$1 ').trim();
+        function maskCard(el) { 
+            let v=el.value.replace(/\D/g,'').substring(0,16); 
+            el.value=v.replace(/(.{4})/g,'$1 ').trim(); 
         }
 
-        function maskValidade(el) {
-            let v = el.value.replace(/\D/g,'').substring(0,4);
-            if(v.length >= 2) v = v.substring(0,2)+'/'+v.substring(2);
-            el.value = v;
+        function maskValidade(el) { 
+            let v=el.value.replace(/\D/g,'').substring(0,4); 
+            if(v.length>=2) v=v.substring(0,2)+'/'+v.substring(2); el.value=v; 
         }
 
-        function copyPix() {
-            navigator.clipboard.writeText('carwell@pagamentos.com');
-            const btn = document.getElementById('copyPixBtn');
-            btn.textContent = 'Copiado!';
-            setTimeout(() => btn.textContent = 'Copiar chave', 2000);
+        function copyPix() { 
+            navigator.clipboard.writeText('carwell@pagamentos.com'); 
+            const btn=document.getElementById('copyPixBtn'); 
+            btn.textContent='Copiado!'; 
+            setTimeout(()=>btn.textContent='Copiar chave',2000); 
         }
 
-        function copyBoleto() {
-            navigator.clipboard.writeText('34191.09008 12345.678901 23456.789012 3 10010000108900');
-            const btn = document.getElementById('copyBoletoBtn');
-            btn.textContent = 'Copiado!';
-            setTimeout(() => btn.textContent = 'Copiar código', 2000);
+        function copyBoleto() { 
+            navigator.clipboard.writeText('34191.09008 12345.678901 23456.789012 3 10010000108900'); 
+            const btn=document.getElementById('copyBoletoBtn'); 
+            btn.textContent='Copiado!'; 
+            setTimeout(()=>btn.textContent='Copiar código',2000); 
         }
 
         let currentFilter = 'all';
-
-        function setFilter(el) {
-            currentFilter = el.dataset.filter;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
-            applyFilters();
+        function setFilter(el) { 
+            currentFilter=el.dataset.filter; 
+            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); 
+            el.classList.add('active'); 
+            applyFilters(); 
         }
 
-        function filterRows() { applyFilters(); }
-
+        function filterRows() { 
+            applyFilters(); 
+        }
+        
         function applyFilters() {
-            const q = document.getElementById('searchInput').value.toLowerCase().trim();
-            const rows = document.querySelectorAll('#tableBody tr');
-            let visible = 0;
-            rows.forEach(row => {
-                const matchFilter = currentFilter==='all' || row.dataset.status===currentFilter;
-                const matchSearch = !q || row.dataset.search.includes(q);
-                const show = matchFilter && matchSearch;
-                row.style.display = show ? '' : 'none';
-                if(show) visible++;
-            });
-            document.getElementById('emptyState').style.display = visible===0 ? '' : 'none';
+            const q=document.getElementById('searchInput').value.toLowerCase().trim();
+            const rows=document.querySelectorAll('#tableBody tr');
+            let visible=0;
+            rows.forEach(row=>{ const ok=(currentFilter==='all'||row.dataset.status===currentFilter)&&(!q||row.dataset.search.includes(q)); row.style.display=ok?'':'none'; if(ok) visible++; });
+            document.getElementById('emptyState').style.display=visible===0?'':'none';
         }
 
-        function clearFilters() {
-            document.getElementById('searchInput').value='';
-            currentFilter='all';
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            document.querySelector('[data-filter="all"]').classList.add('active');
-            applyFilters();
+        function clearFilters() { 
+            document.getElementById('searchInput').value=''; 
+            currentFilter='all'; 
+            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); 
+            document.querySelector('[data-filter="all"]').classList.add('active'); applyFilters(); 
         }
-
-        document.addEventListener('keydown', e => {
-            if(e.key==='Escape') { ['create','edit','delete'].forEach(closePopUp); document.body.style.overflow=''; }
-        });
+        
+        document.addEventListener('keydown',e=>{ if(e.key==='Escape'){['create','edit','delete'].forEach(closePopUp);document.body.style.overflow='';} });
     </script>
-
 </body>
 </html>

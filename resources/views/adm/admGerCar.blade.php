@@ -217,11 +217,11 @@
                             <label class="form-label">Combustível</label>
                             <select name="combustivel" class="form-control">
                                 <option value="">Selecionar...</option>
-                                <option value="flex"     {{ old('combustivel') == 'flex'     ? 'selected' : '' }}>Flex</option>
+                                <option value="flex" {{ old('combustivel') == 'flex'     ? 'selected' : '' }}>Flex</option>
                                 <option value="gasolina" {{ old('combustivel') == 'gasolina' ? 'selected' : '' }}>Gasolina</option>
-                                <option value="diesel"   {{ old('combustivel') == 'diesel'   ? 'selected' : '' }}>Diesel</option>
+                                <option value="diesel" {{ old('combustivel') == 'diesel'   ? 'selected' : '' }}>Diesel</option>
                                 <option value="eletrico" {{ old('combustivel') == 'eletrico' ? 'selected' : '' }}>Elétrico</option>
-                                <option value="hibrido"  {{ old('combustivel') == 'hibrido'  ? 'selected' : '' }}>Híbrido</option>
+                                <option value="hibrido" {{ old('combustivel') == 'hibrido'  ? 'selected' : '' }}>Híbrido</option>
                             </select>
                         </div>
                     </div>
@@ -230,17 +230,17 @@
                             <label class="form-label">Câmbio</label>
                             <select name="cambio" class="form-control">
                                 <option value="">Selecionar...</option>
-                                <option value="manual"    {{ old('cambio') == 'manual'    ? 'selected' : '' }}>Manual</option>
-                                <option value="automatico"{{ old('cambio') == 'automatico'? 'selected' : '' }}>Automático</option>
-                                <option value="cvt"       {{ old('cambio') == 'cvt'       ? 'selected' : '' }}>CVT</option>
+                                <option value="manual" {{ old('cambio') == 'manual' ? 'selected' : '' }}>Manual</option>
+                                <option value="automatico" {{ old('cambio') == 'automatico' ? 'selected' : '' }}>Automático</option>
+                                <option value="cvt" {{ old('cambio') == 'cvt' ? 'selected' : '' }}>CVT</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label class="form-label">Status</label>
                             <select name="status" class="form-control">
                                 <option value="disponivel" {{ old('status','disponivel') == 'disponivel' ? 'selected' : '' }}>Disponível</option>
-                                <option value="reservado"  {{ old('status') == 'reservado'  ? 'selected' : '' }}>Reservado</option>
-                                <option value="vendido"    {{ old('status') == 'vendido'    ? 'selected' : '' }}>Vendido</option>
+                                <option value="reservado" {{ old('status') == 'reservado' ? 'selected' : '' }}>Reservado</option>
+                                <option value="vendido" {{ old('status') == 'vendido' ? 'selected' : '' }}>Vendido</option>
                             </select>
                         </div>
                     </div>
@@ -413,22 +413,32 @@
     </div>
 
     <script>
-        function openModal(name) { document.getElementById('modal-'+name).classList.add('open'); document.body.style.overflow='hidden'; }
-        function closeModal(name) { document.getElementById('modal-'+name).classList.remove('open'); document.body.style.overflow=''; }
-        function closeOnBackdrop(e,name) { if(e.target===e.currentTarget) closeModal(name); }
+        function openModal(name) { 
+            document.getElementById('modal-'+name).classList.add('open'); 
+            document.body.style.overflow='hidden'; 
+        }
+
+        function closeModal(name) { 
+            document.getElementById('modal-'+name).classList.remove('open'); 
+            document.body.style.overflow=''; 
+        }
+
+        function closeOnBackdrop(e,name) { 
+            if(e.target===e.currentTarget) closeModal(name); 
+        }
 
         function openEdit(id,marca,modelo,ano,preco,status,km,cor,combustivel,cambio,descricao) {
-            document.getElementById('editId').value          = id;
-            document.getElementById('editMarca').value       = marca;
-            document.getElementById('editModelo').value      = modelo;
-            document.getElementById('editAno').value         = ano;
-            document.getElementById('editPreco').value       = preco;
-            document.getElementById('editStatus').value      = status;
-            document.getElementById('editKm').value          = km;
-            document.getElementById('editCor').value         = cor || '';
+            document.getElementById('editId').value = id;
+            document.getElementById('editMarca').value = marca;
+            document.getElementById('editModelo').value = modelo;
+            document.getElementById('editAno').value = ano;
+            document.getElementById('editPreco').value = preco;
+            document.getElementById('editStatus').value = status;
+            document.getElementById('editKm').value = km;
+            document.getElementById('editCor').value = cor || '';
             document.getElementById('editCombustivel').value = combustivel || '';
-            document.getElementById('editCambio').value      = cambio || '';
-            document.getElementById('editDescricao').value   = descricao || '';
+            document.getElementById('editCambio').value = cambio || '';
+            document.getElementById('editDescricao').value = descricao || '';
             document.getElementById('editSubtitle').textContent = marca + ' ' + modelo;
             document.getElementById('formEdit').action = "{{ url('/adm/carros') }}/" + id;
             openModal('edit');
@@ -507,7 +517,9 @@
             document.querySelector('[data-filter="all"]').classList.add('active');
             applyFilters();
         }
-        document.addEventListener('keydown',e=>{ if(e.key==='Escape'){['create','edit','delete'].forEach(closeModal);document.body.style.overflow='';} });
+        document.addEventListener('keydown',e=>{ if(e.key==='Escape'){
+            ['create','edit','delete'].forEach(closeModal);document.body.style.overflow='';
+        }});
         </script>
     </body>
 </html>
