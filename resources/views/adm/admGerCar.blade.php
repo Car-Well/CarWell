@@ -361,12 +361,26 @@
                         <textarea name="descricao" id="editDescricao" class="form-control" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Trocar foto de capa</label>
-                        <input type="file" name="capa" accept="image/*" class="form-control">
+                        <label class="form-label">Trocar a foto de capa</label>
+                        <div class="upload-area">
+                            <input type="file" name="capa" accept="image/*" onchange="previewPhoto(event, 'previewCreate', 'uploadCreateContent')">
+                            <div class="upload-content" id="uploadCreateContent">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                                <span>Clique ou arraste a foto</span>
+                            </div>
+                            <img id="previewCreate" class="upload-preview" style="display:none;">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Adicionar mais fotos</label>
-                        <input type="file" name="fotos[]" accept="image/*" multiple class="form-control">
+                        <label class="form-label">Trocar mais fotos (galeria)</label>
+                        <div class="upload-area">
+                            <input type="file" name="fotos[]" accept="image/*" multiple onchange="previewGallery(event, 'galleryCreate', 'galleryCreateContent')">
+                            <div class="upload-content" id="galleryCreateContent">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                                <span>Mais fotos (galeria)</span>
+                            </div>
+                            <div id="galleryCreate" class="gallery-preview-container"></div>
+                        </div>
                     </div>
                 </form>
             </div>
