@@ -44,8 +44,7 @@ class AdmPedidoController extends Controller
         ];
 
         $clientes = Cliente::whereNotNull('email_verified_at')->orderBy('name')->get();
-        $carros   = Carro::where('status', 'disponivel')->orderBy('marca')->get();
-
+        $carros = Carro::whereIn('status', ['disponivel', 'reservado'])->orderBy('marca')->get();
         return view('adm.admGerPed', compact('pedidos', 'kpis', 'clientes', 'carros'));
     }
 
