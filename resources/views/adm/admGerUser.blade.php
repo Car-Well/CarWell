@@ -138,15 +138,8 @@
                         <td>
                             <div class="row-actions">
                                 <button class="btn btn-secondary btn-sm"
-                                    onclick="openEdit(
-                                        {{ $u->id }},
-                                        '{{ addslashes($u->name ?? '') }}',
-                                        '{{ addslashes($u->email ?? '') }}',
-                                        '{{ $u->perfil ?? 'cliente' }}',
-                                        '{{ $nascBr }}',
-                                        '{{ addslashes($u->endereco ?? '') }}',
-                                        '{{ addslashes($u->telefone ?? '') }}'
-                                    )">
+                                    data-user="{{ json_encode(['id'=>$u->id,'nome'=>$u->name??'','email'=>$u->email??'','perfil'=>$u->perfil??'cliente','nascimento'=>$nascBr,'telefone'=>$u->telefone??'','cep'=>$u->cep??'','rua'=>$u->rua??'','bairro'=>$u->bairro??'','cidade'=>$u->cidade??'','estado'=>$u->estado??'','numero'=>$u->numero??'','complemento'=>$u->complemento??'','ponto_referencia'=>$u->ponto_referencia??'']) }}"
+                                    onclick="openEdit(this)">
                                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                                     Editar
                                 </button>
@@ -208,7 +201,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Nome completo *</label>
-                            <input type="text" name="name" class="form-control" placeholder="ex: João Silva" value="{{ old('name') }}">
+                            <input type="text" name="nome" class="form-control" placeholder="ex: João Silva" value="{{ old('nome') }}">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Email *</label>
@@ -218,7 +211,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Telefone</label>
-                            <input type="text" name="telefone" class="form-control" placeholder="(11) 99999-9999" value="{{ old('telefone') }}">
+                            <input type="text" name="telefone" class="form-control" placeholder="(11) 99999-9999" value="{{ old('telefone') }}" oninput="maskTelefone(this)">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Data de nascimento</label>
@@ -228,11 +221,11 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Senha *</label>
-                            <input type="password" name="password" class="form-control" placeholder="••••••••">
+                            <input type="password" name="senha" class="form-control" placeholder="••••••••">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Confirmar senha *</label>
-                            <input type="password" name="password_confirmation" class="form-control" placeholder="••••••••">
+                            <input type="password" name="senha_confirmation" class="form-control" placeholder="••••••••">
                         </div>
                     </div>
                     <div class="form-row">
@@ -294,7 +287,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Nome completo *</label>
-                            <input type="text" name="name" id="editNome" class="form-control">
+                            <input type="text" name="nome" id="editNome" class="form-control">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Email *</label>
@@ -304,7 +297,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Telefone</label>
-                            <input type="text" name="telefone" id="editTelefone" class="form-control">
+                            <input type="text" name="telefone" id="editTelefone" class="form-control" placeholder="(11) 99999-9999" oninput="maskTelefone(this)">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Data de nascimento</label>
@@ -314,11 +307,11 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Nova senha</label>
-                            <input type="password" name="password" class="form-control" placeholder="Deixe em branco para manter">
+                            <input type="password" name="senha" class="form-control" placeholder="Deixe em branco para manter">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Confirmar nova senha</label>
-                            <input type="password" name="password_confirmation" class="form-control" placeholder="Deixe em branco para manter">
+                            <input type="password" name="senha_confirmation" class="form-control" placeholder="Deixe em branco para manter">
                         </div>
                     </div>
                     <div class="form-row">
@@ -331,8 +324,42 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label class="form-label">Endereço</label>
-                            <input type="text" name="endereco" id="editEndereco" class="form-control">
+                            <label class="form-label">CEP</label>
+                            <input type="text" name="cep" id="editCep" class="form-control" maxlength="9" placeholder="00000-000">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group" style="flex:2">
+                            <label class="form-label">Rua / Avenida</label>
+                            <input type="text" name="rua" id="editRua" class="form-control">
+                        </div>
+                        <div class="form-group" style="flex:1">
+                            <label class="form-label">Número</label>
+                            <input type="text" name="numero" id="editNumero" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Bairro</label>
+                            <input type="text" name="bairro" id="editBairro" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cidade</label>
+                            <input type="text" name="cidade" id="editCidade" class="form-control">
+                        </div>
+                        <div class="form-group" style="max-width:80px">
+                            <label class="form-label">UF</label>
+                            <input type="text" name="estado" id="editEstado" class="form-control" maxlength="2">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Complemento</label>
+                            <input type="text" name="complemento" id="editComplemento" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ponto de Referência</label>
+                            <input type="text" name="ponto_referencia" id="editPontoRef" class="form-control">
                         </div>
                     </div>
                 </form>
@@ -380,7 +407,21 @@
     </div>
 
     <script>
-        function openModal(name) { 
+        function maskTelefone(input) {
+            let v = input.value.replace(/\D/g, '').slice(0, 11);
+            if (v.length > 10) {
+                v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+            } else if (v.length > 6) {
+                v = '(' + v.slice(0,2) + ') ' + v.slice(2,6) + '-' + v.slice(6);
+            } else if (v.length > 2) {
+                v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+            } else if (v.length > 0) {
+                v = '(' + v;
+            }
+            input.value = v;
+        }
+
+        function openModal(name) {
             document.getElementById('modal-'+name).classList.add('open'); 
             document.body.style.overflow='hidden';
         }
@@ -394,16 +435,24 @@
             if(e.target===e.currentTarget) closeModal(name); 
         }
 
-        function openEdit(id, nome, email, perfil, nascimento, endereco, telefone) {
-            document.getElementById('editNome').value = nome;
-            document.getElementById('editEmail').value = email;
-            document.getElementById('editPerfil').value = perfil;
-            document.getElementById('editEndereco').value = endereco;
-            document.getElementById('editTelefone').value = telefone || '';
-            document.getElementById('editSubtitle').textContent = nome;
-            const parts = nascimento.split('/');
+        function openEdit(btn) {
+            const u = JSON.parse(btn.dataset.user);
+            document.getElementById('editNome').value        = u.nome        || '';
+            document.getElementById('editEmail').value       = u.email       || '';
+            document.getElementById('editPerfil').value      = u.perfil      || 'cliente';
+            document.getElementById('editTelefone').value    = u.telefone    || '';
+            document.getElementById('editCep').value         = u.cep         || '';
+            document.getElementById('editRua').value         = u.rua         || '';
+            document.getElementById('editNumero').value      = u.numero      || '';
+            document.getElementById('editBairro').value      = u.bairro      || '';
+            document.getElementById('editCidade').value      = u.cidade      || '';
+            document.getElementById('editEstado').value      = u.estado      || '';
+            document.getElementById('editComplemento').value = u.complemento || '';
+            document.getElementById('editPontoRef').value    = u.ponto_referencia || '';
+            document.getElementById('editSubtitle').textContent = u.nome;
+            const parts = (u.nascimento || '').split('/');
             if(parts.length===3) document.getElementById('editNascimento').value = parts[2]+'-'+parts[1]+'-'+parts[0];
-            document.getElementById('formEdit').action = "{{ url('/adm/usuarios') }}/" + id;
+            document.getElementById('formEdit').action = "{{ url('/adm/usuarios') }}/" + u.id;
             openModal('edit');
         }
 
