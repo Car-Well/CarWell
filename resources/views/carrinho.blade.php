@@ -22,7 +22,6 @@
         <a href="{{ route('home') }}" class="nav-hover-btn">{{ __('nav.home') }}</a>
         <a href="#" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
         <a href="#" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
-        <a href="#" class="nav-hover-btn">{{ __('nav.ajuda') }}</a>
         <a href="{{ route('carrinho') }}" class="nav-active nav-hover-btn">{{ __('nav.carrinho') }}</a>
       </div>
     </div>

@@ -20,9 +20,9 @@
     <div class="nav-center">
       <div class="nav-links">
           <a href="{{ route('home') }}" class="nav-active nav-hover-btn">{{ __('nav.home') }}</a>
-          <a href="#" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
-          <a href="#" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
-          <a href="#" class="nav-hover-btn">{{ __('nav.ajuda') }}</a>
+          <a href="#marcas" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
+          <a href="#por-que" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
+
           <a href="{{ route('carrinho') }}" class="nav-hover-btn">{{ __('nav.carrinho') }}</a>
       </div>
     </div>
@@ -82,7 +82,7 @@
   </section>
 
   <!-- WHY CARWELL -->
-  <section class="section">
+  <section class="section" id="por-que">
     <h2 class="section-title">{{ __('home.por_que') }}</h2>
     <div class="features-grid">
       <div class="feature-card">
@@ -117,7 +117,7 @@
   </section>
 
   <!-- BRANDS -->
-  <div class="brands-section">
+  <div class="brands-section" id="marcas">
     <h2 class="section-title">{{ __('home.marcas') }}</h2>
     <div style="display:flex; align-items:center; gap:10px;">
       <div class="brands-row" id="brands-row">
