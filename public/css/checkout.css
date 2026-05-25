@@ -296,7 +296,9 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-width: 150px;
+  flex: 1;
+  min-width: 0;
+  padding-top: calc(0.72rem * 1.5 + 4px);
 }
 
 /* Order Summary Box */
@@ -305,6 +307,7 @@ body {
   border-radius: var(--radius-md);
   padding: 12px 14px;
   text-align: center;
+  width: 100%;
 }
 
 .order-summary-label {
@@ -344,6 +347,8 @@ body {
   cursor: pointer;
   transition: background 0.18s, transform 0.15s;
   width: 100%;
+  align-self: stretch;
+  flex-shrink: 0;
 }
 
 .btn-pagar:hover {
