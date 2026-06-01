@@ -24,6 +24,7 @@
           <a href="#por-que" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
 
           <a href="{{ route('carrinho') }}" class="nav-hover-btn">{{ __('nav.carrinho') }}</a>
+          <a href="{{ route('favoritos') }}" class="nav-hover-btn" id="nav-favoritos">FAVORITOS <span id="fav-badge" style="display:none; background:#0F6E56; color:#fff; border-radius:999px; font-size:0.6rem; font-weight:800; padding:1px 6px; vertical-align:middle; margin-left:2px;"></span></a>
       </div>
     </div>
 
@@ -121,33 +122,13 @@
     <h2 class="section-title">{{ __('home.marcas') }}</h2>
     <div style="display:flex; align-items:center; gap:10px;">
       <div class="brands-row" id="brands-row">
-        <div class="brand-item">
-          <svg width="36" height="36" viewBox="0 0 60 60" fill="none">
-            <path d="M30 10 C18 10 10 20 10 30 C10 46 24 52 30 52 C36 52 50 46 50 30 C50 20 42 10 30 10Z" fill="none" stroke="#1a2e4a" stroke-width="2.5"/>
-            <path d="M20 30 Q30 15 40 30" fill="none" stroke="#1a2e4a" stroke-width="2"/>
-          </svg>
+        @forelse($marcas as $marca)
+        <div class="brand-item" title="{{ $marca->nome }}">
+          <img src="{{ asset("storage/{$marca->logo}") }}" alt="{{ $marca->nome }}" style="max-height:36px; max-width:72px; object-fit:contain;">
         </div>
-        <div class="brand-item">
-          <svg width="36" height="36" viewBox="0 0 60 60" fill="none">
-            <circle cx="30" cy="30" r="20" fill="none" stroke="#1a2e4a" stroke-width="2.5"/>
-            <path d="M30 10 L30 50 M10 30 L50 30" stroke="#1a2e4a" stroke-width="2"/>
-          </svg>
-        </div>
-        <div class="brand-item">
-          <svg width="36" height="36" viewBox="0 0 60 60" fill="none">
-            <circle cx="30" cy="30" r="20" fill="none" stroke="#1a2e4a" stroke-width="2.5"/>
-            <path d="M22 22 L38 38 M38 22 L22 38" stroke="#1a2e4a" stroke-width="2.5"/>
-          </svg>
-        </div>
-        <div class="brand-item">
-          <svg width="36" height="36" viewBox="0 0 60 60" fill="none">
-            <circle cx="30" cy="30" r="20" fill="none" stroke="#1a2e4a" stroke-width="2.5"/>
-            <circle cx="22" cy="30" r="8" fill="none" stroke="#1a2e4a" stroke-width="2"/>
-            <circle cx="38" cy="30" r="8" fill="none" stroke="#1a2e4a" stroke-width="2"/>
-          </svg>
-        </div>
-        <div class="brand-item" style="font-size:0.7rem; font-weight:800;">HONDA</div>
-        <div class="brand-item" style="font-size:0.65rem; font-weight:800;">AUDI</div>
+        @empty
+        <div class="brand-item" style="font-size:0.75rem; font-weight:700; color:#9EA19C;">Nenhuma marca cadastrada</div>
+        @endforelse
       </div>
       <div class="brands-arrow">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a2e4a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
@@ -174,84 +155,87 @@
   <!-- CAR CARDS -->
   <div class="cars-grid">
 
-    <!-- Card 1 -->
-    <a href="{{ route('info-carro') }}" class="car-card">
-      <div class="car-img-placeholder">
-        <svg viewBox="0 0 120 70" fill="none">
-          <path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1e4d8c" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <rect x="10" y="43" width="100" height="16" rx="8" fill="#1a2e4a" opacity="0.7"/>
-          <circle cx="28" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="28" cy="60" r="5" fill="#c8daea"/>
-          <circle cx="92" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="92" cy="60" r="5" fill="#c8daea"/>
-        </svg>
-      </div>
-      <div class="car-heart" onclick="event.preventDefault(); toggleHeart(this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-      </div>
-      <div class="car-info">
-        <p class="car-name">AUDI S6</p>
-        <p class="car-spec">2.0 TFSI GASOLINA<br>PERFORMANCE S EDITION<br>QUATTRO S TRONIC</p>
-      </div>
-      <div class="car-arrow">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
-    </a>
+    @forelse($carros as $carro)
+    <a href="{{ route('carro.show', $carro->id) }}" class="car-card">
 
-    <!-- Card 2 -->
-    <a href="{{ route('info-carro') }}" class="car-card">
-      <div class="car-img-placeholder" style="background: linear-gradient(135deg, #f5c6cb 0%, #f8d7da 100%);">
-        <svg viewBox="0 0 120 70" fill="none">
-          <path d="M12 46 Q25 16 60 14 Q95 16 108 46" stroke="#b91c1c" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <rect x="8" y="44" width="104" height="16" rx="8" fill="#b91c1c" opacity="0.6"/>
-          <circle cx="26" cy="61" r="9" fill="#b91c1c" opacity="0.6"/><circle cx="26" cy="61" r="5" fill="#f8d7da"/>
-          <circle cx="94" cy="61" r="9" fill="#b91c1c" opacity="0.6"/><circle cx="94" cy="61" r="5" fill="#f8d7da"/>
-        </svg>
-      </div>
-      <div class="car-heart" onclick="event.preventDefault(); toggleHeart(this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-        </svg>
-      </div>
-      <div class="car-info">
-        <p class="car-name">PORSCHE 911 TURBO S<br>STYLE EDITION</p>
-        <p class="car-spec">&nbsp;</p>
-      </div>
-      <div class="car-arrow">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
-    </a>
+      @if($carro->capa_path)
+        <img src="{{ asset('storage/' . $carro->capa_path) }}"
+             alt="{{ $carro->veiculo_nome }}"
+             class="car-img"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <div class="car-img-placeholder" style="display:none">
+          <svg viewBox="0 0 120 70" fill="none"><path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1e4d8c" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="10" y="43" width="100" height="16" rx="8" fill="#1a2e4a" opacity="0.7"/><circle cx="28" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="28" cy="60" r="5" fill="#c8daea"/><circle cx="92" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="92" cy="60" r="5" fill="#c8daea"/></svg>
+        </div>
+      @else
+        <div class="car-img-placeholder">
+          <svg viewBox="0 0 120 70" fill="none"><path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1e4d8c" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="10" y="43" width="100" height="16" rx="8" fill="#1a2e4a" opacity="0.7"/><circle cx="28" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="28" cy="60" r="5" fill="#c8daea"/><circle cx="92" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="92" cy="60" r="5" fill="#c8daea"/></svg>
+        </div>
+      @endif
 
-    <!-- Card 3 -->
-    <a href="{{ route('info-carro') }}" class="car-card">
-      <div class="car-img-placeholder" style="background: linear-gradient(135deg, #1a2e4a 0%, #0d1b2e 100%);">
-        <svg viewBox="0 0 120 70" fill="none">
-          <path d="M10 46 Q28 16 60 14 Q92 16 110 46" stroke="rgba(255,255,255,0.6)" stroke-width="3" fill="none" stroke-linecap="round"/>
-          <rect x="7" y="44" width="106" height="16" rx="8" fill="rgba(255,255,255,0.4)"/>
-          <circle cx="25" cy="61" r="9" fill="rgba(255,255,255,0.3)"/><circle cx="25" cy="61" r="5" fill="rgba(255,255,255,0.7)"/>
-          <circle cx="95" cy="61" r="9" fill="rgba(255,255,255,0.3)"/><circle cx="95" cy="61" r="5" fill="rgba(255,255,255,0.7)"/>
-        </svg>
-      </div>
-      <div class="car-heart" onclick="event.preventDefault(); toggleHeart(this)">
+      <div class="car-heart" data-id="{{ $carro->id }}" onclick="event.preventDefault(); toggleHeart(this, {{ $carro->id }})">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
       </div>
       <div class="car-info">
-        <p class="car-name">FORD MUSTANG<br>#19</p>
-        <p class="car-spec">5.0 V8 GASOLINA<br>DARK HORSE<br>SELECT SHIFT</p>
+        <p class="car-name">{{ strtoupper($carro->veiculo_nome) }}</p>
+        <p class="car-spec">
+          {{ $carro->ano }}{{ $carro->combustivel ? ' · ' . strtoupper($carro->combustivel) : '' }}{{ $carro->cambio ? ' · ' . strtoupper($carro->cambio) : '' }}
+        </p>
+        @if($carro->preco)
+          <p class="car-price">R$ {{ number_format($carro->preco, 0, ',', '.') }}</p>
+        @endif
       </div>
       <div class="car-arrow">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
     </a>
+    @empty
+    <div style="grid-column: 1/-1; text-align:center; padding: 60px 0; color: #9EA19C;">
+      <p style="font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em;">Nenhum veículo disponível no momento</p>
+    </div>
+    @endforelse
 
   </div>
 
   <script>
-    function toggleHeart(el) {
-      el.classList.toggle('liked');
+    const FAV_KEY = 'carwell_favs';
+
+    function getFavs() {
+      return JSON.parse(localStorage.getItem(FAV_KEY) || '[]');
     }
+    function saveFavs(favs) {
+      localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+    }
+
+    function toggleHeart(el, carroId) {
+      el.classList.toggle('liked');
+      let favs = getFavs();
+      if (el.classList.contains('liked')) {
+        if (!favs.includes(carroId)) favs.push(carroId);
+      } else {
+        favs = favs.filter(id => id !== carroId);
+      }
+      saveFavs(favs);
+      updateFavBadge();
+    }
+
+    function updateFavBadge() {
+      const badge = document.getElementById('fav-badge');
+      if (!badge) return;
+      const count = getFavs().length;
+      badge.textContent = count;
+      badge.style.display = count ? 'inline-block' : 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const favs = getFavs();
+      document.querySelectorAll('.car-heart[data-id]').forEach(el => {
+        if (favs.includes(parseInt(el.dataset.id))) el.classList.add('liked');
+      });
+      updateFavBadge();
+    });
+
     function toggleMenu() {
       // mobile menu toggle placeholder
       const links = document.querySelector('.nav-links');
