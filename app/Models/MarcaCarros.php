@@ -6,10 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MarcaCarros extends Model
 {
-    
-    public $fillable = ['name', 'image', 'model_id'];
+    protected $table = 'marca_carros';
 
-    public function Model(){
-        return $this->hasMany(Model::class);
-    }
+    protected $fillable = ['nome', 'logo'];
 }
