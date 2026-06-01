@@ -81,7 +81,7 @@
 
     <script>
       const FAV_KEY    = 'carwell_favs';
-      const STORAGE_URL = '{{ asset("storage/") }}';
+      const STORAGE_URL = '{{ asset("storage") }}/';
       const POR_IDS_URL = '{{ route("carros.por-ids") }}';
 
       function getFavs()         { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }
