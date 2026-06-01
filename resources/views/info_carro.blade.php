@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Carwell – {{ $carro->nome ?? 'Honda Civic G12' }}</title>
+    <title>Carwell – {{ $carro ? strtoupper($carro->veiculo_nome) : 'Veículo' }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -87,7 +87,11 @@
           </svg>
         </button>
       </div>
-      <img src="{{ asset('img/carros/honda-civic.png') }}" alt="{{ $carro->nome ?? 'Honda Civic' }}" class="product-main-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+      @if($carro && $carro->capa_path)
+        <img id="mainCarImg" src="{{ asset('storage/' . $carro->capa_path) }}" alt="{{ $carro->veiculo_nome }}" class="product-main-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+      @else
+        <img id="mainCarImg" src="{{ asset('img/carros/honda-civic.png') }}" alt="Veículo" class="product-main-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+      @endif
       <div class="product-img-placeholder" style="display:none">
         <svg viewBox="0 0 200 100" fill="none" width="200">
           <path d="M20 68 Q50 22 100 20 Q150 22 180 68" stroke="rgba(0,0,0,0.3)" stroke-width="4" fill="none" stroke-linecap="round"/>
@@ -96,72 +100,86 @@
           <circle cx="160" cy="92" r="13" fill="rgba(0,0,0,0.2)"/><circle cx="160" cy="92" r="7" fill="rgba(0,0,0,0.35)"/>
         </svg>
       </div>
+
+      @if($carro && $carro->fotos->count() > 1)
+      <div class="photo-thumbnails">
+        @foreach($carro->fotos->sortBy('ordem') as $foto)
+          <button class="thumb-btn {{ $foto->is_capa ? 'active' : '' }}"
+                  onclick="switchPhoto(this, '{{ asset('storage/' . $foto->path) }}')"
+                  type="button">
+            <img src="{{ asset('storage/' . $foto->path) }}" alt="Foto {{ $loop->iteration }}">
+          </button>
+        @endforeach
+      </div>
+      @php $totalFotos = $carro->fotos->count(); @endphp
+      @if($totalFotos > 3)
+      <button class="btn-ver-fotos" onclick="openGallery()">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        Ver todas as fotos ({{ $totalFotos }})
+      </button>
+      @endif
+      @endif
+
     </div>
 
     <!-- Info do produto -->
     <div class="product-info-area">
-      <p class="product-label">HONDA CIVIC G12 2025(34)</p>
-      <p class="product-price">R$ 708.900</p>
-      <a href="{{ route('carrinho') }}" class="btn-comprar">{{ __('info_carro.comprar') }}</a>
+      <p class="product-label">
+        {{ $carro ? strtoupper($carro->veiculo_nome) : 'HONDA CIVIC G12' }}
+        @if($carro && $carro->ano) {{ $carro->ano }} @endif
+      </p>
+      <p class="product-price">
+        @if($carro && $carro->preco)
+          R$ {{ number_format($carro->preco, 0, ',', '.') }}
+        @else
+          R$ 708.900
+        @endif
+      </p>
+      {{-- Descrição do admin --}}
+      @if($carro && $carro->descricao)
+      <div class="info-section">
+        <p class="info-section-title">Descrição</p>
+        <p class="carro-descricao">{{ $carro->descricao }}</p>
+      </div>
+      @endif
 
       <!-- Informações Básicas -->
       <div class="info-section">
         <p class="info-section-title">{{ __('info_carro.info_basicas') }}</p>
-
-        <!-- Cidade -->
-        <div class="accordion-item">
-          <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">{{ __('info_carro.cidade') }}</span>
-            <span class="accordion-right">
-              <span class="accordion-preview">SÃO PAULO</span>
-              <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </span>
-          </button>
-          <div class="accordion-body">
-            <div class="accordion-content">
-              <div class="accordion-detail-row"><span>São Paulo – SP</span></div>
-              <div class="accordion-detail-row"><span>Zona Sul</span></div>
-              <div class="accordion-detail-row"><span>CEP: 04000-000</span></div>
-            </div>
-          </div>
-        </div>
 
         <!-- Estoque ID -->
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
             <span class="info-label">{{ __('info_carro.estoque_id') }}</span>
             <span class="accordion-right">
-              <span class="accordion-preview">1720</span>
+              <span class="accordion-preview">{{ $carro ? $carro->id : '–' }}</span>
               <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
             </span>
           </button>
           <div class="accordion-body">
             <div class="accordion-content">
-              <div class="accordion-detail-row"><span>Código interno</span><span class="accordion-val">1720-CW</span></div>
-              <div class="accordion-detail-row"><span>Disponibilidade</span><span class="accordion-val accent">Em estoque</span></div>
+              <div class="accordion-detail-row"><span>Código interno</span><span class="accordion-val">{{ $carro ? $carro->id . '-CW' : '–' }}</span></div>
+              <div class="accordion-detail-row"><span>Disponibilidade</span><span class="accordion-val accent">{{ $carro ? ucfirst($carro->status) : 'Disponível' }}</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Ano -->
+        <!-- Ano / KM -->
         <div class="accordion-item">
           <button class="accordion-trigger" onclick="toggleAccordion(this)">
             <span class="info-label">{{ __('info_carro.ano') }}</span>
             <span class="accordion-right">
-              <span class="accordion-preview">2026</span>
+              <span class="accordion-preview">{{ $carro ? $carro->ano : '–' }}</span>
               <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
             </span>
           </button>
           <div class="accordion-body">
             <div class="accordion-content">
-              <div class="accordion-detail-row"><span>Ano de fabricação</span><span class="accordion-val">2025</span></div>
-              <div class="accordion-detail-row"><span>Ano modelo</span><span class="accordion-val">2026</span></div>
-              <div class="accordion-detail-row"><span>Quilometragem</span><span class="accordion-val">0 km</span></div>
+              <div class="accordion-detail-row"><span>Ano</span><span class="accordion-val">{{ $carro ? $carro->ano : '–' }}</span></div>
+              <div class="accordion-detail-row"><span>Quilometragem</span><span class="accordion-val">{{ $carro && $carro->km ? number_format($carro->km, 0, ',', '.') . ' km' : '0 km' }}</span></div>
             </div>
           </div>
         </div>
-
-        <a href="#" class="ver-mais-link">{{ __('info_carro.ver_mais') }}</a>
       </div>
 
       <!-- Características -->
@@ -175,125 +193,16 @@
           </button>
           <div class="accordion-body">
             <div class="accordion-content">
-              <div class="accordion-detail-row"><span>Combustível</span><span class="accordion-val">Gasolina</span></div>
-              <div class="accordion-detail-row"><span>Câmbio</span><span class="accordion-val">CVT</span></div>
-              <div class="accordion-detail-row"><span>Tração</span><span class="accordion-val">Dianteira</span></div>
-              <div class="accordion-detail-row"><span>Direção</span><span class="accordion-val">Elétrica</span></div>
+              <div class="accordion-detail-row"><span>Combustível</span><span class="accordion-val">{{ $carro && $carro->combustivel ? ucfirst($carro->combustivel) : '–' }}</span></div>
+              <div class="accordion-detail-row"><span>Câmbio</span><span class="accordion-val">{{ $carro && $carro->cambio ? ucfirst($carro->cambio) : '–' }}</span></div>
+              <div class="accordion-detail-row"><span>Cor</span><span class="accordion-val">{{ $carro && $carro->cor ? ucfirst($carro->cor) : '–' }}</span></div>
             </div>
           </div>
         </div>
 
-        <div class="accordion-item">
-          <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">{{ __('info_carro.exterior') }}</span>
-            <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="accordion-body">
-            <div class="accordion-content">
-              <div class="accordion-detail-row"><span>Cor</span><span class="accordion-val">Preto</span></div>
-              <div class="accordion-detail-row"><span>Rodas</span><span class="accordion-val">18" Liga Leve</span></div>
-              <div class="accordion-detail-row"><span>Vidros elétricos</span><span class="accordion-val accent">Sim</span></div>
-              <div class="accordion-detail-row"><span>Teto solar</span><span class="accordion-val accent">Sim</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">{{ __('info_carro.entretenimento') }}</span>
-            <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="accordion-body">
-            <div class="accordion-content">
-              <div class="accordion-detail-row"><span>Central multimídia</span><span class="accordion-val">10.5" Touch</span></div>
-              <div class="accordion-detail-row"><span>Apple CarPlay</span><span class="accordion-val accent">Sim</span></div>
-              <div class="accordion-detail-row"><span>Android Auto</span><span class="accordion-val accent">Sim</span></div>
-              <div class="accordion-detail-row"><span>Ar-condicionado</span><span class="accordion-val">Dual Zone</span></div>
-              <div class="accordion-detail-row"><span>Bancos</span><span class="accordion-val">Couro aquecido</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">{{ __('info_carro.seguranca') }}</span>
-            <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="accordion-body">
-            <div class="accordion-content">
-              <div class="accordion-detail-row"><span>Airbags</span><span class="accordion-val">6 unidades</span></div>
-              <div class="accordion-detail-row"><span>ABS + EBD</span><span class="accordion-val accent">Sim</span></div>
-              <div class="accordion-detail-row"><span>Câmera de ré</span><span class="accordion-val accent">Sim</span></div>
-              <div class="accordion-detail-row"><span>Sensor de estacionamento</span><span class="accordion-val accent">Sim</span></div>
-              <div class="accordion-detail-row"><span>Honda Sensing</span><span class="accordion-val accent">Sim</span></div>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <!-- Dados Técnicos -->
-      <div class="info-section">
-        <p class="info-section-title">{{ __('info_carro.dados_tecnicos') }}</p>
-
-        <div class="accordion-item">
-          <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">{{ __('info_carro.unidade_motor') }}</span>
-            <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="accordion-body">
-            <div class="accordion-content">
-              <div class="accordion-detail-row"><span>Motor</span><span class="accordion-val">1.5 VTEC Turbo</span></div>
-              <div class="accordion-detail-row"><span>Cilindros</span><span class="accordion-val">4 cilindros</span></div>
-              <div class="accordion-detail-row"><span>Cilindrada</span><span class="accordion-val">1.498 cc</span></div>
-              <div class="accordion-detail-row"><span>Alimentação</span><span class="accordion-val">Injeção direta</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">{{ __('info_carro.desempenho') }}</span>
-            <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="accordion-body">
-            <div class="accordion-content">
-              <div class="accordion-detail-row"><span>Potência</span><span class="accordion-val">182 cv</span></div>
-              <div class="accordion-detail-row"><span>Torque</span><span class="accordion-val">24,1 kgfm</span></div>
-              <div class="accordion-detail-row"><span>0–100 km/h</span><span class="accordion-val">7,2 s</span></div>
-              <div class="accordion-detail-row"><span>Vel. máxima</span><span class="accordion-val">230 km/h</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">{{ __('info_carro.carroceria') }}</span>
-            <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="accordion-body">
-            <div class="accordion-content">
-              <div class="accordion-detail-row"><span>Tipo</span><span class="accordion-val">Sedã</span></div>
-              <div class="accordion-detail-row"><span>Portas</span><span class="accordion-val">4</span></div>
-              <div class="accordion-detail-row"><span>Capacidade</span><span class="accordion-val">5 lugares</span></div>
-              <div class="accordion-detail-row"><span>Porta-malas</span><span class="accordion-val">519 litros</span></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="accordion-item">
-          <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">{{ __('info_carro.nivel_ruido') }}</span>
-            <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="accordion-body">
-            <div class="accordion-content">
-              <div class="accordion-detail-row"><span>Interno em marcha</span><span class="accordion-val">62 dB</span></div>
-              <div class="accordion-detail-row"><span>Externo máx.</span><span class="accordion-val">71 dB</span></div>
-              <div class="accordion-detail-row"><span>Classificação</span><span class="accordion-val accent">Silencioso</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <a href="{{ route('carrinho') }}" class="btn-comprar">{{ __('info_carro.comprar') }}</a>
     </div>
 
   </section>
@@ -307,84 +216,26 @@
       </button>
     </div>
     <div class="related-grid">
-      <!-- Card 1 -->
-      <div class="related-card">
+      @forelse($relacionados as $rel)
+      <a href="{{ route('carro.show', $rel->id) }}" class="related-card" style="text-decoration:none; color:inherit;">
         <div class="related-img-wrap">
-          <img src="{{ asset('img/carros/ferrari-f8.png') }}" alt="Ferrari F8 Spyder" onerror="this.style.display='none'">
-          <div class="related-img-placeholder ferrari"></div>
-          <button class="related-heart" onclick="toggleHeart(this)">
+          @if($rel->capa_path)
+            <img src="{{ asset('storage/' . $rel->capa_path) }}" alt="{{ $rel->veiculo_nome }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            <div class="related-img-placeholder" style="display:none"></div>
+          @else
+            <div class="related-img-placeholder"></div>
+          @endif
+          <button class="related-heart" onclick="event.preventDefault(); toggleHeart(this)">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
             </svg>
           </button>
         </div>
-        <p class="related-name">FERRARI F8 SPYDER</p>
-      </div>
-      <!-- Card 2 -->
-      <div class="related-card">
-        <div class="related-img-wrap">
-          <img src="{{ asset('img/carros/bmw-m8.png') }}" alt="BMW M8" onerror="this.style.display='none'">
-          <div class="related-img-placeholder bmw"></div>
-          <button class="related-heart" onclick="toggleHeart(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </button>
-        </div>
-        <p class="related-name">BMW M8</p>
-      </div>
-      <!-- Card 3 -->
-      <div class="related-card">
-        <div class="related-img-wrap">
-          <img src="{{ asset('img/carros/mercedes-amg.png') }}" alt="Mercedes-Benz AMG g63" onerror="this.style.display='none'">
-          <div class="related-img-placeholder mercedes"></div>
-          <button class="related-heart" onclick="toggleHeart(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </button>
-        </div>
-        <p class="related-name">MERCEDES-BENZ AMG G63 ♥</p>
-      </div>
-      <!-- Card 4 -->
-      <div class="related-card">
-        <div class="related-img-wrap">
-          <img src="{{ asset('img/carros/lamborghini.png') }}" alt="Lamborghini Aventador SV" onerror="this.style.display='none'">
-          <div class="related-img-placeholder lambo"></div>
-          <button class="related-heart" onclick="toggleHeart(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </button>
-        </div>
-        <p class="related-name">LAMBORGHINI AVENTADOR SV</p>
-      </div>
-      <!-- Card 5 -->
-      <div class="related-card">
-        <div class="related-img-wrap">
-          <img src="{{ asset('img/carros/fiat-uno.png') }}" alt="Fiat Uno" onerror="this.style.display='none'">
-          <div class="related-img-placeholder fiat"></div>
-          <button class="related-heart" onclick="toggleHeart(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </button>
-        </div>
-        <p class="related-name">FIAT UNO</p>
-      </div>
-      <!-- Card 6 -->
-      <div class="related-card">
-        <div class="related-img-wrap">
-          <img src="{{ asset('img/carros/porsche-pink.png') }}" alt="Porsche Pink" onerror="this.style.display='none'">
-          <div class="related-img-placeholder porsche-pink"></div>
-          <button class="related-heart" onclick="toggleHeart(this)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </button>
-        </div>
-        <p class="related-name">PORSCHE PINK</p>
-      </div>
+        <p class="related-name">{{ strtoupper($rel->veiculo_nome) }}</p>
+      </a>
+      @empty
+        <p style="color:#9EA19C; font-size:0.8rem;">Nenhum veículo relacionado.</p>
+      @endforelse
     </div>
   </section>
 
@@ -413,6 +264,12 @@
   </section>
 
   <script>
+    function switchPhoto(btn, url) {
+      document.getElementById('mainCarImg').src = url;
+      document.querySelectorAll('.thumb-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
     function toggleHeart(el) {
       el.classList.toggle('liked');
     }
@@ -445,5 +302,77 @@
       }
     }
   </script>
+
+  @if($carro && $carro->fotos->count() > 1)
+  @php $todasFotos = $carro->fotos->sortBy('ordem')->values(); @endphp
+  <div class="gallery-modal-overlay" id="galleryModal">
+    <div class="gallery-modal">
+      <button class="gallery-modal-close" onclick="closeGallery()">&#x2715;</button>
+      <button class="gallery-nav prev" onclick="galleryNav(-1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="gallery-nav next" onclick="galleryNav(1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <img id="galleryMainImg" class="gallery-modal-main" src="" alt="Foto do veículo">
+      <div class="gallery-modal-strip" id="galleryStrip">
+        @foreach($todasFotos as $i => $foto)
+          <div class="gallery-strip-thumb {{ $i === 0 ? 'active' : '' }}"
+               onclick="galleryGoTo({{ $i }})"
+               id="gthumb-{{ $i }}">
+            <img src="{{ asset('storage/' . $foto->path) }}" alt="Foto {{ $i + 1 }}">
+          </div>
+        @endforeach
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const galleryPhotos = @json($todasFotos->map(fn($f) => asset('storage/' . $f->path))->values());
+    let galleryIndex = 0;
+
+    function openGallery(startIndex) {
+      galleryIndex = startIndex ?? 0;
+      updateGalleryImg();
+      document.getElementById('galleryModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeGallery() {
+      document.getElementById('galleryModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function galleryNav(dir) {
+      galleryIndex = (galleryIndex + dir + galleryPhotos.length) % galleryPhotos.length;
+      updateGalleryImg();
+    }
+
+    function galleryGoTo(index) {
+      galleryIndex = index;
+      updateGalleryImg();
+    }
+
+    function updateGalleryImg() {
+      document.getElementById('galleryMainImg').src = galleryPhotos[galleryIndex];
+      document.querySelectorAll('.gallery-strip-thumb').forEach((t, i) => {
+        t.classList.toggle('active', i === galleryIndex);
+      });
+      const thumb = document.getElementById('gthumb-' + galleryIndex);
+      if (thumb) thumb.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    document.getElementById('galleryModal').addEventListener('click', function(e) {
+      if (e.target === this) closeGallery();
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if (!document.getElementById('galleryModal').classList.contains('open')) return;
+      if (e.key === 'ArrowLeft') galleryNav(-1);
+      if (e.key === 'ArrowRight') galleryNav(1);
+      if (e.key === 'Escape') closeGallery();
+    });
+  </script>
+  @endif
 </body>
 </html>
