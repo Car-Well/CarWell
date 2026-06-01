@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Adm;
 use App\Http\Controllers\Controller;
 use App\Models\Carro;
 use App\Models\CarroFoto;
+use App\Models\MarcaCarros;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,7 +32,7 @@ class AdmCarroController extends Controller
             $query->where('status', $request->get('status'));
         }
 
-        $carros = $query->with(['capa'])->get();
+        $carros = $query->with(['capa', 'fotos'])->get();
 
         $kpis = [
             'total' => (int) Carro::count(),
@@ -40,7 +41,9 @@ class AdmCarroController extends Controller
             'vendido' => (int) Carro::where('status', 'vendido')->count(),
         ];
 
-        return view('adm.admGerCar', compact('carros', 'kpis'));
+        $marcas = MarcaCarros::orderBy('nome')->get();
+
+        return view('adm.admGerCar', compact('carros', 'kpis', 'marcas'));
     }
 
     public function store(Request $request)
