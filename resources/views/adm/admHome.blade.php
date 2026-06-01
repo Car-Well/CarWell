@@ -26,7 +26,7 @@
     <div class="nav-right">
         <form action="{{ route('adm.logout') }}" method="POST">
             @csrf
-            <button type="submit" class="btn-logout">Sair</button>
+            <button type="submit" class="btn-logout nav-hover-btn">Sair</button>
         </form>
     </div>
 </nav>

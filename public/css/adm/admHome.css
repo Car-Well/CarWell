@@ -67,6 +67,12 @@ body {
     gap: 1rem; 
 }
 
+.btn-logout {
+    background: none;
+    border: none;
+    padding: 0;
+}
+
 .nav-hover-btn {
     position: relative;
     margin: 0 1.25rem; 
