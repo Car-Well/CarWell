@@ -55,10 +55,20 @@
                 <h1 class="page-title">Gerenciar <span>Carros</span></h1>
                 <p class="page-subtitle">Gerencie todo o estoque de veículos</p>
             </div>
-            <button class="btn btn-primary" onclick="openModal('create')">
-                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Adicionar carro
-            </button>
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn btn-secondary" onclick="openModal('marca')">
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Adicionar marca
+                </button>
+                <button class="btn btn-secondary" onclick="openModal('logo')">
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    Adicionar logo
+                </button>
+                <button class="btn btn-primary" onclick="openModal('create')">
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Adicionar carro
+                </button>
+            </div>
         </div>
 
         <div class="kpi-grid">
@@ -138,7 +148,9 @@
                                 '{{ addslashes($carro->cor ?? '') }}',
                                 '{{ $carro->combustivel ?? '' }}',
                                 '{{ $carro->cambio ?? '' }}',
-                                '{{ addslashes(str_replace(["\r","\n","'"], ['',' ',''], $carro->descricao ?? '')) }}'
+                                '{{ addslashes(str_replace(["\r","\n","'"], ['',' ',''], $carro->descricao ?? '')) }}',
+                                '{{ $carro->capa_path ? asset('storage/'.$carro->capa_path) : '' }}',
+                                @json($carro->fotos->where('is_capa', false)->map(fn($f) => asset('storage/'.$f->path))->values())
                             )">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             Editar
@@ -187,7 +199,16 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Marca *</label>
+                            @if($marcas->count())
+                            <select name="marca" class="form-control" required>
+                                <option value="">Selecionar...</option>
+                                @foreach($marcas as $m)
+                                <option value="{{ $m->nome }}" {{ old('marca') == $m->nome ? 'selected' : '' }}>{{ $m->nome }}</option>
+                                @endforeach
+                            </select>
+                            @else
                             <input type="text" name="marca" class="form-control" value="{{ old('marca') }}" placeholder="ex: Honda">
+                            @endif
                         </div>
                         <div class="form-group">
                             <label class="form-label">Modelo *</label>
@@ -301,7 +322,16 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Marca *</label>
+                            @if($marcas->count())
+                            <select name="marca" id="editMarca" class="form-control">
+                                <option value="">Selecionar...</option>
+                                @foreach($marcas as $m)
+                                <option value="{{ $m->nome }}">{{ $m->nome }}</option>
+                                @endforeach
+                            </select>
+                            @else
                             <input type="text" name="marca" id="editMarca" class="form-control">
+                            @endif
                         </div>
                         <div class="form-group">
                             <label class="form-label">Modelo *</label>
@@ -361,25 +391,31 @@
                         <textarea name="descricao" id="editDescricao" class="form-control" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Trocar a foto de capa</label>
+                        <label class="form-label">Foto de capa atual</label>
+                        <div id="editCapaAtual" style="display:none; margin-bottom:8px;">
+                            <img id="editCapaAtualImg" src="" style="width:100%; max-height:160px; object-fit:cover; border-radius:8px; border:1px solid #e5e7eb;">
+                        </div>
+                        <label class="form-label" style="font-size:0.7rem; color:#9EA19C;">Trocar foto de capa</label>
                         <div class="upload-area">
-                            <input type="file" name="capa" accept="image/*" onchange="previewPhoto(event, 'previewCreate', 'uploadCreateContent')">
-                            <div class="upload-content" id="uploadCreateContent">
+                            <input type="file" name="capa" accept="image/*" onchange="previewPhoto(event, 'previewEdit', 'uploadEditContent')">
+                            <div class="upload-content" id="uploadEditContent">
                                 <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-                                <span>Clique ou arraste a foto</span>
+                                <span>Clique ou arraste a nova foto</span>
                             </div>
-                            <img id="previewCreate" class="upload-preview" style="display:none;">
+                            <img id="previewEdit" class="upload-preview" style="display:none;">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Trocar mais fotos (galeria)</label>
+                        <label class="form-label">Fotos da galeria atuais</label>
+                        <div id="editGaleriaAtual" class="gallery-preview-container" style="margin-bottom:8px;"></div>
+                        <label class="form-label" style="font-size:0.7rem; color:#9EA19C;">Adicionar mais fotos</label>
                         <div class="upload-area">
-                            <input type="file" name="fotos[]" accept="image/*" multiple onchange="previewGallery(event, 'galleryCreate', 'galleryCreateContent')">
-                            <div class="upload-content" id="galleryCreateContent">
+                            <input type="file" name="fotos[]" accept="image/*" multiple onchange="previewGallery(event, 'galleryEdit', 'galleryEditContent')">
+                            <div class="upload-content" id="galleryEditContent">
                                 <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
                                 <span>Mais fotos (galeria)</span>
                             </div>
-                            <div id="galleryCreate" class="gallery-preview-container"></div>
+                            <div id="galleryEdit" class="gallery-preview-container"></div>
                         </div>
                     </div>
                 </form>
@@ -389,6 +425,121 @@
                 <button class="btn btn-primary" onclick="document.getElementById('formEdit').submit()">
                     <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
                     Salvar alterações
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL: Adicionar Marca --}}
+    <div class="modal-overlay" id="modal-marca" onclick="closeOnBackdrop(event,'marca')">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-title">Adicionar marca</div>
+                    <div class="modal-subtitle">Nome que aparecerá no select de carros</div>
+                </div>
+                <button class="modal-close" onclick="closeModal('marca')">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ route('adm.marcas.store') }}" method="POST" id="formMarca">
+                    @csrf
+                    <div class="form-group">
+                        <label class="form-label">Nome da marca *</label>
+                        <input type="text" name="nome" class="form-control" placeholder="ex: Toyota" required>
+                    </div>
+                </form>
+
+                @if($marcas->count())
+                <div style="margin-top:16px;">
+                    <p class="form-label" style="margin-bottom:8px;">Marcas cadastradas</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                        @foreach($marcas as $m)
+                        <div style="display:flex; align-items:center; gap:6px; background:#f4f5f3; border-radius:20px; padding:4px 12px; font-size:0.75rem; font-weight:700;">
+                            {{ $m->nome }}
+                            <form action="{{ route('adm.marcas.destroy', $m->id) }}" method="POST" style="margin:0;">
+                                @csrf @method('DELETE')
+                                <button type="submit" style="background:none;border:none;cursor:pointer;color:#e53e3e;font-size:0.9rem;line-height:1;padding:0;" title="Remover">&#x2715;</button>
+                            </form>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('marca')">Cancelar</button>
+                <button class="btn btn-primary" onclick="document.getElementById('formMarca').submit()">
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    Salvar marca
+                </button>
+            </div>
+        </div>
+    </div>
+
+    {{-- MODAL: Adicionar Logo --}}
+    <div class="modal-overlay" id="modal-logo" onclick="closeOnBackdrop(event,'logo')">
+        <div class="modal modal-sm">
+            <div class="modal-header">
+                <div>
+                    <div class="modal-title">Adicionar logo</div>
+                    <div class="modal-subtitle">Logo que aparecerá na home do cliente</div>
+                </div>
+                <button class="modal-close" onclick="closeModal('logo')">
+                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                @if($marcas->count())
+                <form action="#" method="POST" id="formLogo" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label class="form-label">Selecionar marca *</label>
+                        <select name="marca_id" id="logoMarcaSelect" class="form-control" onchange="updateLogoAction(this)">
+                            <option value="">Escolha a marca...</option>
+                            @foreach($marcas as $m)
+                            <option value="{{ $m->id }}" data-action="{{ route('adm.marcas.logo', $m->id) }}">
+                                {{ $m->nome }}{{ $m->logo ? ' ✓' : '' }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Arquivo da logo (PNG, SVG, JPG)</label>
+                        <div class="upload-area">
+                            <input type="file" name="logo" accept="image/*" onchange="previewPhoto(event,'previewLogo','uploadLogoContent')">
+                            <div class="upload-content" id="uploadLogoContent">
+                                <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                                <span>Clique ou arraste a logo</span>
+                            </div>
+                            <img id="previewLogo" class="upload-preview" style="display:none; max-height:80px; object-fit:contain;">
+                        </div>
+                    </div>
+                </form>
+                @else
+                <p style="color:#9EA19C; font-size:0.82rem;">Nenhuma marca cadastrada. Adicione uma marca primeiro.</p>
+                @endif
+
+                @if($marcas->where('logo','!=',null)->count())
+                <div style="margin-top:16px;">
+                    <p class="form-label" style="margin-bottom:8px;">Logos cadastradas</p>
+                    <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
+                        @foreach($marcas->whereNotNull('logo') as $m)
+                        <div style="text-align:center;">
+                            <img src="{{ asset('storage/'.$m->logo) }}" alt="{{ $m->nome }}" style="height:32px; object-fit:contain; display:block; margin:0 auto 4px;">
+                            <span style="font-size:0.65rem; color:#6B6E69;">{{ $m->nome }}</span>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('logo')">Cancelar</button>
+                <button class="btn btn-primary" onclick="document.getElementById('formLogo').submit()">
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+                    Salvar logo
                 </button>
             </div>
         </div>
@@ -441,7 +592,7 @@
             if(e.target===e.currentTarget) closeModal(name); 
         }
 
-        function openEdit(id,marca,modelo,ano,preco,status,km,cor,combustivel,cambio,descricao) {
+        function openEdit(id,marca,modelo,ano,preco,status,km,cor,combustivel,cambio,descricao,capaUrl,galeriaUrls) {
             document.getElementById('editId').value = id;
             document.getElementById('editMarca').value = marca;
             document.getElementById('editModelo').value = modelo;
@@ -455,6 +606,38 @@
             document.getElementById('editDescricao').value = descricao || '';
             document.getElementById('editSubtitle').textContent = marca + ' ' + modelo;
             document.getElementById('formEdit').action = "{{ url('/adm/carros') }}/" + id;
+
+            // Foto de capa atual
+            const capaAtual = document.getElementById('editCapaAtual');
+            const capaAtualImg = document.getElementById('editCapaAtualImg');
+            if (capaUrl) {
+                capaAtualImg.src = capaUrl;
+                capaAtual.style.display = 'block';
+            } else {
+                capaAtual.style.display = 'none';
+            }
+            // Limpa preview de nova capa
+            document.getElementById('previewEdit').style.display = 'none';
+            document.getElementById('uploadEditContent').style.display = 'flex';
+
+            // Fotos da galeria atuais
+            const galeriaAtual = document.getElementById('editGaleriaAtual');
+            galeriaAtual.innerHTML = '';
+            if (galeriaUrls && galeriaUrls.length) {
+                galeriaUrls.forEach(url => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'gallery-item-wrapper';
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.className = 'gallery-preview-item';
+                    wrapper.appendChild(img);
+                    galeriaAtual.appendChild(wrapper);
+                });
+            }
+            // Limpa preview de novas fotos
+            document.getElementById('galleryEdit').innerHTML = '';
+            document.getElementById('galleryEditContent').style.display = 'flex';
+
             openModal('edit');
         }
 
@@ -531,8 +714,13 @@
             document.querySelector('[data-filter="all"]').classList.add('active');
             applyFilters();
         }
+        function updateLogoAction(select) {
+            const opt = select.options[select.selectedIndex];
+            document.getElementById('formLogo').action = opt.dataset.action || '#';
+        }
+
         document.addEventListener('keydown',e=>{ if(e.key==='Escape'){
-            ['create','edit','delete'].forEach(closeModal);document.body.style.overflow='';
+            ['create','edit','delete','marca','logo'].forEach(closeModal);document.body.style.overflow='';
         }});
         </script>
     </body>
