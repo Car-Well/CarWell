@@ -5,11 +5,14 @@ use App\Http\Controllers\Auth\LoginClienteController;
 use App\Http\Controllers\Auth\LoginAdmController;
 use App\Http\Controllers\Auth\RegistrarClienteController;
 use App\Http\Controllers\Adm\AdmCarroController;
+use App\Http\Controllers\Adm\AdmMarcaController;
 use App\Http\Controllers\Adm\AdmPedidoController;
 use App\Http\Controllers\Adm\AdmUserController;
 use App\Http\Controllers\Adm\AdmClienteController;
 use App\Http\Controllers\Adm\AdmDashboardController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CarroController;
 use Illuminate\Support\Facades\Route;
 
 // Rota TESTE
@@ -28,9 +31,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/storage', function () {
     return view('storage');
@@ -45,8 +46,12 @@ Route::get('/about', function () {
 });
 
 Route::get('/infocar', function () {
-    return view('info_carro');
+    return view('info_carro', ['carro' => null, 'relacionados' => collect()]);
 })->name('info-carro');
+
+Route::get('/carro/{carro}', [CarroController::class, 'show'])->name('carro.show');
+Route::get('/carros/por-ids', [CarroController::class, 'porIds'])->name('carros.por-ids');
+Route::get('/favoritos', fn() => view('favoritos'))->name('favoritos');
 
 // Login admin
 Route::get('/login-adm',  [LoginAdmController::class, 'showLogin'])->name('login-adm');
@@ -57,6 +62,12 @@ Route::post('/logout-adm',[LoginAdmController::class, 'logout'])->name('adm.logo
 Route::prefix('adm')->name('adm.')->middleware('admin.autenticado')->group(function () {
 
     Route::get('/', [AdmDashboardController::class, 'index'])->name('dashboard');
+
+    Route::prefix('marcas')->name('marcas.')->group(function () {
+        Route::post('/',                       [AdmMarcaController::class, 'store'])->name('store');
+        Route::post('/{marca}/logo',           [AdmMarcaController::class, 'updateLogo'])->name('logo');
+        Route::delete('/{marca}',              [AdmMarcaController::class, 'destroy'])->name('destroy');
+    });
 
     Route::prefix('carros')->name('carros.')->group(function () {
         Route::get('/',           [AdmCarroController::class, 'index'])->name('index');
