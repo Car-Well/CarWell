@@ -70,10 +70,11 @@ Route::prefix('adm')->name('adm.')->middleware('admin.autenticado')->group(funct
     });
 
     Route::prefix('carros')->name('carros.')->group(function () {
-        Route::get('/',           [AdmCarroController::class, 'index'])->name('index');
-        Route::post('/',          [AdmCarroController::class, 'store'])->name('store');
-        Route::put('/{carro}',    [AdmCarroController::class, 'update'])->name('update');
-        Route::delete('/{carro}', [AdmCarroController::class, 'destroy'])->name('destroy');
+        Route::get('/',                    [AdmCarroController::class, 'index'])->name('index');
+        Route::post('/',                   [AdmCarroController::class, 'store'])->name('store');
+        Route::put('/{carro}',             [AdmCarroController::class, 'update'])->name('update');
+        Route::post('/{carro}/destacar',   [AdmCarroController::class, 'destacar'])->name('destacar');
+        Route::delete('/{carro}',          [AdmCarroController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('usuarios')->name('usuarios.')->group(function () {
