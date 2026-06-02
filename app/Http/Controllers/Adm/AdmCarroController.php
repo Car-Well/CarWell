@@ -58,11 +58,16 @@ class AdmCarroController extends Controller
             'combustivel' => ['nullable', 'in:flex,gasolina,diesel,eletrico,hibrido'],
             'cambio' => ['nullable', 'in:manual,automatico,cvt'],
             'status' => ['required', 'in:disponivel,reservado,vendido'],
+            'destacado' => ['nullable', 'boolean'],
             'descricao' => ['nullable', 'string'],
             'capa' => ['nullable', 'image', 'max:4096'],
             'fotos' => ['nullable', 'array'],
             'fotos.*' => ['image', 'max:4096'],
         ]);
+
+        if (!empty($data['destacado'])) {
+            Carro::query()->update(['destacado' => false]);
+        }
 
         $carro = Carro::create($data);
 
@@ -167,6 +172,17 @@ class AdmCarroController extends Controller
         }
 
         return redirect()->route('adm.carros.index')->with('success', 'Carro atualizado com sucesso.');
+    }
+
+    public function destacar(Carro $carro)
+    {
+        $carro->update(['destacado' => !$carro->destacado]);
+
+        $msg = $carro->destacado
+            ? '"' . $carro->marca . ' ' . $carro->modelo . '" adicionado ao destaque da home.'
+            : '"' . $carro->marca . ' ' . $carro->modelo . '" removido do destaque.';
+
+        return redirect()->route('adm.carros.index')->with('success', $msg);
     }
 
     public function destroy(Carro $carro)
