@@ -136,7 +136,7 @@
                         <span class="car-year">{{ $carro->ano }}</span>
                     </div>
                     <div class="car-model">{{ $carro->modelo }}</div>
-                    <div class="car-info">{{ $carro->km ? number_format($carro->km, 0, ',', '.') . ' km' : '—' }} · Seminovo</div>
+                    <div class="car-info">{{ $carro->km ? number_format($carro->km, 0, ',', '.') . ' km' : '—' }} · {{ $carro->tipo }}</div>
                     <div class="car-price">R$ {{ number_format((float)$carro->preco, 2, ',', '.') }}</div>
                     <div class="car-actions">
                         <button class="btn btn-secondary btn-sm"

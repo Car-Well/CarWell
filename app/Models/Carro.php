@@ -51,5 +51,21 @@ class Carro extends Model
     {
         return trim($this->marca . ' ' . $this->modelo);
     }
+
+    public function getTipoAttribute(): string
+    {
+        $km  = (int) $this->km;
+        $ano = (int) $this->ano;
+
+        if ($km === 0) {
+            return 'Novo';
+        }
+
+        if ($km < 30000 && ((int) date('Y') - $ano) <= 3) {
+            return 'Seminovo';
+        }
+
+        return 'Usado';
+    }
 }
 
