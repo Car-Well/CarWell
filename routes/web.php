@@ -13,6 +13,7 @@ use App\Http\Controllers\Adm\AdmDashboardController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CarroController;
+use App\Http\Controllers\PedidoClienteController;
 use Illuminate\Support\Facades\Route;
 
 // Rota TESTE
@@ -27,31 +28,17 @@ Route::get('/locale/{lang}', function ($lang) {
 })->name('locale.set');
 
 // Páginas públicas do site
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', fn() => redirect()->route('home'));
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/storage', function () {
-    return view('storage');
-});
-
-Route::get('/services', function () {
-    return view('services');
-});
-
-Route::get('/about', function () {
-    return view('aboutUs');
-});
-
 Route::get('/infocar', function () {
-    return view('info_carro', ['carro' => null, 'relacionados' => collect()]);
+    return view('cliente.info_carro', ['carro' => null, 'relacionados' => collect()]);
 })->name('info-carro');
 
 Route::get('/carro/{carro}', [CarroController::class, 'show'])->name('carro.show');
 Route::get('/carros/por-ids', [CarroController::class, 'porIds'])->name('carros.por-ids');
-Route::get('/favoritos', fn() => view('favoritos'))->name('favoritos');
+Route::get('/favoritos', fn() => view('cliente.favoritos'))->name('favoritos');
 
 // Login admin
 Route::get('/login-adm',  [LoginAdmController::class, 'showLogin'])->name('login-adm');
@@ -121,16 +108,10 @@ Route::middleware('cliente.autenticado')->group(function () {
     Route::post('/perfil/endereco', [PerfilController::class, 'updateEndereco'])->name('perfil.endereco.update');
     Route::post('/logout', [PerfilController::class, 'logout'])->name('cliente.logout');
 
-    Route::get('/carrinho', function () {
-        return view('carrinho');
-    })->name('carrinho');
+    Route::get('/carrinho', fn() => view('cliente.carrinho'))->name('carrinho');
+    Route::get('/checkout', fn() => view('cliente.checkout'))->name('checkout');
 
-    Route::get('/checkout', function () {
-        return view('checkout');
-    })->name('checkout');
-
-    Route::get('/pedido', function () {
-        return view('pedido');
-    })->name('pedido');
+    Route::post('/pedido', [PedidoClienteController::class, 'store'])->name('pedido.store');
+    Route::get('/pedido/{pedido}', [PedidoClienteController::class, 'show'])->name('pedido.show');
 
 });
