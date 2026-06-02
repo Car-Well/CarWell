@@ -20,9 +20,10 @@
     <div class="nav-center">
       <div class="nav-links">
         <a href="{{ route('home') }}" class="nav-hover-btn">{{ __('nav.home') }}</a>
-        <a href="#" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
-        <a href="#" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
+        <a href="{{ route('home') }}#marcas" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
+        <a href="{{ route('home') }}#por-que" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
         <a href="{{ route('carrinho') }}" class="nav-active nav-hover-btn">{{ __('nav.carrinho') }}</a>
+        <a href="{{ route('favoritos') }}" class="nav-hover-btn" id="nav-favoritos">FAVORITOS <span id="fav-badge" style="display:none; background:#0F6E56; color:#fff; border-radius:999px; font-size:0.6rem; font-weight:800; padding:1px 6px; vertical-align:middle; margin-left:2px;"></span></a>
       </div>
     </div>
 

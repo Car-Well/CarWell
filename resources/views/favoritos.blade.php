@@ -31,11 +31,11 @@
       </div>
       <div class="nav-center">
         <div class="nav-links">
-          <a href="{{ route('home') }}" class="nav-hover-btn">HOME</a>
-          <a href="{{ route('home') }}#marcas" class="nav-hover-btn">COMPRAR CARRO</a>
-          <a href="{{ route('home') }}#por-que" class="nav-hover-btn">SOBRE NÓS</a>
-          <a href="{{ route('carrinho') }}" class="nav-hover-btn">CARRINHO</a>
-          <a href="{{ route('favoritos') }}" class="nav-active nav-hover-btn">FAVORITOS <span id="fav-badge" style="display:none; background:#0F6E56; color:#fff; border-radius:999px; font-size:0.6rem; font-weight:800; padding:1px 6px; vertical-align:middle; margin-left:2px;"></span></a>
+          <a href="{{ route('home') }}" class="nav-hover-btn">{{ __('nav.home') }}</a>
+          <a href="{{ route('home') }}#marcas" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
+          <a href="{{ route('home') }}#por-que" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
+          <a href="{{ route('carrinho') }}" class="nav-hover-btn">{{ __('nav.carrinho') }}</a>
+          <a href="{{ route('favoritos') }}" class="nav-active nav-hover-btn" id="nav-favoritos">FAVORITOS <span id="fav-badge" style="display:none; background:#0F6E56; color:#fff; border-radius:999px; font-size:0.6rem; font-weight:800; padding:1px 6px; vertical-align:middle; margin-left:2px;"></span></a>
         </div>
       </div>
       <div class="nav-right-spacer"></div>
@@ -46,7 +46,7 @@
             {{ explode(' ', Auth::guard('cliente')->user()->name)[0] }}
           </a>
         @else
-          <a href="{{ route('login-cliente') }}" class="nav-login">LOGIN</a>
+          <a href="{{ route('login-cliente') }}" class="nav-login">{{ __('nav.login') }}</a>
         @endauth
         <a href="{{ route('perfil') }}" class="nav-profile">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
