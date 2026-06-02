@@ -55,15 +55,23 @@
                 <h1 class="page-title">Gerenciar <span>Carros</span></h1>
                 <p class="page-subtitle">Gerencie todo o estoque de veículos</p>
             </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                <button class="btn btn-secondary" onclick="openModal('marca')">
-                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Adicionar marca
-                </button>
-                <button class="btn btn-secondary" onclick="openModal('logo')">
-                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                    Adicionar logo
-                </button>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                <details class="marcas-dropdown">
+                    <summary class="btn btn-secondary">
+                        Marcas
+                        <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="width:14px;height:14px;margin-left:4px;"><polyline points="6 9 12 15 18 9"/></svg>
+                    </summary>
+                    <div class="marcas-dropdown-menu">
+                        <button onclick="openModal('marca')" class="marcas-dropdown-item">
+                            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="width:14px;height:14px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            Adicionar marca
+                        </button>
+                        <button onclick="openModal('logo')" class="marcas-dropdown-item marcas-dropdown-item--border">
+                            <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="width:14px;height:14px;"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            Adicionar logo
+                        </button>
+                    </div>
+                </details>
                 <button class="btn btn-primary" onclick="openModal('create')">
                     <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                     Adicionar carro

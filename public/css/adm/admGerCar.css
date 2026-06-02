@@ -282,6 +282,37 @@ body {
 }
 .btn-secondary:hover { background: #E4E5E3; }
 
+.marcas-dropdown { position: relative; list-style: none; }
+.marcas-dropdown summary { list-style: none; cursor: pointer; }
+.marcas-dropdown summary::-webkit-details-marker { display: none; }
+.marcas-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    min-width: 170px;
+    z-index: 50;
+    overflow: hidden;
+}
+.marcas-dropdown-item {
+    width: 100%;
+    text-align: left;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: #1a2e4a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.marcas-dropdown-item:hover { background: #f9fafb; }
+.marcas-dropdown-item--border { border-top: 1px solid #f3f4f6; }
+
 .btn-danger {
     background: #FEF2F2;
     color: #B91C1C;
