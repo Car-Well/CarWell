@@ -14,8 +14,9 @@ class HomeController extends Controller
             ->latest()
             ->get();
 
-        $marcas = MarcaCarros::whereNotNull('logo')->orderBy('nome')->get();
+        $marcas      = MarcaCarros::whereNotNull('logo')->orderBy('nome')->get();
+        $destacados  = Carro::with('capa')->where('destacado', true)->latest()->get();
 
-        return view('home', compact('carros', 'marcas'));
+        return view('home', compact('carros', 'marcas', 'destacados'));
     }
 }
