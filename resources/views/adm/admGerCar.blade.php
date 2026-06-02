@@ -126,6 +126,9 @@
                         <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
                     </div>
                     <span class="badge {{ $badgeClass[$carro->status] ?? 'badge-success' }}">{{ $badgeLabel[$carro->status] ?? $carro->status }}</span>
+                    @if($carro->destacado)
+                    <span class="badge-destaque">⭐ Destaque</span>
+                    @endif
                 </div>
                 <div class="car-body">
                     <div class="car-meta">
@@ -294,7 +297,13 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('create')">Cancelar</button>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <button class="btn btn-secondary" onclick="closeModal('create')">Cancelar</button>
+                    <button class="btn btn-destacar" type="submit" name="destacado" value="1" form="formCreate">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        Destacar na home
+                    </button>
+                </div>
                 <button class="btn btn-primary" onclick="document.getElementById('formCreate').submit()">
                     <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
                     Salvar carro
@@ -420,8 +429,19 @@
                     </div>
                 </form>
             </div>
+            {{-- form oculto para destacar via POST --}}
+            <form id="formDestacar" action="#" method="POST" style="display:none;">
+                @csrf
+            </form>
+
             <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('edit')">Cancelar</button>
+                <div style="display:flex; gap:8px; align-items:center;">
+                    <button class="btn btn-secondary" onclick="closeModal('edit')">Cancelar</button>
+                    <button class="btn btn-destacar" type="button" onclick="document.getElementById('formDestacar').submit()">
+                        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        Destacar na home
+                    </button>
+                </div>
                 <button class="btn btn-primary" onclick="document.getElementById('formEdit').submit()">
                     <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
                     Salvar alterações
@@ -606,6 +626,7 @@
             document.getElementById('editDescricao').value = descricao || '';
             document.getElementById('editSubtitle').textContent = marca + ' ' + modelo;
             document.getElementById('formEdit').action = "{{ url('/adm/carros') }}/" + id;
+            document.getElementById('formDestacar').action = "{{ url('/adm/carros') }}/" + id + "/destacar";
 
             // Foto de capa atual
             const capaAtual = document.getElementById('editCapaAtual');
