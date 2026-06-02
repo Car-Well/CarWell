@@ -202,5 +202,8 @@
         }
       }
     </script>
+
+    @include('partials._footer')
+    @include('partials._cookies')
   </body>
 </html>
