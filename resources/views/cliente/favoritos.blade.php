@@ -25,39 +25,7 @@
   </head>
   <body>
 
-    <nav class="main-nav">
-      <div class="nav-left">
-        <img src="{{ asset('img/logo.png') }}" alt="logo" class="nav-logo" />
-      </div>
-      <div class="nav-center">
-        <div class="nav-links">
-          <a href="{{ route('home') }}" class="nav-hover-btn">{{ __('nav.home') }}</a>
-          <a href="{{ route('home') }}#marcas" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
-          <a href="{{ route('home') }}#por-que" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
-          <a href="{{ route('carrinho') }}" class="nav-hover-btn">{{ __('nav.carrinho') }}</a>
-          <a href="{{ route('favoritos') }}" class="nav-active nav-hover-btn" id="nav-favoritos">FAVORITOS <span id="fav-badge" style="display:none; background:#0F6E56; color:#fff; border-radius:999px; font-size:0.6rem; font-weight:800; padding:1px 6px; vertical-align:middle; margin-left:2px;"></span></a>
-        </div>
-      </div>
-      <div class="nav-right-spacer"></div>
-      <div class="nav-right">
-        <span class="nav-flag">🇧🇷</span>
-        @auth('cliente')
-          <a href="{{ route('perfil') }}" class="nav-login">
-            {{ explode(' ', Auth::guard('cliente')->user()->name)[0] }}
-          </a>
-        @else
-          <a href="{{ route('login-cliente') }}" class="nav-login">{{ __('nav.login') }}</a>
-        @endauth
-        <a href="{{ route('perfil') }}" class="nav-profile">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0F6E56" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-          </svg>
-        </a>
-        <div class="hamburger" onclick="toggleMenu()">
-          <span></span><span></span><span></span>
-        </div>
-      </div>
-    </nav>
+  @include('partials._nav')
 
     <main class="fav-main">
       <div class="fav-header">

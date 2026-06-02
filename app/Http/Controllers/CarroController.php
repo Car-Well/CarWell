@@ -40,6 +40,6 @@ class CarroController extends Controller
             ->take(6)
             ->get();
 
-        return view('info_carro', compact('carro', 'relacionados'));
+        return view('cliente.info_carro', compact('carro', 'relacionados'));
     }
 }
