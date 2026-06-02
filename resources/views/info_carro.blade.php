@@ -203,7 +203,7 @@
 
       </div>
 
-      <a href="{{ route('carrinho') }}" class="btn-comprar">{{ __('info_carro.comprar') }}</a>
+      <button class="btn-comprar" onclick="addToCart()">{{ __('info_carro.comprar') }}</button>
     </div>
 
   </section>
@@ -301,6 +301,15 @@
       } else {
         links.style.cssText = 'display:flex; flex-direction:column; position:absolute; top:60px; left:0; right:0; background:#fff; padding:20px 32px; gap:18px; box-shadow:0 8px 24px rgba(30,77,140,0.1); z-index:99;';
       }
+    }
+
+    function addToCart() {
+      const id = {{ $carro ? $carro->id : 'null' }};
+      if (!id) return;
+      const cart = JSON.parse(localStorage.getItem('carwell_carrinho') || '{}');
+      cart[id] = (cart[id] || 0) + 1;
+      localStorage.setItem('carwell_carrinho', JSON.stringify(cart));
+      window.location.href = "{{ route('carrinho') }}";
     }
   </script>
 
