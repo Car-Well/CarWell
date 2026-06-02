@@ -58,39 +58,7 @@
     <!-- SEUS PEDIDOS -->
     <div class="checkout-block">
       <p class="checkout-block-title">{{ __('checkout.seus_pedidos') }}</p>
-
-      <div class="checkout-order-item">
-        <div class="checkout-order-img">
-          <img src="{{ asset('img/carros/lamborghini.png') }}" alt="Lamborghini Aventador SV" onerror="this.style.display='none'">
-          <div class="order-img-placeholder lambo"></div>
-        </div>
-        <div class="checkout-order-info">
-          <p class="checkout-order-name">LAMBORGHINI AVENTADOR SV</p>
-          <p class="checkout-order-price">R$ 3.200.000</p>
-        </div>
-      </div>
-
-      <div class="checkout-order-item">
-        <div class="checkout-order-img">
-          <img src="{{ asset('img/carros/porsche-pink.png') }}" alt="Porsche Pink" onerror="this.style.display='none'">
-          <div class="order-img-placeholder porsche"></div>
-        </div>
-        <div class="checkout-order-info">
-          <p class="checkout-order-name">PORSCHE PINK</p>
-          <p class="checkout-order-price">R$ 3.200.000</p>
-        </div>
-      </div>
-
-      <div class="checkout-order-item">
-        <div class="checkout-order-img">
-          <img src="{{ asset('img/carros/audi-r8.png') }}" alt="Audi R8" onerror="this.style.display='none'">
-          <div class="order-img-placeholder audi"></div>
-        </div>
-        <div class="checkout-order-info">
-          <p class="checkout-order-name">AUDI R8</p>
-          <p class="checkout-order-price">R$ 3.200.000</p>
-        </div>
-      </div>
+      <div id="checkout-items"><p style="color:#9EA19C; font-size:0.85rem;">Carregando...</p></div>
     </div>
 
     <!-- DADOS DO PAGAMENTO -->
@@ -112,7 +80,7 @@
           <div class="billing-right">
             <div class="order-summary-box">
               <p class="order-summary-label">{{ __('checkout.resumo_pedido') }}</p>
-              <p class="order-summary-value">R$ 9600.000</p>
+              <p class="order-summary-value" id="checkout-total">R$ 0</p>
               <p class="order-summary-frete">{{ __('checkout.frete_gratis') }}</p>
             </div>
             <button type="submit" class="btn-pagar">{{ __('checkout.pagar_agora') }}</button>
@@ -134,6 +102,41 @@
   </main>
 
   <script>
+    const cart = JSON.parse(localStorage.getItem('carwell_carrinho') || '{}');
+    const ids  = Object.keys(cart);
+
+    if (!ids.length) {
+      document.getElementById('checkout-items').innerHTML = '<p style="color:#9EA19C;font-size:0.85rem;">Nenhum item no carrinho.</p>';
+    } else {
+      fetch('{{ route("carros.por-ids") }}?' + ids.map(id => `ids[]=${id}`).join('&'))
+        .then(r => r.json())
+        .then(carros => {
+          let total = 0;
+
+          document.getElementById('checkout-items').innerHTML = carros.map(c => {
+            const qty      = cart[c.id] || 1;
+            const subtotal = Number(c.preco) * qty;
+            total += subtotal;
+            const img = c.capa_path
+              ? `<img src="{{ asset('storage') }}/${c.capa_path}" onerror="this.style.display='none'">`
+              : '';
+
+            return `<div class="checkout-order-item">
+              <div class="checkout-order-img">
+                ${img}
+                <div class="order-img-placeholder" style="${c.capa_path ? 'display:none;' : ''}background:linear-gradient(135deg,#2d3748,#4a5568);"></div>
+              </div>
+              <div class="checkout-order-info">
+                <p class="checkout-order-name">${c.nome.toUpperCase()}${qty > 1 ? ' ×' + qty : ''}</p>
+                <p class="checkout-order-price">R$ ${Number(subtotal).toLocaleString('pt-BR')}</p>
+              </div>
+            </div>`;
+          }).join('');
+
+          document.getElementById('checkout-total').textContent = 'R$ ' + Number(total).toLocaleString('pt-BR');
+        });
+    }
+
     function formatCard(input) {
       let v = input.value.replace(/\D/g, '').substring(0, 16);
       input.value = v.replace(/(.{4})/g, '$1 ').trim();
