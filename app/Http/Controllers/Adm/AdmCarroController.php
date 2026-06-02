@@ -125,7 +125,7 @@ class AdmCarroController extends Controller
             'fotos.*' => ['image', 'max:4096'],
         ]);
 
-        $carro->update($data);
+        $carro->update(collect($data)->except(['capa', 'fotos'])->toArray());
 
         $dir = storage_path('app/public/carros');
         if (!is_dir($dir)) {

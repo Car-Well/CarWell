@@ -236,9 +236,9 @@
                             <label class="form-label">Status</label>
                             <select name="status" class="form-control">
                                 <option value="em_separacao">Em separação</option>
-                                <option value="a_caminho">A caminho</option>
-                                <option value="entregue">Entregue</option>
-                                <option value="finalizado">Finalizado</option>
+                                <option value="a_caminho">Em transporte</option>
+                                <option value="entregue">Saiu para entrega</option>
+                                <option value="finalizado">Entregue</option>
                             </select>
                         </div>
                     </div>
@@ -419,28 +419,28 @@
                                 <div class="step-dot">
                                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
                                 </div>
-                                <div class="step-label">Em separação</div>
+                                <div class="step-label">Pedido Realizado</div>
                             </div>
                             <div class="step-line"></div>
                             <div class="step" data-step="a_caminho" onclick="selectStep(this)">
                                 <div class="step-dot">
                                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13" rx="1"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
                                 </div>
-                                <div class="step-label">A caminho</div>
+                                <div class="step-label">Em Transporte</div>
                             </div>
                             <div class="step-line"></div>
                             <div class="step" data-step="entregue" onclick="selectStep(this)">
                                 <div class="step-dot">
                                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
                                 </div>
-                                <div class="step-label">Entregue</div>
+                                <div class="step-label">Saiu para Entrega</div>
                             </div>
                             <div class="step-line"></div>
                             <div class="step" data-step="finalizado" onclick="selectStep(this)">
                                 <div class="step-dot">
                                     <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                                 </div>
-                                <div class="step-label">Finalizado</div>
+                                <div class="step-label">Pedido Entregue</div>
                             </div>
                             <input type="hidden" name="status" id="editStatus">
                         </div>
