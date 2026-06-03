@@ -40,28 +40,18 @@
 
       <!-- SEÇÃO CARTÃO -->
       <div id="section-cartao">
-        <form class="payment-form" onsubmit="pagarCartao(event)">
-          <input id="num-cartao" type="text" class="form-input" placeholder="{{ __('checkout.numero_cartao') }}" maxlength="19" oninput="formatCard(this)">
-          <input id="titular" type="text" class="form-input" placeholder="{{ __('checkout.titular_cartao') }}">
-          <input id="cvv" type="text" class="form-input cvv-input" placeholder="CVV" maxlength="4">
-
-          <div class="billing-address-row">
-            <div class="billing-left">
-              <p class="billing-label">{{ __('checkout.endereco_cobranca') }}</p>
-              <input type="text" class="form-input" placeholder="CEP" maxlength="9">
-              <input type="text" class="form-input" placeholder="{{ __('checkout.rua') }}">
-              <input type="text" class="form-input" placeholder="{{ __('checkout.numero') }}">
-            </div>
-            <div class="billing-right">
-              <div class="order-summary-box">
-                <p class="order-summary-label">{{ __('checkout.resumo_pedido') }}</p>
-                <p class="order-summary-value" id="checkout-total">R$ 0</p>
-                <p class="order-summary-frete">{{ __('checkout.frete_gratis') }}</p>
-              </div>
-              <button type="submit" id="btn-pagar" class="btn-pagar">{{ __('checkout.pagar_agora') }}</button>
-            </div>
+        <div style="display:flex; flex-direction:column; align-items:center; gap:16px; padding:8px 0 8px;">
+          <p style="font-family:'DM Sans',sans-serif; font-size:0.82rem; color:#6b7280; text-align:center; margin:0;">Você será redirecionado para a página segura do Stripe para concluir o pagamento.</p>
+          <div style="display:flex; align-items:center; justify-content:space-between; width:100%; background:#f9fafb; border:1px solid #e5e7eb; border-radius:12px; padding:16px 20px;">
+            <span style="font-family:'DM Sans',sans-serif; font-size:0.82rem; color:#6b7280;">Total</span>
+            <span style="font-family:'Syne',sans-serif; font-size:1.1rem; font-weight:800; color:#0F6E56;" id="checkout-total">R$ 0</span>
           </div>
-        </form>
+          <button id="btn-pagar" onclick="pagarCartao(event)" class="btn-pagar" style="width:100%;">{{ __('checkout.pagar_agora') }}</button>
+          <div style="display:flex; align-items:center; gap:6px;">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9EA19C" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <span style="font-size:0.72rem; color:#9EA19C; font-family:'DM Sans',sans-serif;">Pagamento protegido pelo Stripe</span>
+          </div>
+        </div>
       </div>
 
       <!-- SEÇÃO PIX -->
@@ -108,7 +98,6 @@
       <img src="{{ asset('img/payment/mastercard.svg') }}" alt="Mastercard" onerror="this.outerHTML='<span class=pay-icon>MC</span>'">
       <img src="{{ asset('img/payment/amex.svg') }}" alt="Amex" onerror="this.outerHTML='<span class=pay-icon>AMEX</span>'">
       <img src="{{ asset('img/payment/elo.svg') }}" alt="Elo" onerror="this.outerHTML='<span class=pay-icon>ELO</span>'">
-      <img src="{{ asset('img/payment/cielo.svg') }}" alt="Cielo" onerror="this.outerHTML='<span class=pay-icon>CIELO</span>'">
       <img src="{{ asset('img/payment/pix.svg') }}" alt="Pix" onerror="this.outerHTML='<span class=pay-icon>PIX</span>'">
     </div>
 
@@ -153,12 +142,25 @@
     function selectMethod(method) {
       document.getElementById('section-cartao').style.display = method === 'cartao' ? 'block' : 'none';
       document.getElementById('section-pix').style.display    = method === 'pix'    ? 'block' : 'none';
-
       const ativo   = method === 'cartao' ? 'tab-cartao' : 'tab-pix';
       const inativo = method === 'cartao' ? 'tab-pix'    : 'tab-cartao';
-
       document.getElementById(ativo).style.cssText   += ';background:#0F6E56;color:#fff;border-color:#0F6E56;';
       document.getElementById(inativo).style.cssText += ';background:#fff;color:#6b7280;border-color:#e5e7eb;';
+    }
+
+    function copiarPix() {
+      navigator.clipboard.writeText(document.getElementById('pix-code').value);
+      const btn = document.getElementById('btn-copiar');
+      btn.textContent = 'Copiado!';
+      setTimeout(() => btn.textContent = 'Copiar', 2000);
+    }
+
+    function simularPix() {
+      const btn = document.getElementById('btn-simular-pix');
+      btn.textContent   = 'Redirecionando para pagamento...';
+      btn.disabled      = true;
+      btn.style.opacity = '0.7';
+      finalizarPedido();
     }
 
     function finalizarPedido() {
@@ -195,26 +197,6 @@
       btn.disabled      = true;
       btn.style.opacity = '0.7';
       finalizarPedido();
-    }
-
-    function copiarPix() {
-      navigator.clipboard.writeText(document.getElementById('pix-code').value);
-      const btn = document.getElementById('btn-copiar');
-      btn.textContent = 'Copiado!';
-      setTimeout(() => btn.textContent = 'Copiar', 2000);
-    }
-
-    function simularPix() {
-      const btn = document.getElementById('btn-simular-pix');
-      btn.textContent   = 'Redirecionando para pagamento...';
-      btn.disabled      = true;
-      btn.style.opacity = '0.7';
-      finalizarPedido();
-    }
-
-    function formatCard(input) {
-      let v = input.value.replace(/\D/g, '').substring(0, 16);
-      input.value = v.replace(/(.{4})/g, '$1 ').trim();
     }
 
     function toggleMenu() {

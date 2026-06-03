@@ -59,6 +59,6 @@ class PedidoClienteController extends Controller
         }
 
         $pedido->load('carro.capa');
-        return view('cliente.pedido', compact('pedido'));
+        return view('cliente.pedido', compact('pedido', 'cliente'));
     }
 }

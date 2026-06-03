@@ -71,7 +71,7 @@
           </div>
         </div>
         <div class="timeline-content">
-          <p class="timeline-title">{{ __('pedido.em_transporte', ['cidade' => 'CURITIBA']) }}</p>
+          <p class="timeline-title">{{ __('pedido.em_transporte', ['cidade' => strtoupper($cliente->cidade ?? 'sua cidade')]) }}</p>
           @if($step >= 2) <p class="timeline-date">{{ $pedido->updated_at->format('d/m/Y – H:i') }}</p> @endif
         </div>
       </div>
