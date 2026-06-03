@@ -699,6 +699,7 @@ textarea.form-control { resize: vertical; }
     flex-wrap: wrap;
     gap: 8px;
     padding: 8px;
+    min-height: 40px;
 }
 
 .gallery-item-wrapper {

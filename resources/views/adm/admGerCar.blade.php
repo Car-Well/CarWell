@@ -148,22 +148,21 @@
                     <div class="car-price">R$ {{ number_format((float)$carro->preco, 2, ',', '.') }}</div>
                     <div class="car-actions">
                         <button class="btn btn-secondary btn-sm"
-                            onclick="openEdit(
-                                {{ $carro->id }},
-                                '{{ addslashes($carro->marca) }}',
-                                '{{ addslashes($carro->modelo) }}',
-                                {{ (int)$carro->ano }},
-                                '{{ $carro->preco }}',
-                                '{{ $carro->status }}',
-                                '{{ $carro->km ?? '' }}',
-                                '{{ addslashes($carro->cor ?? '') }}',
-                                '{{ $carro->combustivel ?? '' }}',
-                                '{{ $carro->cambio ?? '' }}',
-                                '{{ addslashes(str_replace(["\r","\n","'"], ['',' ',''], $carro->descricao ?? '')) }}',
-                                '{{ $carro->categoria ?? '' }}',
-                                '{{ $carro->capa_path ? asset('storage/'.$carro->capa_path) : '' }}',
-                                @json($carro->fotos->where('is_capa', false)->map(fn($f) => asset('storage/'.$f->path))->values())
-                            )">
+                            data-id="{{ $carro->id }}"
+                            data-marca="{{ addslashes($carro->marca) }}"
+                            data-modelo="{{ addslashes($carro->modelo) }}"
+                            data-ano="{{ (int)$carro->ano }}"
+                            data-preco="{{ $carro->preco }}"
+                            data-status="{{ $carro->status }}"
+                            data-km="{{ $carro->km ?? '' }}"
+                            data-cor="{{ addslashes($carro->cor ?? '') }}"
+                            data-combustivel="{{ $carro->combustivel ?? '' }}"
+                            data-cambio="{{ $carro->cambio ?? '' }}"
+                            data-descricao="{{ addslashes(str_replace(["\r","\n","'"], ['',' ',''], $carro->descricao ?? '')) }}"
+                            data-categoria="{{ $carro->categoria ?? '' }}"
+                            data-capa="{{ $carro->capa_path ? asset('storage/'.$carro->capa_path) : '' }}"
+                            data-galeria="{{ e(json_encode($carro->fotos->where('is_capa', false)->map(fn($f) => asset('storage/'.$f->path))->values())) }}"
+                            onclick="openEditFromBtn(this)">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             Editar
                         </button>
@@ -655,6 +654,17 @@
             if(e.target===e.currentTarget) closeModal(name); 
         }
 
+        function openEditFromBtn(btn) {
+            const d = btn.dataset;
+            let galeria = [];
+            try { galeria = JSON.parse(d.galeria || '[]'); } catch(err) { console.error('galeria parse error:', err, d.galeria); }
+            openEdit(
+                d.id, d.marca, d.modelo, d.ano, d.preco, d.status,
+                d.km, d.cor, d.combustivel, d.cambio, d.descricao,
+                d.categoria, d.capa, galeria
+            );
+        }
+
         function openEdit(id,marca,modelo,ano,preco,status,km,cor,combustivel,cambio,descricao,categoria,capaUrl,galeriaUrls) {
             document.getElementById('editId').value = id;
             document.getElementById('editMarca').value = marca;
@@ -750,7 +760,6 @@
                 reader.readAsDataURL(file);
             });
             content.style.display = 'none';
-            event.target.value = '';
         }
 
         let currentFilter = 'all';
