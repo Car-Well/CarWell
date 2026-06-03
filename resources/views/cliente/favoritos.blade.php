@@ -83,7 +83,7 @@
         if (!badge) return;
         const count = getFavs().length;
         badge.textContent = count;
-        badge.style.display = count ? 'inline-block' : 'none';
+        badge.style.display = count ? 'flex' : 'none';
       }
 
       function showEmpty() {

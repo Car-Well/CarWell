@@ -153,10 +153,45 @@ body {
   width: 32px; height: 32px;
   background: var(--green-light);
   border-radius: 50%;
-  display: flex; 
-  align-items: center; 
+  display: flex;
+  align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.nav-fav-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.18s;
+}
+
+.nav-fav-btn:hover,
+.nav-fav-btn.active { color: #e53e3e; }
+
+.nav-fav-btn.active svg { fill: #e53e3e; stroke: #e53e3e; }
+
+#fav-badge {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  background: var(--green-dark);
+  color: #fff;
+  border-radius: 999px;
+  font-size: 0.55rem;
+  font-weight: 800;
+  font-family: var(--font-display);
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .hamburger {
@@ -500,9 +535,48 @@ body {
   transition: background 0.18s;
 }
 
-.filter-btn:hover { 
-  background: var(--white); 
+.filter-btn:hover,
+.filter-btn.active {
+  background: var(--white);
+  border-color: var(--green);
+  color: var(--green-dark);
 }
+
+.categoria-dropdown {
+  position: relative;
+}
+
+.categoria-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #fff;
+  border: 1.5px solid var(--border-mid);
+  border-radius: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  overflow: hidden;
+  z-index: 100;
+  min-width: 180px;
+}
+
+.categoria-menu.open { display: block; }
+
+.categoria-item {
+  display: block;
+  padding: 10px 18px;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.categoria-item:hover { background: var(--bg); color: var(--text-primary); }
+.categoria-item.active { background: var(--green-light); color: var(--green-dark); }
 
 .cars-grid {
   display: grid;

@@ -22,13 +22,17 @@
       <a href="{{ route('home') }}#marcas" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
       <a href="{{ route('home') }}#por-que" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
       <a href="{{ route('carrinho') }}" class="{{ request()->routeIs('carrinho') ? 'nav-active' : '' }} nav-hover-btn">{{ __('nav.carrinho') }}</a>
-      <a href="{{ route('favoritos') }}" class="{{ request()->routeIs('favoritos') ? 'nav-active' : '' }} nav-hover-btn" id="nav-favoritos">FAVORITOS <span id="fav-badge" style="display:none; background:#0F6E56; color:#fff; border-radius:999px; font-size:0.6rem; font-weight:800; padding:1px 6px; vertical-align:middle; margin-left:2px;"></span></a>
     </div>
   </div>
 
   <div class="nav-right-spacer"></div>
   <div class="nav-right">
-    <span class="nav-flag">🇧🇷</span>
+    <a href="{{ route('favoritos') }}" class="nav-fav-btn {{ request()->routeIs('favoritos') ? 'active' : '' }}" id="nav-favoritos" aria-label="Favoritos">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+      <span id="fav-badge" style="display:none;"></span>
+    </a>
 
     @auth('cliente')
       <a href="{{ route('perfil') }}" class="nav-login">
