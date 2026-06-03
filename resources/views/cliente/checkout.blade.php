@@ -161,34 +161,28 @@
       document.getElementById(inativo).style.cssText += ';background:#fff;color:#6b7280;border-color:#e5e7eb;';
     }
 
-    function finalizarPedido(metodoPagamento) {
+    function finalizarPedido() {
       const cart = JSON.parse(localStorage.getItem('carwell_carrinho') || '{}');
       const ids  = Object.keys(cart);
       if (!ids.length) return;
 
-      const form    = document.createElement('form');
-      form.method   = 'POST';
-      form.action   = '{{ route("pedido.store") }}';
+      const form  = document.createElement('form');
+      form.method = 'POST';
+      form.action = '{{ route("stripe.checkout") }}';
 
-      const csrf    = document.createElement('input');
-      csrf.type     = 'hidden';
-      csrf.name     = '_token';
-      csrf.value    = '{{ csrf_token() }}';
+      const csrf  = document.createElement('input');
+      csrf.type   = 'hidden';
+      csrf.name   = '_token';
+      csrf.value  = '{{ csrf_token() }}';
       form.appendChild(csrf);
 
       ids.forEach(id => {
-        const el  = document.createElement('input');
-        el.type   = 'hidden';
-        el.name   = 'carros[]';
-        el.value  = id;
+        const el = document.createElement('input');
+        el.type  = 'hidden';
+        el.name  = 'carros[]';
+        el.value = id;
         form.appendChild(el);
       });
-
-      const pag  = document.createElement('input');
-      pag.type   = 'hidden';
-      pag.name   = 'pagamento';
-      pag.value  = metodoPagamento;
-      form.appendChild(pag);
 
       document.body.appendChild(form);
       form.submit();
@@ -196,20 +190,11 @@
 
     function pagarCartao(e) {
       e.preventDefault();
-      const num     = document.getElementById('num-cartao').value.replace(/\s/g, '');
-      const titular = document.getElementById('titular').value.trim();
-      const cvv     = document.getElementById('cvv').value.trim();
-
-      if (num.length < 16) { alert('Número do cartão inválido.'); return; }
-      if (!titular)         { alert('Informe o titular do cartão.'); return; }
-      if (cvv.length < 3)  { alert('CVV inválido.'); return; }
-
       const btn = document.getElementById('btn-pagar');
-      btn.textContent   = 'Processando...';
+      btn.textContent   = 'Redirecionando para pagamento...';
       btn.disabled      = true;
       btn.style.opacity = '0.7';
-
-      setTimeout(() => finalizarPedido('credito'), 2000);
+      finalizarPedido();
     }
 
     function copiarPix() {
@@ -221,10 +206,10 @@
 
     function simularPix() {
       const btn = document.getElementById('btn-simular-pix');
-      btn.textContent   = 'Confirmando pagamento...';
+      btn.textContent   = 'Redirecionando para pagamento...';
       btn.disabled      = true;
       btn.style.opacity = '0.7';
-      setTimeout(() => finalizarPedido('pix'), 2000);
+      finalizarPedido();
     }
 
     function formatCard(input) {

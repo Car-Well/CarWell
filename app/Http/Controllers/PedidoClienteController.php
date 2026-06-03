@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Auth;
 
 class PedidoClienteController extends Controller
 {
+    public function index()
+    {
+        $cliente = Auth::guard('cliente')->user();
+        $pedidos = Pedido::with('carro.capa')
+            ->where('cliente_id', $cliente->id)
+            ->latest()
+            ->get();
+
+        return view('cliente.meus-pedidos', compact('pedidos'));
+    }
+
     public function store(Request $request)
     {
         $cliente   = Auth::guard('cliente')->user();
