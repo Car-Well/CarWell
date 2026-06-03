@@ -41,22 +41,18 @@
       </div>
 
       @if($carro && $carro->fotos->count() > 1)
-      <div class="photo-thumbnails">
-        @foreach($carro->fotos->sortBy('ordem') as $foto)
-          <button class="thumb-btn {{ $foto->is_capa ? 'active' : '' }}"
-                  onclick="switchPhoto(this, '{{ asset('storage/' . $foto->path) }}')"
-                  type="button">
-            <img src="{{ asset('storage/' . $foto->path) }}" alt="Foto {{ $loop->iteration }}">
-          </button>
+      @php $fotosOrdenadas = $carro->fotos->sortBy('ordem')->values(); @endphp
+      <button class="photo-arrow photo-arrow-left" onclick="photoNav(-1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="photo-arrow photo-arrow-right" onclick="photoNav(1)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <div class="photo-dots">
+        @foreach($fotosOrdenadas as $i => $foto)
+          <span class="photo-dot {{ $i === 0 ? 'active' : '' }}" onclick="photoGoTo({{ $i }})"></span>
         @endforeach
       </div>
-      @php $totalFotos = $carro->fotos->count(); @endphp
-      @if($totalFotos > 3)
-      <button class="btn-ver-fotos" onclick="openGallery()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-        Ver todas as fotos ({{ $totalFotos }})
-      </button>
-      @endif
       @endif
 
     </div>
@@ -162,11 +158,17 @@
   </section>
 
   <script>
-    function switchPhoto(btn, url) {
-      document.getElementById('mainCarImg').src = url;
-      document.querySelectorAll('.thumb-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+    @if($carro && $carro->fotos->count() > 1)
+    const photoUrls = @json($fotosOrdenadas->map(fn($f) => asset('storage/' . $f->path))->values());
+    let photoIndex = 0;
+
+    function photoGoTo(n) {
+      photoIndex = (n + photoUrls.length) % photoUrls.length;
+      document.getElementById('mainCarImg').src = photoUrls[photoIndex];
+      document.querySelectorAll('.photo-dot').forEach((d, i) => d.classList.toggle('active', i === photoIndex));
     }
+    function photoNav(dir) { photoGoTo(photoIndex + dir); }
+    @endif
 
     function toggleHeartAndRedirect(el) {
       const id   = el.dataset.id;
