@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\ConfirmarEmailController;
 use App\Http\Controllers\Auth\LoginClienteController;
+use App\Http\Controllers\Auth\EsqueciSenhaController;
 use App\Http\Controllers\Auth\LoginAdmController;
 use App\Http\Controllers\Auth\RegistrarClienteController;
 use App\Http\Controllers\Adm\AdmCarroController;
@@ -89,6 +90,12 @@ Route::get('/admGerPed', function () { return redirect()->route('adm.pedidos.ind
 // Login
 Route::get('/login-cliente', [LoginClienteController::class, 'showLogin'])->name('login-cliente');
 Route::post('/login-cliente', [LoginClienteController::class, 'login']);
+
+// Recuperação de senha
+Route::get('/esqueci-senha', [EsqueciSenhaController::class, 'showForm'])->name('esqueci-senha');
+Route::post('/esqueci-senha', [EsqueciSenhaController::class, 'enviarLink'])->name('esqueci-senha.enviar');
+Route::get('/redefinir-senha/{token}', [EsqueciSenhaController::class, 'showReset'])->name('senha.redefinir.form');
+Route::post('/redefinir-senha', [EsqueciSenhaController::class, 'redefinir'])->name('senha.redefinir');
 
 // Cadastro
 Route::get('/registrar', [RegistrarClienteController::class, 'showRegistrar'])->name('registrar');

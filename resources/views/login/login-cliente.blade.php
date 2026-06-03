@@ -48,10 +48,12 @@
             <h1 class="login-title">Bem-vindo de volta</h1>
             <p class="login-subtitle">Entre com sua conta para continuar</p>
 
+            @if(session('status'))
+                <div class="alert alert-success">{{ session('status') }}</div>
+            @endif
+
             @if($errors->any())
-                <div class="alert alert-danger">
-                    {{ $errors->first() }}
-                </div>
+                <div class="alert alert-danger">{{ $errors->first() }}</div>
             @endif
 
             <form method="POST" action="{{ route('login-cliente') }}">
@@ -96,7 +98,7 @@
                         <input type="checkbox" name="remember">
                         Lembrar de mim
                     </label>
-                    <a href="{{ route('registrar') }}" class="forgot-link">Esqueci a senha</a>
+                    <a href="{{ route('esqueci-senha') }}" class="forgot-link">Esqueci a senha</a>
                 </div>
 
                 <button type="submit" class="btn-submit">Entrar na minha conta</button>
