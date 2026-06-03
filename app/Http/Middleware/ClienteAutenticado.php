@@ -11,7 +11,7 @@ class ClienteAutenticado
     public function handle(Request $request, Closure $next)
     {
         if (! Auth::guard('cliente')->check()) {
-            return redirect()->route('login-cliente');
+            return redirect()->route('login');
         }
 
         return $next($request);

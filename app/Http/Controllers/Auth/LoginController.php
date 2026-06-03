@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class LoginAdmController extends Controller
+class LoginController extends Controller
 {
     public function showLogin()
     {
@@ -14,7 +15,11 @@ class LoginAdmController extends Controller
             return redirect()->route('admHome');
         }
 
-        return view('login.login-adm');
+        if (Auth::guard('cliente')->check()) {
+            return redirect()->route('home');
+        }
+
+        return view('login.login-cliente');
     }
 
     public function login(Request $request)
@@ -28,21 +33,28 @@ class LoginAdmController extends Controller
             'password.required' => 'A senha é obrigatória.',
         ]);
 
+        // Tenta login como admin primeiro
         if (Auth::guard('admin')->attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
             return redirect()->route('admHome');
         }
 
+        // Tenta login como cliente
+        $cliente = Cliente::where('email', $credentials['email'])->first();
+
+        if ($cliente && ! $cliente->email_verified_at) {
+            $request->session()->put('verify_email', $cliente->email);
+            return redirect()->route('confirmar-email')
+                ->withErrors(['email' => 'Confirme seu e-mail antes de entrar.']);
+        }
+
+        if (Auth::guard('cliente')->attempt($credentials, $request->boolean('remember'))) {
+            $request->session()->regenerate();
+            return redirect()->intended(route('home'));
+        }
+
         return back()
             ->withErrors(['email' => 'E-mail ou senha incorretos.'])
             ->withInput($request->only('email'));
-    }
-
-    public function logout(Request $request)
-    {
-        Auth::guard('admin')->logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return redirect()->route('login');
     }
 }

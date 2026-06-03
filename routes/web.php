@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\ConfirmarEmailController;
-use App\Http\Controllers\Auth\LoginClienteController;
-use App\Http\Controllers\Auth\EsqueciSenhaController;
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LoginAdmController;
+use App\Http\Controllers\Auth\EsqueciSenhaController;
 use App\Http\Controllers\Auth\RegistrarClienteController;
 use App\Http\Controllers\Adm\AdmCarroController;
 use App\Http\Controllers\Adm\AdmMarcaController;
@@ -15,6 +15,7 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CarroController;
 use App\Http\Controllers\PedidoClienteController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
 
 // Rota TESTE
@@ -41,10 +42,15 @@ Route::get('/carro/{carro}', [CarroController::class, 'show'])->name('carro.show
 Route::get('/carros/por-ids', [CarroController::class, 'porIds'])->name('carros.por-ids');
 Route::get('/favoritos', fn() => view('cliente.favoritos'))->name('favoritos');
 
-// Login admin
-Route::get('/login-adm',  [LoginAdmController::class, 'showLogin'])->name('login-adm');
-Route::post('/login-adm', [LoginAdmController::class, 'login'])->name('login-adm.post');
-Route::post('/logout-adm',[LoginAdmController::class, 'logout'])->name('adm.logout');
+// Login unificado
+Route::get('/login',  [LoginController::class, 'showLogin'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+
+// Aliases para compatibilidade com middlewares e links existentes
+Route::get('/login-adm',     fn() => redirect()->route('login'))->name('login-adm');
+Route::get('/login-cliente', fn() => redirect()->route('login'))->name('login-cliente');
+
+Route::post('/logout-adm', [LoginAdmController::class, 'logout'])->name('adm.logout');
 
 // Painel admin (protegido)
 Route::prefix('adm')->name('adm.')->middleware('admin.autenticado')->group(function () {
@@ -87,9 +93,6 @@ Route::get('/admGerUser', function () { return redirect()->route('adm.usuarios.i
 Route::get('/admGerPed', function () { return redirect()->route('adm.pedidos.index'); })->name('admGerPed');
 
 
-// Login
-Route::get('/login-cliente', [LoginClienteController::class, 'showLogin'])->name('login-cliente');
-Route::post('/login-cliente', [LoginClienteController::class, 'login']);
 
 // Recuperação de senha
 Route::get('/esqueci-senha', [EsqueciSenhaController::class, 'showForm'])->name('esqueci-senha');
@@ -118,7 +121,12 @@ Route::middleware('cliente.autenticado')->group(function () {
     Route::get('/carrinho', fn() => view('cliente.carrinho'))->name('carrinho');
     Route::get('/checkout', fn() => view('cliente.checkout'))->name('checkout');
 
+    Route::get('/meus-pedidos', [PedidoClienteController::class, 'index'])->name('pedidos.index');
     Route::post('/pedido', [PedidoClienteController::class, 'store'])->name('pedido.store');
     Route::get('/pedido/{pedido}', [PedidoClienteController::class, 'show'])->name('pedido.show');
+
+    Route::post('/stripe/checkout', [StripeController::class, 'checkout'])->name('stripe.checkout');
+    Route::get('/stripe/success',   [StripeController::class, 'success'])->name('stripe.success');
+    Route::get('/stripe/cancel',    [StripeController::class, 'cancel'])->name('stripe.cancel');
 
 });
