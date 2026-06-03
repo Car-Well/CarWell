@@ -15,6 +15,15 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
+// No Linux (App Engine), /workspace é read-only — redireciona storage para /tmp
+if (PHP_OS_FAMILY !== 'Windows') {
+    $tmpStorage = '/tmp/laravel-storage';
+    foreach (['app/public', 'framework/cache/data', 'framework/sessions', 'framework/views', 'logs'] as $dir) {
+        @mkdir("{$tmpStorage}/{$dir}", 0775, true);
+    }
+    $app->useStoragePath($tmpStorage);
+}
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
