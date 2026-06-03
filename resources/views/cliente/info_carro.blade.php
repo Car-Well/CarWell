@@ -16,36 +16,11 @@
   <!-- PRODUTO PRINCIPAL -->
   <section class="product-section">
 
-    <!-- Sidebar esquerda -->
-    <div class="product-sidebar">
-      <button class="sidebar-btn active">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/>
-        </svg>
-      </button>
-      <button class="sidebar-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-        </svg>
-      </button>
-      <button class="sidebar-btn">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
-        </svg>
-      </button>
-      <div class="sidebar-3d">3D</div>
-    </div>
 
     <!-- Imagem do carro -->
     <div class="product-image-area">
       <div class="product-actions-top">
-        <button class="action-icon-btn">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
-            <polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>
-          </svg>
-        </button>
-        <button class="action-icon-btn heart-btn" onclick="toggleHeart(this)">
+        <button class="action-icon-btn heart-btn" data-id="{{ $carro ? $carro->id : '' }}" onclick="toggleHeartAndRedirect(this)">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
           </svg>
@@ -110,23 +85,6 @@
       <!-- Informações Básicas -->
       <div class="info-section">
         <p class="info-section-title">{{ __('info_carro.info_basicas') }}</p>
-
-        <!-- Estoque ID -->
-        <div class="accordion-item">
-          <button class="accordion-trigger" onclick="toggleAccordion(this)">
-            <span class="info-label">{{ __('info_carro.estoque_id') }}</span>
-            <span class="accordion-right">
-              <span class="accordion-preview">{{ $carro ? $carro->id : '–' }}</span>
-              <svg class="accordion-arrow" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </span>
-          </button>
-          <div class="accordion-body">
-            <div class="accordion-content">
-              <div class="accordion-detail-row"><span>Código interno</span><span class="accordion-val">{{ $carro ? $carro->id . '-CW' : '–' }}</span></div>
-              <div class="accordion-detail-row"><span>Disponibilidade</span><span class="accordion-val accent">{{ $carro ? ucfirst($carro->status) : 'Disponível' }}</span></div>
-            </div>
-          </div>
-        </div>
 
         <!-- Ano / KM -->
         <div class="accordion-item">
@@ -210,8 +168,13 @@
       btn.classList.add('active');
     }
 
-    function toggleHeart(el) {
-      el.classList.toggle('liked');
+    function toggleHeartAndRedirect(el) {
+      const id   = el.dataset.id;
+      const favs = JSON.parse(localStorage.getItem('carwell_favs') || '[]');
+      if (!favs.includes(parseInt(id))) favs.push(parseInt(id));
+      localStorage.setItem('carwell_favs', JSON.stringify(favs));
+      el.classList.add('liked');
+      setTimeout(() => { window.location.href = "{{ route('favoritos') }}"; }, 400);
     }
 
     function toggleAccordion(trigger) {
