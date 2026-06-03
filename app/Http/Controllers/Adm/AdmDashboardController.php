@@ -26,7 +26,7 @@ class AdmDashboardController extends Controller
 
         $receitaRaw = Pedido::whereIn('status', ['entregue', 'finalizado'])
             ->where('created_at', '>=', now()->subMonths(12))
-            ->selectRaw("strftime('%Y-%m', created_at) as mes, SUM(valor) as total")
+            ->selectRaw("TO_CHAR(created_at, 'YYYY-MM') as mes, SUM(valor) as total")
             ->groupBy('mes')
             ->orderBy('mes')
             ->pluck('total', 'mes');
@@ -76,7 +76,7 @@ class AdmDashboardController extends Controller
         ];
 
         $heatmapData = Pedido::whereIn('status', ['entregue', 'finalizado'])
-            ->selectRaw("CAST(strftime('%H', created_at) AS INTEGER) as hora, CAST(strftime('%w', created_at) AS INTEGER) as dia, COUNT(*) as total")
+            ->selectRaw("EXTRACT(HOUR FROM created_at)::INTEGER as hora, EXTRACT(DOW FROM created_at)::INTEGER as dia, COUNT(*) as total")
             ->groupBy('dia', 'hora')
             ->get()
             ->map(fn($r) => [$r->hora, $r->dia, $r->total]);
