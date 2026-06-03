@@ -1,6 +1,11 @@
 @php
-  $navPedido = isset($pedido) ? $pedido : null;
-  $navStep   = 1;
+  $navPedido = null;
+  if (Auth::guard('cliente')->check()) {
+    $navPedido = \App\Models\Pedido::where('cliente_id', Auth::guard('cliente')->id())
+      ->latest()
+      ->first();
+  }
+  $navStep = 1;
   if ($navPedido) {
     $navStep = match($navPedido->status) {
       'a_caminho'  => 2,
@@ -10,6 +15,10 @@
     };
   }
 @endphp
+
+<link rel="stylesheet" href="{{ asset('css/nav.css') }}">
+
+<div class="notif-overlay" id="notifOverlay" onclick="closeNotifPopup()"></div>
 
 <nav class="main-nav" style="border-bottom: 1px solid rgba(0,0,0,0.1);">
   <div class="nav-left">
@@ -22,10 +31,11 @@
       <a href="{{ route('home') }}#marcas" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
       <a href="{{ route('home') }}#por-que" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
       <a href="{{ route('carrinho') }}" class="{{ request()->routeIs('carrinho') ? 'nav-active' : '' }} nav-hover-btn">{{ __('nav.carrinho') }}</a>
+      @auth('cliente')
+      <a href="{{ route('pedidos.index') }}" class="{{ request()->routeIs('pedidos.index') ? 'nav-active' : '' }} nav-hover-btn">{{ __('nav.meus_pedidos') }}</a>
+      @endauth
     </div>
   </div>
-
-  <div class="nav-right-spacer"></div>
   <div class="nav-right">
     <a href="{{ route('favoritos') }}" class="nav-fav-btn {{ request()->routeIs('favoritos') ? 'active' : '' }}" id="nav-favoritos" aria-label="Favoritos">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -129,3 +139,28 @@
     </div>
   </div>
 </nav>
+
+<script>
+  function toggleNotifPopup(e) {
+    e.stopPropagation();
+    const popup   = document.getElementById('notifPopup');
+    const overlay = document.getElementById('notifOverlay');
+    if (!popup) return;
+    const isOpen = popup.classList.contains('open');
+    if (isOpen) {
+      popup.classList.remove('open');
+      overlay.classList.remove('active');
+    } else {
+      popup.classList.add('open');
+      overlay.classList.add('active');
+      const badge = document.getElementById('notifBadge');
+      if (badge) setTimeout(() => { badge.style.opacity = '0'; }, 800);
+    }
+  }
+  function closeNotifPopup() {
+    const popup   = document.getElementById('notifPopup');
+    const overlay = document.getElementById('notifOverlay');
+    if (popup)   popup.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+  }
+</script>

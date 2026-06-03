@@ -6,5 +6,6 @@ return [
     'sobre'         => 'SOBRE NÓS',
     'ajuda'         => 'AJUDA',
     'carrinho'      => 'CARRINHO',
+    'meus_pedidos'  => 'MEUS PEDIDOS',
     'login'         => 'LOGIN',
 ];

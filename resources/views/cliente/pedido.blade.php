@@ -108,31 +108,8 @@
 
   </main>
 
-  <div class="notif-overlay" id="notifOverlay" onclick="closeNotifPopup()"></div>
-
   <script>
     localStorage.removeItem('carwell_carrinho');
-
-    function toggleNotifPopup(e) {
-      e.stopPropagation();
-      const popup = document.getElementById('notifPopup');
-      const overlay = document.getElementById('notifOverlay');
-      const isOpen = popup.classList.contains('open');
-      if (isOpen) {
-        popup.classList.remove('open');
-        overlay.classList.remove('active');
-      } else {
-        popup.classList.add('open');
-        overlay.classList.add('active');
-        const badge = document.getElementById('notifBadge');
-        if (badge) setTimeout(() => { badge.style.opacity = '0'; }, 800);
-      }
-    }
-
-    function closeNotifPopup() {
-      document.getElementById('notifPopup').classList.remove('open');
-      document.getElementById('notifOverlay').classList.remove('active');
-    }
 
     function toggleMenu() {
       const links = document.querySelector('.nav-links');
