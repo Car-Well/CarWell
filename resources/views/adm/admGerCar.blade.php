@@ -160,6 +160,7 @@
                                 '{{ $carro->combustivel ?? '' }}',
                                 '{{ $carro->cambio ?? '' }}',
                                 '{{ addslashes(str_replace(["\r","\n","'"], ['',' ',''], $carro->descricao ?? '')) }}',
+                                '{{ $carro->categoria ?? '' }}',
                                 '{{ $carro->capa_path ? asset('storage/'.$carro->capa_path) : '' }}',
                                 @json($carro->fotos->where('is_capa', false)->map(fn($f) => asset('storage/'.$f->path))->values())
                             )">
@@ -273,6 +274,23 @@
                                 <option value="disponivel" {{ old('status','disponivel') == 'disponivel' ? 'selected' : '' }}>Disponível</option>
                                 <option value="reservado" {{ old('status') == 'reservado' ? 'selected' : '' }}>Reservado</option>
                                 <option value="vendido" {{ old('status') == 'vendido' ? 'selected' : '' }}>Vendido</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Categoria</label>
+                            <select name="categoria" class="form-control">
+                                <option value="">Sem categoria</option>
+                                <option value="esportivo"   {{ old('categoria') == 'esportivo'   ? 'selected' : '' }}>Esportivo</option>
+                                <option value="suv"         {{ old('categoria') == 'suv'         ? 'selected' : '' }}>SUV</option>
+                                <option value="sedan"       {{ old('categoria') == 'sedan'       ? 'selected' : '' }}>Sedã</option>
+                                <option value="hatchback"   {{ old('categoria') == 'hatchback'   ? 'selected' : '' }}>Hatchback</option>
+                                <option value="pickup"      {{ old('categoria') == 'pickup'      ? 'selected' : '' }}>Pickup</option>
+                                <option value="offroad"     {{ old('categoria') == 'offroad'     ? 'selected' : '' }}>Off-road</option>
+                                <option value="vintage"     {{ old('categoria') == 'vintage'     ? 'selected' : '' }}>Vintage</option>
+                                <option value="luxo"        {{ old('categoria') == 'luxo'        ? 'selected' : '' }}>Luxo</option>
+                                <option value="eletrico"    {{ old('categoria') == 'eletrico'    ? 'selected' : '' }}>Elétrico</option>
                             </select>
                         </div>
                     </div>
@@ -400,6 +418,23 @@
                                 <option value="disponivel">Disponível</option>
                                 <option value="reservado">Reservado</option>
                                 <option value="vendido">Vendido</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Categoria</label>
+                            <select name="categoria" id="editCategoria" class="form-control">
+                                <option value="">Sem categoria</option>
+                                <option value="esportivo">Esportivo</option>
+                                <option value="suv">SUV</option>
+                                <option value="sedan">Sedã</option>
+                                <option value="hatchback">Hatchback</option>
+                                <option value="pickup">Pickup</option>
+                                <option value="offroad">Off-road</option>
+                                <option value="vintage">Vintage</option>
+                                <option value="luxo">Luxo</option>
+                                <option value="eletrico">Elétrico</option>
                             </select>
                         </div>
                     </div>
@@ -620,7 +655,7 @@
             if(e.target===e.currentTarget) closeModal(name); 
         }
 
-        function openEdit(id,marca,modelo,ano,preco,status,km,cor,combustivel,cambio,descricao,capaUrl,galeriaUrls) {
+        function openEdit(id,marca,modelo,ano,preco,status,km,cor,combustivel,cambio,descricao,categoria,capaUrl,galeriaUrls) {
             document.getElementById('editId').value = id;
             document.getElementById('editMarca').value = marca;
             document.getElementById('editModelo').value = modelo;
@@ -632,6 +667,7 @@
             document.getElementById('editCombustivel').value = combustivel || '';
             document.getElementById('editCambio').value = cambio || '';
             document.getElementById('editDescricao').value = descricao || '';
+            document.getElementById('editCategoria').value = categoria || '';
             document.getElementById('editSubtitle').textContent = marca + ' ' + modelo;
             document.getElementById('formEdit').action = "{{ url('/adm/carros') }}/" + id;
             document.getElementById('formDestacar').action = "{{ url('/adm/carros') }}/" + id + "/destacar";

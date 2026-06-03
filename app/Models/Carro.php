@@ -21,6 +21,7 @@ class Carro extends Model
         'combustivel',
         'cambio',
         'status',
+        'categoria',
         'destacado',
         'descricao',
         'foto',

@@ -10,8 +10,9 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $busca           = $request->query('busca');
-        $marcaSelecionada = $request->query('marca');
+        $busca              = $request->query('busca');
+        $marcaSelecionada   = $request->query('marca');
+        $categoriaSelecionada = $request->query('categoria');
 
         $query = Carro::with('capa')->where('status', 'disponivel');
 
@@ -26,10 +27,14 @@ class HomeController extends Controller
             $query->where('marca', $marcaSelecionada);
         }
 
+        if ($categoriaSelecionada) {
+            $query->where('categoria', $categoriaSelecionada);
+        }
+
         $carros     = $query->latest()->get();
         $marcas     = MarcaCarros::whereNotNull('logo')->orderBy('nome')->get();
         $destacados = Carro::with('capa')->where('destacado', true)->where('status', '!=', 'vendido')->latest()->get();
 
-        return view('cliente.home', compact('carros', 'marcas', 'destacados', 'busca', 'marcaSelecionada'));
+        return view('cliente.home', compact('carros', 'marcas', 'destacados', 'busca', 'marcaSelecionada', 'categoriaSelecionada'));
     }
 }
