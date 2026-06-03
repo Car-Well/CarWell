@@ -114,37 +114,45 @@
   <!-- BRANDS -->
   <div class="brands-section" id="marcas">
     <h2 class="section-title">{{ __('home.marcas') }}</h2>
-    <div style="display:flex; align-items:center; gap:10px;">
-      <div class="brands-row" id="brands-row">
-        @forelse($marcas as $marca)
-        <div class="brand-item" title="{{ $marca->nome }}">
-          <img src="{{ asset("storage/{$marca->logo}") }}" alt="{{ $marca->nome }}" style="max-height:36px; max-width:72px; object-fit:contain;">
-        </div>
-        @empty
-        <div class="brand-item" style="font-size:0.75rem; font-weight:700; color:#9EA19C;">Nenhuma marca cadastrada</div>
-        @endforelse
-      </div>
-      <div class="brands-arrow">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a2e4a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
+    <div class="brands-row" id="brands-row">
+      @forelse($marcas as $marca)
+      @php
+        $params = $marcaSelecionada === $marca->nome
+          ? array_filter(['busca' => $busca])
+          : array_filter(['marca' => $marca->nome, 'busca' => $busca]);
+        $href = route('home', $params) . '#marcas';
+      @endphp
+      <a href="{{ $href }}"
+         class="brand-item {{ $marcaSelecionada === $marca->nome ? 'brand-item--active' : '' }}"
+         title="{{ $marca->nome }}">
+        <img src="{{ asset("storage/{$marca->logo}") }}" alt="{{ $marca->nome }}">
+      </a>
+      @empty
+      <div class="brand-item" style="font-size:0.75rem; font-weight:700; color:#9EA19C;">Nenhuma marca cadastrada</div>
+      @endforelse
     </div>
   </div>
 
   <!-- FILTER BAR -->
-  <div class="filter-bar">
+  <form class="filter-bar" method="GET" action="{{ route('home') }}">
+    @if($marcaSelecionada)
+      <input type="hidden" name="marca" value="{{ $marcaSelecionada }}">
+    @endif
     <div class="filter-search">
-      <input type="text" placeholder="{{ __('home.busca_modelo') }}"/>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
+      <input type="text" name="busca" value="{{ $busca }}" placeholder="{{ __('home.busca_modelo') }}" autocomplete="off"/>
+      <button type="submit" class="filter-search-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
     </div>
-    <button class="filter-btn">
+    <button type="submit" class="filter-btn">
       {{ __('home.filtrar') }}
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
         <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
       </svg>
     </button>
-  </div>
+  </form>
 
   <!-- CAR CARDS -->
   <div class="cars-grid">
@@ -193,6 +201,12 @@
   </div>
 
   <script>
+    document.querySelector('.filter-bar').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const params = new URLSearchParams(new FormData(this)).toString();
+      window.location.href = '{{ route("home") }}' + (params ? '?' + params : '') + '#marcas';
+    });
+
     // Carrossel de destaques
     const heroTotal = document.querySelectorAll('.hero-destaque-card').length;
     if (heroTotal > 0) {

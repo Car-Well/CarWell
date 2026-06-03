@@ -4,19 +4,32 @@ namespace App\Http\Controllers;
 
 use App\Models\Carro;
 use App\Models\MarcaCarros;
+use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $carros = Carro::with('capa')
-            ->where('status', 'disponivel')
-            ->latest()
-            ->get();
+        $busca           = $request->query('busca');
+        $marcaSelecionada = $request->query('marca');
 
-        $marcas      = MarcaCarros::whereNotNull('logo')->orderBy('nome')->get();
-        $destacados  = Carro::with('capa')->where('destacado', true)->where('status', '!=', 'vendido')->latest()->get();
+        $query = Carro::with('capa')->where('status', 'disponivel');
 
-        return view('cliente.home', compact('carros', 'marcas', 'destacados'));
+        if ($busca) {
+            $query->where(function ($q) use ($busca) {
+                $q->where('marca', 'like', "%{$busca}%")
+                  ->orWhere('modelo', 'like', "%{$busca}%");
+            });
+        }
+
+        if ($marcaSelecionada) {
+            $query->where('marca', $marcaSelecionada);
+        }
+
+        $carros     = $query->latest()->get();
+        $marcas     = MarcaCarros::whereNotNull('logo')->orderBy('nome')->get();
+        $destacados = Carro::with('capa')->where('destacado', true)->where('status', '!=', 'vendido')->latest()->get();
+
+        return view('cliente.home', compact('carros', 'marcas', 'destacados', 'busca', 'marcaSelecionada'));
     }
 }
