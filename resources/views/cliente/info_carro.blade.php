@@ -203,30 +203,6 @@
     </div>
   </section>
 
-  <!-- CATEGORIAS -->
-  <section class="categories-section">
-    <div class="related-header">
-      <h2 class="section-title-sm">{{ __('info_carro.categorias') }}</h2>
-    </div>
-    <div class="categories-grid">
-      <div class="category-card">
-        <img src="{{ asset('img/categorias/vintage.jpg') }}" alt="Vintage" onerror="this.style.display='none'">
-        <div class="category-overlay"></div>
-        <span class="category-name">VINTAGE</span>
-      </div>
-      <div class="category-card">
-        <img src="{{ asset('img/categorias/eletricos.jpg') }}" alt="Elétricos" onerror="this.style.display='none'">
-        <div class="category-overlay"></div>
-        <span class="category-name">ELÉTRICOS</span>
-      </div>
-      <div class="category-card">
-        <img src="{{ asset('img/categorias/picapes.jpg') }}" alt="Picapes" onerror="this.style.display='none'">
-        <div class="category-overlay"></div>
-        <span class="category-name">PICAPES</span>
-      </div>
-    </div>
-  </section>
-
   <script>
     function switchPhoto(btn, url) {
       document.getElementById('mainCarImg').src = url;
