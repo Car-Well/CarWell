@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>CarWell — Gerenciar Carros</title>
+        <title>CarWell — {{ __('adm.car_titulo') }}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -18,16 +18,16 @@
         </div>
         <div class="nav-center">
             <div class="nav-links">
-                <a href="{{ route('adm.dashboard') }}" class="nav-hover-btn">Dashboard</a>
-                <a href="{{ route('adm.carros.index') }}" class="nav-active nav-hover-btn">Carros</a>
-                <a href="{{ route('adm.pedidos.index') }}" class="nav-hover-btn">Pedidos</a>
-                <a href="{{ route('adm.usuarios.index') }}" class="nav-hover-btn">Clientes</a>
+                <a href="{{ route('adm.dashboard') }}" class="nav-hover-btn">{{ __('adm.dashboard') }}</a>
+                <a href="{{ route('adm.carros.index') }}" class="nav-active nav-hover-btn">{{ __('adm.carros') }}</a>
+                <a href="{{ route('adm.pedidos.index') }}" class="nav-hover-btn">{{ __('adm.pedidos') }}</a>
+                <a href="{{ route('adm.usuarios.index') }}" class="nav-hover-btn">{{ __('adm.clientes') }}</a>
             </div>
         </div>
         <div class="nav-right">
             <form action="{{ route('adm.logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn-logout nav-hover-btn">Sair</button>
+                <button type="submit" class="btn-logout nav-hover-btn">{{ __('adm.sair') }}</button>
             </form>
         </div>
     </nav>
@@ -52,8 +52,8 @@
 
         <div class="page-header">
             <div>
-                <h1 class="page-title">Gerenciar <span>Carros</span></h1>
-                <p class="page-subtitle">Gerencie todo o estoque de veículos</p>
+                <h1 class="page-title">{{ __('adm.car_titulo') }}</h1>
+                <p class="page-subtitle">{{ __('adm.car_subtitulo') }}</p>
             </div>
             <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
                 <details class="marcas-dropdown">
@@ -128,7 +128,7 @@
                 style="animation-delay:{{ $i * 0.06 }}s">
                 <div class="car-thumb">
                     @if($carro->capa_path)
-                        <img class="car-photo" src="{{ asset('storage/'.$carro->capa_path) }}" alt="{{ $carro->modelo }}">
+                        <img class="car-photo" src="{{ storage_url($carro->capa_path) }}" alt="{{ $carro->modelo }}">
                     @endif
                     <div class="car-thumb-inner">
                         <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z"/></svg>
@@ -160,8 +160,8 @@
                             data-cambio="{{ $carro->cambio ?? '' }}"
                             data-descricao="{{ addslashes(str_replace(["\r","\n","'"], ['',' ',''], $carro->descricao ?? '')) }}"
                             data-categoria="{{ $carro->categoria ?? '' }}"
-                            data-capa="{{ $carro->capa_path ? asset('storage/'.$carro->capa_path) : '' }}"
-                            data-galeria="{{ e(json_encode($carro->fotos->where('is_capa', false)->map(fn($f) => asset('storage/'.$f->path))->values())) }}"
+                            data-capa="{{ $carro->capa_path ? storage_url($carro->capa_path) : '' }}"
+                            data-galeria="{{ e(json_encode($carro->fotos->where('is_capa', false)->map(fn($f) => storage_url($f->path))->values())) }}"
                             onclick="openEditFromBtn(this)">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             Editar
@@ -589,7 +589,7 @@
                     <div style="display:flex; flex-wrap:wrap; gap:12px; align-items:center;">
                         @foreach($marcas->whereNotNull('logo') as $m)
                         <div style="text-align:center;">
-                            <img src="{{ asset('storage/'.$m->logo) }}" alt="{{ $m->nome }}" style="height:32px; object-fit:contain; display:block; margin:0 auto 4px;">
+                            <img src="{{ storage_url($m->logo) }}" alt="{{ $m->nome }}" style="height:32px; object-fit:contain; display:block; margin:0 auto 4px;">
                             <span style="font-size:0.65rem; color:#6B6E69;">{{ $m->nome }}</span>
                         </div>
                         @endforeach

@@ -31,7 +31,7 @@
               @foreach($destacados as $d)
               <a href="{{ route('carro.show', $d->id) }}" class="hero-destaque-card" draggable="false">
                 @if($d->capa_path)
-                  <img src="{{ asset('storage/' . $d->capa_path) }}" alt="{{ $d->veiculo_nome }}" class="hero-destaque-img" draggable="false">
+                  <img src="{{ storage_url($d->capa_path) }}" alt="{{ $d->veiculo_nome }}" class="hero-destaque-img" draggable="false">
                 @endif
                 <div class="hero-destaque-info">
                   <span class="hero-car-badge">⭐ Destaque</span>
@@ -125,7 +125,7 @@
       <a href="{{ $href }}"
          class="brand-item {{ $marcaSelecionada === $marca->nome ? 'brand-item--active' : '' }}"
          title="{{ $marca->nome }}">
-        <img src="{{ asset("storage/{$marca->logo}") }}" alt="{{ $marca->nome }}">
+        <img src="{{ storage_url($marca->logo) }}" alt="{{ $marca->nome }}">
       </a>
       @empty
       <div class="brand-item" style="font-size:0.75rem; font-weight:700; color:#9EA19C;">Nenhuma marca cadastrada</div>
@@ -182,7 +182,7 @@
     <a href="{{ route('carro.show', $carro->id) }}" class="car-card">
 
       @if($carro->capa_path)
-        <img src="{{ asset('storage/' . $carro->capa_path) }}"
+        <img src="{{ storage_url($carro->capa_path) }}"
              alt="{{ $carro->veiculo_nome }}"
              class="car-img"
              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">

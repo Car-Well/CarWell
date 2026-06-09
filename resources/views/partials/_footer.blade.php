@@ -4,7 +4,7 @@
     {{-- Coluna 1: Logo + tagline --}}
     <div class="footer-brand">
       <img src="{{ asset('img/logo.png') }}" alt="CarWell" class="footer-logo">
-      <p class="footer-tagline">O seu próximo carro começa aqui.</p>
+      <p class="footer-tagline">{{ __('footer.tagline') }}</p>
       <div class="footer-socials">
         <a href="#" class="footer-social-btn" aria-label="Instagram">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
@@ -33,38 +33,38 @@
 
     {{-- Coluna 2: Navegação --}}
     <div class="footer-col">
-      <p class="footer-col-title">Navegação</p>
+      <p class="footer-col-title">{{ __('footer.nav_titulo') }}</p>
       <ul class="footer-links">
-        <li><a href="{{ route('home') }}">Home</a></li>
-        <li><a href="{{ route('home') }}#marcas">Comprar Carro</a></li>
-        <li><a href="{{ route('home') }}#por-que">Sobre Nós</a></li>
-        <li><a href="{{ route('favoritos') }}">Meus Favoritos</a></li>
-        <li><a href="{{ route('carrinho') }}">Carrinho</a></li>
+        <li><a href="{{ route('home') }}">{{ __('footer.nav_home') }}</a></li>
+        <li><a href="{{ route('home') }}#marcas">{{ __('footer.nav_comprar') }}</a></li>
+        <li><a href="{{ route('home') }}#por-que">{{ __('footer.nav_sobre') }}</a></li>
+        <li><a href="{{ route('favoritos') }}">{{ __('footer.nav_favoritos') }}</a></li>
+        <li><a href="{{ route('carrinho') }}">{{ __('footer.nav_carrinho') }}</a></li>
       </ul>
     </div>
 
     {{-- Coluna 3: Informações --}}
     <div class="footer-col">
-      <p class="footer-col-title">Informações</p>
+      <p class="footer-col-title">{{ __('footer.info_titulo') }}</p>
       <ul class="footer-links">
-        <li><a href="#">Perguntas Frequentes</a></li>
-        <li><a href="#">Guia de Preços</a></li>
-        <li><a href="#">Onde Estamos</a></li>
-        <li><a href="#">Contato</a></li>
-        <li><a href="#">Blog</a></li>
+        <li><a href="#">{{ __('footer.info_faq') }}</a></li>
+        <li><a href="#">{{ __('footer.info_guia') }}</a></li>
+        <li><a href="#">{{ __('footer.info_onde') }}</a></li>
+        <li><a href="#">{{ __('footer.info_contato') }}</a></li>
+        <li><a href="#">{{ __('footer.info_blog') }}</a></li>
       </ul>
     </div>
 
   </div>
 
   <div class="footer-bottom">
-    <p class="footer-copy">© {{ date('Y') }} CarWell. Todos os direitos reservados.</p>
+    <p class="footer-copy">{{ __('footer.direitos', ['year' => date('Y')]) }}</p>
     <div class="footer-legal">
-      <a href="#">Política de Privacidade</a>
+      <a href="#">{{ __('footer.privacidade') }}</a>
       <span>·</span>
-      <a href="#">Termos e Condições</a>
+      <a href="#">{{ __('footer.termos') }}</a>
       <span>·</span>
-      <a href="#">Configurações de cookies</a>
+      <a href="#">{{ __('footer.cookies_config') }}</a>
     </div>
   </div>
 </footer>

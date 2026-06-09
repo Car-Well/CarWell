@@ -23,4 +23,28 @@ return [
     'escreva_codigo'         => 'Escreva aqui o código que chegou no seu email',
     'codigo_nao_chegou'      => 'O código não chegou?',
     'reenviar_codigo'        => 'REENVIAR CÓDIGO',
+    // esqueci-senha
+    'titulo_esqueci'         => 'CarWell — Esqueci a senha',
+    'recupere_acesso'        => 'Recupere o acesso à sua conta.',
+    'link_nova_senha'        => 'Enviaremos um link para o seu e-mail para você criar uma nova senha.',
+    'esqueci_titulo'         => 'Esqueci a senha',
+    'esqueci_subtitulo'      => 'Informe seu e-mail e enviaremos um link de redefinição',
+    'label_email'            => 'E-mail',
+    'placeholder_seu_email'  => 'seu@email.com',
+    'enviar_link'            => 'Enviar link de redefinição',
+    'voltar_login'           => '← Voltar ao login',
+    // redefinir-senha
+    'titulo_redefinir'       => 'CarWell — Redefinir senha',
+    'crie_nova_senha'        => 'Crie uma nova senha.',
+    'senha_segura'           => 'Escolha uma senha segura para proteger sua conta CarWell.',
+    'redefinir_titulo'       => 'Redefinir senha',
+    'redefinir_subtitulo'    => 'Digite e confirme sua nova senha',
+    'nova_senha'             => 'Nova senha',
+    'confirmar_nova_senha'   => 'Confirmar nova senha',
+    'salvar_nova_senha'      => 'Salvar nova senha',
+    // stats visuais
+    'stat_veiculos'          => 'Veículos vendidos',
+    'stat_avaliacao'         => 'Avaliação média',
+    'stat_clientes'          => 'Clientes satisfeitos',
+    'stat_seguro'            => 'Seguro e confiável',
 ];

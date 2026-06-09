@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>CarWell — Meus Pedidos</title>
+    <title>{{ __('meus_pedidos.titulo') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -15,8 +15,8 @@
 
   <main class="pedidos-page">
 
-    <h1 class="pedidos-title">Meus <span>Pedidos</span></h1>
-    <p class="pedidos-subtitle">Acompanhe todos os seus pedidos realizados</p>
+    <h1 class="pedidos-title">{{ __('meus_pedidos.titulo_h1') }} <span>{{ __('meus_pedidos.titulo_span') }}</span></h1>
+    <p class="pedidos-subtitle">{{ __('meus_pedidos.subtitulo') }}</p>
 
     @if($pedidos->isEmpty())
       <div class="pedidos-empty">
@@ -25,17 +25,17 @@
           <line x1="3" y1="6" x2="21" y2="6"/>
           <path d="M16 10a4 4 0 0 1-8 0"/>
         </svg>
-        <p>Você ainda não realizou nenhum pedido</p>
-        <a href="{{ route('home') }}#marcas">Ver veículos disponíveis</a>
+        <p>{{ __('meus_pedidos.nenhum_pedido') }}</p>
+        <a href="{{ route('home') }}#marcas">{{ __('meus_pedidos.ver_veiculos') }}</a>
       </div>
     @else
 
       @php
         $statusLabel = [
-          'em_separacao' => 'Em separação',
-          'a_caminho'    => 'A caminho',
-          'entregue'     => 'Entregue',
-          'cancelado'    => 'Cancelado',
+          'em_separacao' => __('meus_pedidos.status_separacao'),
+          'a_caminho'    => __('meus_pedidos.status_caminho'),
+          'entregue'     => __('meus_pedidos.status_entregue'),
+          'cancelado'    => __('meus_pedidos.status_cancelado'),
         ];
         $statusBadge = [
           'em_separacao' => 'badge-separacao',
@@ -50,7 +50,7 @@
 
         <div class="pedido-card-img">
           @if($pedido->carro->capa_path)
-            <img src="{{ asset('storage/' . $pedido->carro->capa_path) }}"
+            <img src="{{ storage_url($pedido->carro->capa_path) }}"
                  alt="{{ $pedido->carro->veiculo_nome }}"
                  onerror="this.style.display='none'">
           @else

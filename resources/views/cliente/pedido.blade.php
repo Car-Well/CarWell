@@ -28,7 +28,7 @@
     <div class="pedido-header-card">
       <div class="pedido-car-img">
         @if($pedido->carro->capa_path)
-          <img src="{{ asset('storage/' . $pedido->carro->capa_path) }}" alt="{{ $pedido->carro->veiculo_nome }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+          <img src="{{ storage_url($pedido->carro->capa_path) }}" alt="{{ $pedido->carro->veiculo_nome }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
         @endif
         <div class="pedido-car-placeholder" style="{{ $pedido->carro->capa_path ? 'display:none' : '' }}"></div>
       </div>

@@ -23,4 +23,28 @@ return [
     'escreva_codigo'         => 'Enter the code that was sent to your email',
     'codigo_nao_chegou'      => "Didn't receive the code?",
     'reenviar_codigo'        => 'RESEND CODE',
+    // forgot password
+    'titulo_esqueci'         => 'CarWell — Forgot Password',
+    'recupere_acesso'        => 'Recover access to your account.',
+    'link_nova_senha'        => 'We will send a link to your email so you can create a new password.',
+    'esqueci_titulo'         => 'Forgot password',
+    'esqueci_subtitulo'      => 'Enter your email and we will send a reset link',
+    'label_email'            => 'Email',
+    'placeholder_seu_email'  => 'your@email.com',
+    'enviar_link'            => 'Send reset link',
+    'voltar_login'           => '← Back to login',
+    // reset password
+    'titulo_redefinir'       => 'CarWell — Reset Password',
+    'crie_nova_senha'        => 'Create a new password.',
+    'senha_segura'           => 'Choose a strong password to protect your CarWell account.',
+    'redefinir_titulo'       => 'Reset password',
+    'redefinir_subtitulo'    => 'Enter and confirm your new password',
+    'nova_senha'             => 'New password',
+    'confirmar_nova_senha'   => 'Confirm new password',
+    'salvar_nova_senha'      => 'Save new password',
+    // visual stats
+    'stat_veiculos'          => 'Vehicles sold',
+    'stat_avaliacao'         => 'Average rating',
+    'stat_clientes'          => 'Satisfied customers',
+    'stat_seguro'            => 'Safe and reliable',
 ];

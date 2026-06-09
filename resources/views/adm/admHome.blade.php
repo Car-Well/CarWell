@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarWell — Dashboard</title>
+    <title>CarWell — {{ __('adm.dashboard') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -17,16 +17,16 @@
     </div>
     <div class="nav-center">
         <div class="nav-links">
-            <a href="{{ route('adm.dashboard') }}" class="nav-active nav-hover-btn">Dashboard</a>
-            <a href="{{ route('adm.carros.index') }}" class="nav-hover-btn">Carros</a>
-            <a href="{{ route('adm.pedidos.index') }}" class="nav-hover-btn">Pedidos</a>
-            <a href="{{ route('adm.usuarios.index') }}" class="nav-hover-btn">Clientes</a>
+            <a href="{{ route('adm.dashboard') }}" class="nav-active nav-hover-btn">{{ __('adm.dashboard') }}</a>
+            <a href="{{ route('adm.carros.index') }}" class="nav-hover-btn">{{ __('adm.carros') }}</a>
+            <a href="{{ route('adm.pedidos.index') }}" class="nav-hover-btn">{{ __('adm.pedidos') }}</a>
+            <a href="{{ route('adm.usuarios.index') }}" class="nav-hover-btn">{{ __('adm.clientes') }}</a>
         </div>
     </div>
     <div class="nav-right">
         <form action="{{ route('adm.logout') }}" method="POST">
             @csrf
-            <button type="submit" class="btn-logout nav-hover-btn">Sair</button>
+            <button type="submit" class="btn-logout nav-hover-btn">{{ __('adm.sair') }}</button>
         </form>
     </div>
 </nav>
@@ -35,12 +35,12 @@
 
     <div class="page-header">
         <div>
-            <h1 class="page-title">Dashboard <span>Administrativo</span></h1>
-            <p class="page-subtitle">Visão completa do desempenho da CarWell</p>
+            <h1 class="page-title">{{ __('adm.dash_titulo') }}</h1>
+            <p class="page-subtitle">{{ __('adm.dash_subtitulo') }}</p>
         </div>
         <span class="last-update">
             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            Atualizado agora
+            {{ __('adm.dash_atualizado') }}
         </span>
     </div>
 
@@ -50,11 +50,11 @@
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
             </div>
             <div class="kpi-body">
-                <div class="kpi-label">Lucro total</div>
+                <div class="kpi-label">{{ __('adm.dash_lucro') }}</div>
                 <div class="kpi-value">R$ {{ number_format($kpis['lucroTotal'], 0, ',', '.') }}</div>
                 <div class="kpi-trend up">
                     <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
-                    pedidos entregues + finalizados
+                    {{ __('adm.dash_lucro_sub') }}
                 </div>
             </div>
         </div>
@@ -64,11 +64,11 @@
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99z"/></svg>
             </div>
             <div class="kpi-body">
-                <div class="kpi-label">Carros vendidos</div>
+                <div class="kpi-label">{{ __('adm.dash_vendidos') }}</div>
                 <div class="kpi-value">{{ $kpis['carrosVendidos'] }}</div>
                 <div class="kpi-trend up">
                     <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
-                    pedidos concluídos
+                    {{ __('adm.dash_vendidos_sub') }}
                 </div>
             </div>
         </div>
@@ -78,11 +78,11 @@
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div class="kpi-body">
-                <div class="kpi-label">Clientes ativos</div>
+                <div class="kpi-label">{{ __('adm.dash_clientes') }}</div>
                 <div class="kpi-value">{{ $kpis['clientesAtivos'] }}</div>
                 <div class="kpi-trend up">
                     <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
-                    e-mails verificados
+                    {{ __('adm.dash_clientes_sub') }}
                 </div>
             </div>
         </div>
@@ -92,11 +92,11 @@
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
             </div>
             <div class="kpi-body">
-                <div class="kpi-label">Estoque atual</div>
+                <div class="kpi-label">{{ __('adm.dash_estoque') }}</div>
                 <div class="kpi-value">{{ $kpis['estoqueAtual'] }}</div>
                 <div class="kpi-trend down">
                     <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 9 12 15 6 9"/></svg>
-                    carros disponíveis
+                    {{ __('adm.dash_estoque_sub') }}
                 </div>
             </div>
         </div>
@@ -106,11 +106,11 @@
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
             </div>
             <div class="kpi-body">
-                <div class="kpi-label">Pedidos ativos</div>
+                <div class="kpi-label">{{ __('adm.dash_ativos') }}</div>
                 <div class="kpi-value">{{ $kpis['pedidosAtivos'] }}</div>
                 <div class="kpi-trend up">
                     <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
-                    em andamento
+                    {{ __('adm.dash_ativos_sub') }}
                 </div>
             </div>
         </div>
@@ -120,11 +120,11 @@
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             </div>
             <div class="kpi-body">
-                <div class="kpi-label">Ticket médio</div>
+                <div class="kpi-label">{{ __('adm.dash_ticket') }}</div>
                 <div class="kpi-value">R$ {{ number_format($kpis['ticketMedio'], 0, ',', '.') }}</div>
                 <div class="kpi-trend up">
                     <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
-                    por venda
+                    {{ __('adm.dash_ticket_sub') }}
                 </div>
             </div>
         </div>
@@ -134,8 +134,8 @@
         <div class="panel panel--lg">
             <div class="panel-head">
                 <div>
-                    <div class="panel-title">Receita mensal</div>
-                    <div class="panel-subtitle">Últimos 12 meses</div>
+                    <div class="panel-title">{{ __('adm.dash_receita') }}</div>
+                    <div class="panel-subtitle">{{ __('adm.dash_receita_sub') }}</div>
                 </div>
             </div>
             <div class="panel-body">
@@ -145,8 +145,8 @@
         <div class="panel">
             <div class="panel-head">
                 <div>
-                    <div class="panel-title">Vendas por marca</div>
-                    <div class="panel-subtitle">Top marcas</div>
+                    <div class="panel-title">{{ __('adm.dash_vendas_marca') }}</div>
+                    <div class="panel-subtitle">{{ __('adm.dash_vendas_marca_sub') }}</div>
                 </div>
             </div>
             <div class="panel-body">
@@ -159,8 +159,8 @@
         <div class="panel">
             <div class="panel-head">
                 <div>
-                    <div class="panel-title">Status do estoque</div>
-                    <div class="panel-subtitle">Distribuição atual</div>
+                    <div class="panel-title">{{ __('adm.dash_status_est') }}</div>
+                    <div class="panel-subtitle">{{ __('adm.dash_status_est_sub') }}</div>
                 </div>
             </div>
             <div class="panel-body">
@@ -170,8 +170,8 @@
         <div class="panel">
             <div class="panel-head">
                 <div>
-                    <div class="panel-title">Formas de pagamento</div>
-                    <div class="panel-subtitle">Percentual de uso</div>
+                    <div class="panel-title">{{ __('adm.dash_pagamentos') }}</div>
+                    <div class="panel-subtitle">{{ __('adm.dash_pagamentos_sub') }}</div>
                 </div>
             </div>
             <div class="panel-body">
@@ -181,8 +181,8 @@
         <div class="panel">
             <div class="panel-head">
                 <div>
-                    <div class="panel-title">Novos clientes</div>
-                    <div class="panel-subtitle">Últimas 8 semanas</div>
+                    <div class="panel-title">{{ __('adm.dash_novos_cli') }}</div>
+                    <div class="panel-subtitle">{{ __('adm.dash_novos_cli_sub') }}</div>
                 </div>
             </div>
             <div class="panel-body">
@@ -195,8 +195,8 @@
         <div class="panel panel--lg">
             <div class="panel-head">
                 <div>
-                    <div class="panel-title">Atividade de vendas</div>
-                    <div class="panel-subtitle">Heatmap por dia e hora</div>
+                    <div class="panel-title">{{ __('adm.dash_atividade') }}</div>
+                    <div class="panel-subtitle">{{ __('adm.dash_atividade_sub') }}</div>
                 </div>
             </div>
             <div class="panel-body">
@@ -206,8 +206,8 @@
         <div class="panel">
             <div class="panel-head">
                 <div>
-                    <div class="panel-title">Funil de conversão</div>
-                    <div class="panel-subtitle">Visitantes → Venda</div>
+                    <div class="panel-title">{{ __('adm.dash_funil') }}</div>
+                    <div class="panel-subtitle">{{ __('adm.dash_funil_sub') }}</div>
                 </div>
             </div>
             <div class="panel-body">
@@ -219,23 +219,23 @@
     <div class="tables-row">
         <div class="panel">
             <div class="panel-head">
-                <div class="panel-title">Vendas recentes</div>
-                <a href="{{ route('adm.pedidos.index') }}" class="panel-action">Ver tudo</a>
+                <div class="panel-title">{{ __('adm.dash_recentes') }}</div>
+                <a href="{{ route('adm.pedidos.index') }}" class="panel-action">{{ __('adm.dash_ver_tudo') }}</a>
             </div>
             <div class="panel-body" style="padding:0;">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Veículo</th>
-                            <th>Cliente</th>
-                            <th>Valor</th>
-                            <th>Status</th>
+                            <th>{{ __('adm.dash_veiculo') }}</th>
+                            <th>{{ __('adm.dash_cliente') }}</th>
+                            <th>{{ __('adm.dash_valor') }}</th>
+                            <th>{{ __('adm.dash_status') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
                             $stClass = ['entregue'=>'badge-green','a_caminho'=>'badge-amber','finalizado'=>'badge-gray','em_separacao'=>'badge-blue'];
-                            $stLabel = ['entregue'=>'Entregue','a_caminho'=>'A caminho','finalizado'=>'Finalizado','em_separacao'=>'Em separação'];
+                            $stLabel = ['entregue'=>__('adm.status_entregue'),'a_caminho'=>__('adm.status_a_caminho'),'finalizado'=>__('adm.status_finalizado'),'em_separacao'=>__('adm.status_em_separacao')];
                         @endphp
                         @forelse($vendasRecentes as $venda)
                         @php
@@ -256,7 +256,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" style="text-align:center; color:#9EA19C; padding:2rem;">Nenhuma venda ainda</td>
+                            <td colspan="4" style="text-align:center; color:#9EA19C; padding:2rem;">{{ __('adm.dash_nenhuma_venda') }}</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -266,23 +266,23 @@
 
         <div class="panel">
             <div class="panel-head">
-                <div class="panel-title">Estoque — destaques</div>
-                <a href="{{ route('adm.carros.index') }}" class="panel-action">Gerenciar</a>
+                <div class="panel-title">{{ __('adm.dash_estoque_dest') }}</div>
+                <a href="{{ route('adm.carros.index') }}" class="panel-action">{{ __('adm.dash_gerenciar') }}</a>
             </div>
             <div class="panel-body" style="padding:0;">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>Veículo</th>
-                            <th>Ano</th>
-                            <th>Valor</th>
-                            <th>Status</th>
+                            <th>{{ __('adm.dash_veiculo') }}</th>
+                            <th>{{ __('adm.dash_ano') }}</th>
+                            <th>{{ __('adm.dash_valor') }}</th>
+                            <th>{{ __('adm.dash_status') }}</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
                             $esClass = ['disponivel'=>'badge-green','reservado'=>'badge-amber'];
-                            $esLabel = ['disponivel'=>'Disponível','reservado'=>'Reservado'];
+                            $esLabel = ['disponivel'=>__('adm.dash_disponivel'),'reservado'=>__('adm.dash_reservado')];
                         @endphp
                         @forelse($estoqueDestaques as $carro)
                         <tr>
@@ -293,7 +293,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" style="text-align:center; color:#9EA19C; padding:2rem;">Nenhum carro no estoque</td>
+                            <td colspan="4" style="text-align:center; color:#9EA19C; padding:2rem;">{{ __('adm.dash_nenhum_carro') }}</td>
                         </tr>
                         @endforelse
                     </tbody>

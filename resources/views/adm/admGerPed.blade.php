@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>CarWell — Gerenciar Pedidos</title>
+    <title>CarWell — {{ __('adm.ped_titulo') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -18,16 +18,16 @@
         </div>
         <div class="nav-center">
             <div class="nav-links">
-                <a href="{{ route('adm.dashboard') }}" class="nav-hover-btn">Dashboard</a>
-                <a href="{{ route('adm.carros.index') }}" class="nav-hover-btn">Carros</a>
-                <a href="{{ route('adm.pedidos.index') }}" class="nav-active nav-hover-btn">Pedidos</a>
-                <a href="{{ route('adm.usuarios.index') }}" class="nav-hover-btn">Clientes</a>
+                <a href="{{ route('adm.dashboard') }}" class="nav-hover-btn">{{ __('adm.dashboard') }}</a>
+                <a href="{{ route('adm.carros.index') }}" class="nav-hover-btn">{{ __('adm.carros') }}</a>
+                <a href="{{ route('adm.pedidos.index') }}" class="nav-active nav-hover-btn">{{ __('adm.pedidos') }}</a>
+                <a href="{{ route('adm.usuarios.index') }}" class="nav-hover-btn">{{ __('adm.clientes') }}</a>
             </div>
         </div>
         <div class="nav-right">
             <form action="{{ route('adm.logout') }}" method="POST">
                 @csrf
-                <button type="submit" class="btn-logout nav-hover-btn">Sair</button>
+                <button type="submit" class="btn-logout nav-hover-btn">{{ __('adm.sair') }}</button>
             </form>
         </div>
     </nav>
@@ -40,7 +40,7 @@
 
         @if($errors->any())
             <div class="alert alert-danger" style="margin-bottom:14px;">
-                <strong>Não foi possível salvar.</strong>
+                <strong>{{ __('adm.ped_erro_salvar') }}</strong>
                 <ul style="margin:8px 0 0 18px;">
                     @foreach($errors->all() as $msg)<li>{{ $msg }}</li>@endforeach
                 </ul>
@@ -50,12 +50,12 @@
 
         <div class="page-header">
             <div>
-                <h1 class="page-title">Gerenciar <span>Pedidos</span></h1>
-                <p class="page-subtitle">Acompanhe e gerencie todos os pedidos</p>
+                <h1 class="page-title">{{ __('adm.ped_titulo') }}</h1>
+                <p class="page-subtitle">{{ __('adm.ped_subtitulo') }}</p>
             </div>
             <button class="btn btn-primary" onclick="openPopUp('create')">
                 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Novo pedido
+                {{ __('adm.ped_novo') }}
             </button>
         </div>
 

@@ -27,7 +27,7 @@
         </button>
       </div>
       @if($carro && $carro->capa_path)
-        <img id="mainCarImg" src="{{ asset('storage/' . $carro->capa_path) }}" alt="{{ $carro->veiculo_nome }}" class="product-main-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+        <img id="mainCarImg" src="{{ storage_url($carro->capa_path) }}" alt="{{ $carro->veiculo_nome }}" class="product-main-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
       @else
         <img id="mainCarImg" src="{{ asset('img/carros/honda-civic.png') }}" alt="Veículo" class="product-main-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
       @endif
@@ -138,7 +138,7 @@
       <a href="{{ route('carro.show', $rel->id) }}" class="related-card" style="text-decoration:none; color:inherit;">
         <div class="related-img-wrap">
           @if($rel->capa_path)
-            <img src="{{ asset('storage/' . $rel->capa_path) }}" alt="{{ $rel->veiculo_nome }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+            <img src="{{ storage_url($rel->capa_path) }}" alt="{{ $rel->veiculo_nome }}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
             <div class="related-img-placeholder" style="display:none"></div>
           @else
             <div class="related-img-placeholder"></div>
@@ -159,7 +159,7 @@
 
   <script>
     @if($carro && $carro->fotos->count() > 1)
-    const photoUrls = @json($fotosOrdenadas->map(fn($f) => asset('storage/' . $f->path))->values());
+    const photoUrls = @json($fotosOrdenadas->map(fn($f) => storage_url($f->path))->values());
     let photoIndex = 0;
 
     function photoGoTo(n) {
@@ -234,7 +234,7 @@
           <div class="gallery-strip-thumb {{ $i === 0 ? 'active' : '' }}"
                onclick="galleryGoTo({{ $i }})"
                id="gthumb-{{ $i }}">
-            <img src="{{ asset('storage/' . $foto->path) }}" alt="Foto {{ $i + 1 }}">
+            <img src="{{ storage_url($foto->path) }}" alt="Foto {{ $i + 1 }}">
           </div>
         @endforeach
       </div>
@@ -242,7 +242,7 @@
   </div>
 
   <script>
-    const galleryPhotos = @json($todasFotos->map(fn($f) => asset('storage/' . $f->path))->values());
+    const galleryPhotos = @json($todasFotos->map(fn($f) => storage_url($f->path))->values());
     let galleryIndex = 0;
 
     function openGallery(startIndex) {

@@ -120,7 +120,7 @@
             const subtotal = Number(c.preco) * qty;
             total += subtotal;
             const img = c.capa_path
-              ? `<img src="{{ asset('storage') }}/${c.capa_path}" onerror="this.style.display='none'">`
+              ? `<img src="{{ storage_base_url() }}/${c.capa_path}" onerror="this.style.display='none'">`
               : '';
 
             return `<div class="checkout-order-item">

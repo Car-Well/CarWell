@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarWell — Redefinir senha</title>
+    <title>{{ __('login.titulo_redefinir') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -18,21 +18,20 @@
         Car<strong>Well</strong>
       </div>
       <div class="visual-hero">
-        <h2>Crie uma<br><span>nova senha.</span></h2>
-        <p>Escolha uma senha segura para proteger sua conta CarWell.</p>
+        <h2>{{ __('login.crie_nova_senha') }}<br><span>{{ __('login.senha_segura') }}</span></h2>
       </div>
       <div class="visual-stats">
-        <div class="visual-stat"><div class="visual-stat-val">+2.400</div><div class="visual-stat-label">Veículos vendidos</div></div>
-        <div class="visual-stat"><div class="visual-stat-val">4.9★</div><div class="visual-stat-label">Avaliação média</div></div>
-        <div class="visual-stat"><div class="visual-stat-val">+8.000</div><div class="visual-stat-label">Clientes satisfeitos</div></div>
-        <div class="visual-stat"><div class="visual-stat-val">100%</div><div class="visual-stat-label">Seguro e confiável</div></div>
+        <div class="visual-stat"><div class="visual-stat-val">+2.400</div><div class="visual-stat-label">{{ __('login.stat_veiculos') }}</div></div>
+        <div class="visual-stat"><div class="visual-stat-val">4.9★</div><div class="visual-stat-label">{{ __('login.stat_avaliacao') }}</div></div>
+        <div class="visual-stat"><div class="visual-stat-val">+8.000</div><div class="visual-stat-label">{{ __('login.stat_clientes') }}</div></div>
+        <div class="visual-stat"><div class="visual-stat-val">100%</div><div class="visual-stat-label">{{ __('login.stat_seguro') }}</div></div>
       </div>
     </div>
 
     <div class="login-form-side">
       <div class="login-box">
-        <h1 class="login-title">Redefinir senha</h1>
-        <p class="login-subtitle">Digite e confirme sua nova senha</p>
+        <h1 class="login-title">{{ __('login.redefinir_titulo') }}</h1>
+        <p class="login-subtitle">{{ __('login.redefinir_subtitulo') }}</p>
 
         @if($errors->any())
           <div class="alert alert-danger">{{ $errors->first() }}</div>
@@ -44,7 +43,7 @@
           <input type="hidden" name="email" value="{{ $email }}">
 
           <div class="form-group">
-            <label class="form-label">Nova senha</label>
+            <label class="form-label">{{ __('login.nova_senha') }}</label>
             <div class="input-wrap">
               <input type="password" name="password" id="senhaInput" class="form-control has-icon" placeholder="••••••••" autocomplete="new-password">
               <button type="button" class="input-icon" onclick="toggleSenha('senhaInput', 'eye1')">
@@ -56,7 +55,7 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Confirmar nova senha</label>
+            <label class="form-label">{{ __('login.confirmar_nova_senha') }}</label>
             <div class="input-wrap">
               <input type="password" name="password_confirmation" id="senhaConfirm" class="form-control has-icon" placeholder="••••••••" autocomplete="new-password">
               <button type="button" class="input-icon" onclick="toggleSenha('senhaConfirm', 'eye2')">
@@ -67,7 +66,7 @@
             </div>
           </div>
 
-          <button type="submit" class="btn-submit">Salvar nova senha</button>
+          <button type="submit" class="btn-submit">{{ __('login.salvar_nova_senha') }}</button>
         </form>
       </div>
     </div>

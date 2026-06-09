@@ -13,36 +13,35 @@
     </div>
 
     <div class="cookie-content">
-      <p class="cookie-title">Nós usamos cookies 🍪</p>
+      <p class="cookie-title">{{ __('cookies.titulo') }}</p>
       <p class="cookie-text">
-        Utilizamos cookies para melhorar sua experiência de navegação, personalizar conteúdo e analisar nosso tráfego.
-        Ao continuar no site, você concorda com nossa
-        <a href="#" class="cookie-link">Política de Privacidade</a>.
+        {{ __('cookies.texto') }}
+        <a href="#" class="cookie-link">{{ __('cookies.politica') }}</a>.
       </p>
 
       <div class="cookie-options" id="cookie-options" style="display:none;">
         <label class="cookie-toggle">
           <input type="checkbox" checked disabled>
           <span class="cookie-toggle-slider"></span>
-          <span class="cookie-toggle-label">Essenciais <small>(obrigatório)</small></span>
+          <span class="cookie-toggle-label">{{ __('cookies.essenciais') }} <small>{{ __('cookies.obrigatorio') }}</small></span>
         </label>
         <label class="cookie-toggle">
           <input type="checkbox" id="cookie-analytics" checked>
           <span class="cookie-toggle-slider"></span>
-          <span class="cookie-toggle-label">Análise e desempenho</span>
+          <span class="cookie-toggle-label">{{ __('cookies.analise') }}</span>
         </label>
         <label class="cookie-toggle">
           <input type="checkbox" id="cookie-marketing" checked>
           <span class="cookie-toggle-slider"></span>
-          <span class="cookie-toggle-label">Marketing e personalização</span>
+          <span class="cookie-toggle-label">{{ __('cookies.marketing') }}</span>
         </label>
       </div>
     </div>
 
     <div class="cookie-actions">
-      <button class="cookie-btn-config" onclick="toggleCookieOptions()">Configurar</button>
-      <button class="cookie-btn-essential" onclick="acceptEssential()">Apenas essenciais</button>
-      <button class="cookie-btn-accept" onclick="acceptAllCookies()">Aceitar todos</button>
+      <button class="cookie-btn-config" onclick="toggleCookieOptions()" data-label-config="{{ __('cookies.configurar') }}" data-label-fechar="{{ __('cookies.fechar') }}">{{ __('cookies.configurar') }}</button>
+      <button class="cookie-btn-essential" onclick="acceptEssential()">{{ __('cookies.essenciais_btn') }}</button>
+      <button class="cookie-btn-accept" onclick="acceptAllCookies()">{{ __('cookies.aceitar') }}</button>
     </div>
 
   </div>
@@ -253,7 +252,7 @@
     const btn  = document.querySelector('.cookie-btn-config');
     const open = opts.style.display === 'flex' || opts.style.display === '';
     opts.style.display = open ? 'none' : 'flex';
-    btn.textContent    = open ? 'Configurar' : 'Fechar';
+    btn.textContent    = open ? btn.dataset.labelConfig : btn.dataset.labelFechar;
   };
 
   window.acceptAllCookies = function() {

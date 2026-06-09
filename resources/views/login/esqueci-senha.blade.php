@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarWell — Esqueci a senha</title>
+    <title>{{ __('login.titulo_esqueci') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -18,21 +18,20 @@
         Car<strong>Well</strong>
       </div>
       <div class="visual-hero">
-        <h2>Recupere o<br><span>acesso à sua conta.</span></h2>
-        <p>Enviaremos um link para o seu e-mail para você criar uma nova senha.</p>
+        <h2>{{ __('login.recupere_acesso') }}<br><span>{{ __('login.link_nova_senha') }}</span></h2>
       </div>
       <div class="visual-stats">
-        <div class="visual-stat"><div class="visual-stat-val">+2.400</div><div class="visual-stat-label">Veículos vendidos</div></div>
-        <div class="visual-stat"><div class="visual-stat-val">4.9★</div><div class="visual-stat-label">Avaliação média</div></div>
-        <div class="visual-stat"><div class="visual-stat-val">+8.000</div><div class="visual-stat-label">Clientes satisfeitos</div></div>
-        <div class="visual-stat"><div class="visual-stat-val">100%</div><div class="visual-stat-label">Seguro e confiável</div></div>
+        <div class="visual-stat"><div class="visual-stat-val">+2.400</div><div class="visual-stat-label">{{ __('login.stat_veiculos') }}</div></div>
+        <div class="visual-stat"><div class="visual-stat-val">4.9★</div><div class="visual-stat-label">{{ __('login.stat_avaliacao') }}</div></div>
+        <div class="visual-stat"><div class="visual-stat-val">+8.000</div><div class="visual-stat-label">{{ __('login.stat_clientes') }}</div></div>
+        <div class="visual-stat"><div class="visual-stat-val">100%</div><div class="visual-stat-label">{{ __('login.stat_seguro') }}</div></div>
       </div>
     </div>
 
     <div class="login-form-side">
       <div class="login-box">
-        <h1 class="login-title">Esqueci a senha</h1>
-        <p class="login-subtitle">Informe seu e-mail e enviaremos um link de redefinição</p>
+        <h1 class="login-title">{{ __('login.esqueci_titulo') }}</h1>
+        <p class="login-subtitle">{{ __('login.esqueci_subtitulo') }}</p>
 
         @if(session('status'))
           <div class="alert alert-success">{{ session('status') }}</div>
@@ -45,14 +44,14 @@
         <form method="POST" action="{{ route('esqueci-senha.enviar') }}">
           @csrf
           <div class="form-group">
-            <label class="form-label">E-mail</label>
-            <input type="email" name="email" class="form-control" placeholder="seu@email.com" value="{{ old('email') }}" autofocus>
+            <label class="form-label">{{ __('login.label_email') }}</label>
+            <input type="email" name="email" class="form-control" placeholder="{{ __('login.placeholder_seu_email') }}" value="{{ old('email') }}" autofocus>
           </div>
 
-          <button type="submit" class="btn-submit">Enviar link de redefinição</button>
+          <button type="submit" class="btn-submit">{{ __('login.enviar_link') }}</button>
         </form>
 
-        <a href="{{ route('login-cliente') }}" class="btn-back">← Voltar ao login</a>
+        <a href="{{ route('login-cliente') }}" class="btn-back">{{ __('login.voltar_login') }}</a>
       </div>
     </div>
   </body>

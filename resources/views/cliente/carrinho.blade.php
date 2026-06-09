@@ -123,7 +123,7 @@
           document.getElementById('cart-items').innerHTML = carros.map(c => {
             const qty = cart[c.id] || 1;
             const img = c.capa_path
-              ? `<img src="{{ asset('storage') }}/${c.capa_path}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`
+              ? `<img src="{{ storage_base_url() }}/${c.capa_path}" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'">`
               : '';
 
             return `<div class="cart-item" data-id="${c.id}" data-preco="${c.preco}">

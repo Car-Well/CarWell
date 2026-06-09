@@ -38,7 +38,7 @@
         <p class="add-photo-label">{{ __('perfil.adicionar_foto') }}</p>
         <div class="photo-circle" id="photo-circle">
           @if($cliente->foto)
-            <img id="preview-img" src="{{ asset('storage/' . $cliente->foto) }}"
+            <img id="preview-img" src="{{ storage_url($cliente->foto) }}"
                  alt="Foto de perfil" style="display:block"/>
             <span class="plus-icon" id="plus-icon" style="display:none">+</span>
           @else

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Meus Favoritos — CarWell</title>
+    <title>{{ __('favoritos.titulo') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -29,19 +29,19 @@
 
     <main class="fav-main">
       <div class="fav-header">
-        <h1 class="fav-title">Meus <span>Favoritos</span></h1>
-        <p class="fav-sub">Veículos que você curtiu</p>
+        <h1 class="fav-title">{{ __('favoritos.titulo_h1') }} <span>{{ __('favoritos.titulo_span') }}</span></h1>
+        <p class="fav-sub">{{ __('favoritos.subtitulo') }}</p>
       </div>
 
-      <div id="fav-loading" class="fav-loading">Carregando...</div>
+      <div id="fav-loading" class="fav-loading">{{ __('favoritos.carregando') }}</div>
 
       <div id="fav-empty" class="fav-empty" style="display:none;">
         <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
-        <h3>Nenhum favorito ainda</h3>
-        <p>Clique no coração dos carros que você curtir e eles aparecerão aqui.</p>
-        <a href="{{ route('home') }}">Ver carros disponíveis</a>
+        <h3>{{ __('favoritos.nenhum_titulo') }}</h3>
+        <p>{{ __('favoritos.nenhum_texto') }}</p>
+        <a href="{{ route('home') }}">{{ __('favoritos.ver_carros') }}</a>
       </div>
 
       <div id="fav-grid" style="display:none;"></div>
@@ -49,7 +49,7 @@
 
     <script>
       const FAV_KEY    = 'carwell_favs';
-      const STORAGE_URL = '{{ asset("storage") }}/';
+      const STORAGE_URL = '{{ storage_base_url() }}/';
       const POR_IDS_URL = '{{ route("carros.por-ids") }}';
 
       function getFavs()         { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }
@@ -155,7 +155,7 @@
           grid.style.display = 'grid';
           updateFavBadge();
         } catch(e) {
-          loading.textContent = 'Erro ao carregar favoritos.';
+          loading.textContent = '{{ __("favoritos.erro_carregar") }}';
         }
       }
 
