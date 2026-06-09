@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\ResetSenhaNotification;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -56,5 +57,10 @@ class Cliente extends Authenticatable implements CanResetPasswordContract
     {
         $parts = explode(' ', trim($this->name));
         return strtoupper(($parts[0][0] ?? '') . ($parts[1][0] ?? ''));
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResetSenhaNotification($token));
     }
 }

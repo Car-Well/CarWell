@@ -6,8 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Carro;
 use App\Models\CarroFoto;
 use App\Models\MarcaCarros;
+use App\Services\GcsStorage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class AdmCarroController extends Controller
 {
@@ -72,13 +72,8 @@ class AdmCarroController extends Controller
 
         $carro = Carro::create($data);
 
-        $dir = storage_path('app/public/carros');
-        if (!is_dir($dir)) {
-            @mkdir($dir, 0775, true);
-        }
-
         if ($request->hasFile('capa')) {
-            $path = $request->file('capa')->store('carros', 'public');
+            $path = GcsStorage::store($request->file('capa'), 'carros');
             CarroFoto::create([
                 'carro_id' => $carro->id,
                 'path' => $path,
@@ -95,7 +90,7 @@ class AdmCarroController extends Controller
                 if (!$file) {
                     continue;
                 }
-                $path = $file->store('carros', 'public');
+                $path = GcsStorage::store($file, 'carros');
                 CarroFoto::create([
                     'carro_id' => $carro->id,
                     'path' => $path,
@@ -129,17 +124,12 @@ class AdmCarroController extends Controller
 
         $carro->update(collect($data)->except(['capa', 'fotos'])->toArray());
 
-        $dir = storage_path('app/public/carros');
-        if (!is_dir($dir)) {
-            @mkdir($dir, 0775, true);
-        }
-
         if ($request->hasFile('capa')) {
-            $path = $request->file('capa')->store('carros', 'public');
+            $path = GcsStorage::store($request->file('capa'), 'carros');
 
             $capaAtual = $carro->capa()->first();
             if ($capaAtual) {
-                Storage::disk('public')->delete($capaAtual->path);
+                GcsStorage::delete($capaAtual->path);
                 $capaAtual->update(['path' => $path]);
             } else {
                 CarroFoto::create([
@@ -151,7 +141,7 @@ class AdmCarroController extends Controller
             }
 
             if ($carro->foto && $carro->foto !== $path) {
-                Storage::disk('public')->delete($carro->foto);
+                GcsStorage::delete($carro->foto);
             }
             $carro->foto = $path;
             $carro->save();
@@ -163,7 +153,7 @@ class AdmCarroController extends Controller
                 if (!$file) {
                     continue;
                 }
-                $path = $file->store('carros', 'public');
+                $path = GcsStorage::store($file, 'carros');
                 CarroFoto::create([
                     'carro_id' => $carro->id,
                     'path' => $path,
@@ -190,7 +180,7 @@ class AdmCarroController extends Controller
     public function destroy(Carro $carro)
     {
         foreach ($carro->fotos()->get() as $foto) {
-            Storage::disk('public')->delete($foto->path);
+            GcsStorage::delete($foto->path);
         }
 
         $carro->delete();

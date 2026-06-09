@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\GcsStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -43,7 +44,7 @@ class PerfilController extends Controller
         ];
 
         if ($request->hasFile('foto')) {
-            $path = $request->file('foto')->store('fotos', 'public');
+            $path = GcsStorage::store($request->file('foto'), 'fotos');
             $data['foto'] = $path;
         }
 

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Adm;
 
 use App\Http\Controllers\Controller;
 use App\Models\MarcaCarros;
+use App\Services\GcsStorage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class AdmMarcaController extends Controller
 {
@@ -27,10 +27,10 @@ class AdmMarcaController extends Controller
         ]);
 
         if ($marca->logo) {
-            Storage::disk('public')->delete($marca->logo);
+            GcsStorage::delete($marca->logo);
         }
 
-        $path = $request->file('logo')->store('marcas', 'public');
+        $path = GcsStorage::store($request->file('logo'), 'marcas');
         $marca->update(['logo' => $path]);
 
         return redirect()->route('adm.carros.index')->with('success', 'Logo atualizada com sucesso.');
@@ -39,7 +39,7 @@ class AdmMarcaController extends Controller
     public function destroy(MarcaCarros $marca)
     {
         if ($marca->logo) {
-            Storage::disk('public')->delete($marca->logo);
+            GcsStorage::delete($marca->logo);
         }
 
         $marca->delete();
