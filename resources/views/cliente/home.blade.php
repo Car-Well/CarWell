@@ -146,14 +146,14 @@
         </svg>
       </button>
     </div>
-    <div class="categoria-dropdown">
-      <button type="button" class="filter-btn" onclick="toggleCategorias(this)">
+    <details class="categoria-dropdown">
+      <summary class="filter-btn">
         {{ $categoriaSelecionada ? strtoupper($categoriaSelecionada) : __('home.filtrar') }}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
         </svg>
-      </button>
-      <div class="categoria-menu" id="categoriaMenu">
+      </summary>
+      <div class="categoria-menu">
         @foreach([
           ''           => 'Todas as categorias',
           'esportivo'  => 'Esportivo',
@@ -172,7 +172,7 @@
         </a>
         @endforeach
       </div>
-    </div>
+    </details>
   </form>
 
   <!-- CAR CARDS -->
@@ -222,27 +222,6 @@
   </div>
 
   <script>
-    document.querySelector('.filter-bar').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const params = new URLSearchParams(new FormData(this)).toString();
-      window.location.href = '{{ route("home") }}' + (params ? '?' + params : '') + '#marcas';
-    });
-
-    function toggleCategorias(btn) {
-      const menu = document.getElementById('categoriaMenu');
-      const open = menu.classList.toggle('open');
-      btn.classList.toggle('active', open);
-      if (open) {
-        document.addEventListener('click', function close(e) {
-          if (!menu.closest('.categoria-dropdown').contains(e.target)) {
-            menu.classList.remove('open');
-            btn.classList.remove('active');
-            document.removeEventListener('click', close);
-          }
-        });
-      }
-    }
-
     // Carrossel de destaques
     const heroTotal = document.querySelectorAll('.hero-destaque-card').length;
     if (heroTotal > 0) {

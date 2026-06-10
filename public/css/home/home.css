@@ -560,7 +560,9 @@ body {
   min-width: 180px;
 }
 
-.categoria-menu.open { display: block; }
+details.categoria-dropdown[open] .categoria-menu { display: block; }
+details.categoria-dropdown > summary { list-style: none; }
+details.categoria-dropdown > summary::-webkit-details-marker { display: none; }
 
 .categoria-item {
   display: block;

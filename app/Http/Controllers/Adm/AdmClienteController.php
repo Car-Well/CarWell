@@ -39,8 +39,10 @@ class AdmClienteController extends Controller
             'cliente'  => (int) Cliente::where('perfil', 'cliente')->count(),
             'inativo'  => (int) Cliente::where('perfil', 'inativo')->count(),
         ];
+        $q = (string) $request->get('q', '');
+        $perfil = (string) $request->get('perfil', 'all');
 
-        return view('adm.admGerUser', compact('clientes', 'kpis'));
+        return view('adm.admGerUser', compact('clientes', 'kpis', 'q', 'perfil'));
     }
 
     public function store(Request $request)

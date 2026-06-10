@@ -102,18 +102,21 @@
             </div>
         </div>
 
-        <div class="toolbar">
+        <form class="toolbar" method="GET" action="{{ route('adm.carros.index') }}">
+            @if($status && $status !== 'all')
+                <input type="hidden" name="status" value="{{ $status }}">
+            @endif
             <div class="search-wrap">
                 <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" class="search-input" id="searchInput" placeholder="Buscar marca, modelo ou ano..." oninput="filterCards()">
+                <input type="text" class="search-input" name="q" value="{{ $q }}" placeholder="Buscar marca, modelo ou ano...">
             </div>
             <div class="filter-group">
-                <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">Todos</button>
-                <button class="filter-btn" data-filter="disponivel" onclick="setFilter(this)">Disponíveis</button>
-                <button class="filter-btn" data-filter="reservado" onclick="setFilter(this)">Reservados</button>
-                <button class="filter-btn" data-filter="vendido" onclick="setFilter(this)">Vendidos</button>
+                <a href="{{ route('adm.carros.index', array_filter(['q' => $q])) }}" class="filter-btn {{ $status === 'all' ? 'active' : '' }}" style="text-decoration:none;">Todos</a>
+                <a href="{{ route('adm.carros.index', array_filter(['status' => 'disponivel', 'q' => $q])) }}" class="filter-btn {{ $status === 'disponivel' ? 'active' : '' }}" style="text-decoration:none;">Disponíveis</a>
+                <a href="{{ route('adm.carros.index', array_filter(['status' => 'reservado', 'q' => $q])) }}" class="filter-btn {{ $status === 'reservado' ? 'active' : '' }}" style="text-decoration:none;">Reservados</a>
+                <a href="{{ route('adm.carros.index', array_filter(['status' => 'vendido', 'q' => $q])) }}" class="filter-btn {{ $status === 'vendido' ? 'active' : '' }}" style="text-decoration:none;">Vendidos</a>
             </div>
-        </div>
+        </form>
 
         <div class="cars-grid" id="carsGrid">
             @php
@@ -122,10 +125,7 @@
             @endphp
 
             @forelse($carros as $i => $carro)
-            <div class="car-card"
-                data-status="{{ $carro->status }}"
-                data-search="{{ strtolower($carro->marca.' '.$carro->modelo.' '.$carro->ano) }}"
-                style="animation-delay:{{ $i * 0.06 }}s">
+            <div class="car-card" style="animation-delay:{{ $i * 0.06 }}s">
                 <div class="car-thumb">
                     @if($carro->capa_path)
                         <img class="car-photo" src="{{ storage_url($carro->capa_path) }}" alt="{{ $carro->modelo }}">
@@ -177,18 +177,18 @@
             @empty
             <div class="empty-state" style="display:block; grid-column:1/-1;">
                 <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <h3>Nenhum carro cadastrado</h3>
-                <p>Adicione o primeiro veículo ao estoque.</p>
-                <button class="btn btn-primary" onclick="openModal('create')">Adicionar carro</button>
+                @if($q || $status !== 'all')
+                    <h3>Nenhum resultado</h3>
+                    <p>Tente outro termo ou limpe os filtros.</p>
+                    <a href="{{ route('adm.carros.index') }}" class="btn btn-secondary" style="text-decoration:none;">Limpar filtros</a>
+                @else
+                    <h3>Nenhum carro cadastrado</h3>
+                    <p>Adicione o primeiro veículo ao estoque.</p>
+                    <button class="btn btn-primary" onclick="openModal('create')">Adicionar carro</button>
+                @endif
             </div>
             @endforelse
 
-            <div class="empty-state" id="emptyState" style="display:none; grid-column:1/-1;">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <h3>Nenhum resultado</h3>
-                <p>Tente outro termo ou limpe os filtros.</p>
-                <button class="btn btn-secondary" onclick="clearFilters()">Limpar filtros</button>
-            </div>
         </div>
 
     </main>
@@ -762,32 +762,6 @@
             content.style.display = 'none';
         }
 
-        let currentFilter = 'all';
-        function setFilter(el) {
-            currentFilter = el.dataset.filter;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            el.classList.add('active');
-            applyFilters();
-        }
-        function filterCards() { applyFilters(); }
-        function applyFilters() {
-            const q = document.getElementById('searchInput').value.toLowerCase().trim();
-            const cards = document.querySelectorAll('.car-card');
-            let visible = 0;
-            cards.forEach(card => {
-                const ok = (currentFilter==='all'||card.dataset.status===currentFilter) && (!q||card.dataset.search.includes(q));
-                card.style.display = ok ? '' : 'none';
-                if(ok) visible++;
-            });
-            document.getElementById('emptyState').style.display = visible===0 ? '' : 'none';
-        }
-        function clearFilters() {
-            document.getElementById('searchInput').value='';
-            currentFilter='all';
-            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-            document.querySelector('[data-filter="all"]').classList.add('active');
-            applyFilters();
-        }
         function updateLogoAction(select) {
             const opt = select.options[select.selectedIndex];
             document.getElementById('formLogo').action = opt.dataset.action || '#';

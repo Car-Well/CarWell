@@ -45,7 +45,9 @@ class AdmPedidoController extends Controller
 
         $clientes = Cliente::whereNotNull('email_verified_at')->orderBy('name')->get();
         $carros = Carro::whereIn('status', ['disponivel', 'reservado'])->orderBy('marca')->get();
-        return view('adm.admGerPed', compact('pedidos', 'kpis', 'clientes', 'carros'));
+        $q = (string) $request->get('q', '');
+        $status = (string) $request->get('status', 'all');
+        return view('adm.admGerPed', compact('pedidos', 'kpis', 'clientes', 'carros', 'q', 'status'));
     }
 
     public function store(Request $request)

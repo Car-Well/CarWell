@@ -82,18 +82,21 @@
             </div>
         </div>
 
-        <div class="toolbar">
+        <form class="toolbar" method="GET" action="{{ route('adm.usuarios.index') }}">
+            @if($perfil && $perfil !== 'all')
+                <input type="hidden" name="perfil" value="{{ $perfil }}">
+            @endif
             <div class="search-wrap">
                 <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" class="search-input" id="searchInput" placeholder="Buscar nome, email ou perfil..." oninput="filterRows()">
+                <input type="text" class="search-input" name="q" value="{{ $q }}" placeholder="Buscar nome, email ou perfil...">
             </div>
             <div class="filter-group">
-                <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">Todos</button>
-                <button class="filter-btn" data-filter="admin" onclick="setFilter(this)">Admins</button>
-                <button class="filter-btn" data-filter="cliente" onclick="setFilter(this)">Clientes</button>
-                <button class="filter-btn" data-filter="inativo" onclick="setFilter(this)">Inativos</button>
+                <a href="{{ route('adm.usuarios.index', array_filter(['q' => $q])) }}" class="filter-btn {{ $perfil === 'all' ? 'active' : '' }}" style="text-decoration:none;">Todos</a>
+                <a href="{{ route('adm.usuarios.index', array_filter(['perfil' => 'admin', 'q' => $q])) }}" class="filter-btn {{ $perfil === 'admin' ? 'active' : '' }}" style="text-decoration:none;">Admins</a>
+                <a href="{{ route('adm.usuarios.index', array_filter(['perfil' => 'cliente', 'q' => $q])) }}" class="filter-btn {{ $perfil === 'cliente' ? 'active' : '' }}" style="text-decoration:none;">Clientes</a>
+                <a href="{{ route('adm.usuarios.index', array_filter(['perfil' => 'inativo', 'q' => $q])) }}" class="filter-btn {{ $perfil === 'inativo' ? 'active' : '' }}" style="text-decoration:none;">Inativos</a>
             </div>
-        </div>
+        </form>
 
         <div class="table-card">
             <table class="data-table">
@@ -119,8 +122,7 @@
                         $initials = strtoupper(substr($parts[0]??'',0,1).substr($parts[1]??'',0,1));
                         $nascBr   = $u->nascimento ? $u->nascimento->format('d/m/Y') : '';
                     @endphp
-                    <tr data-perfil="{{ $u->perfil ?? 'cliente' }}"
-                        data-search="{{ strtolower(($u->name??'').' '.($u->email??'').' '.($u->perfil??'')) }}">
+                    <tr>
                         <td>
                             <div class="user-cell">
                                 @if($u->foto)
@@ -153,18 +155,18 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" style="text-align:center;color:#9EA19C;padding:2rem;">Nenhum usuário cadastrado</td>
+                        <td colspan="6" style="text-align:center;color:#9EA19C;padding:2rem;">
+                            @if($q || $perfil !== 'all')
+                                Nenhum resultado. <a href="{{ route('adm.usuarios.index') }}" style="color:#0F6E56;">Limpar filtros</a>
+                            @else
+                                Nenhum usuário cadastrado
+                            @endif
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
 
-            <div class="empty-state" id="emptyState" style="display:none;">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <h3>Nenhum resultado</h3>
-                <p>Tente outro termo ou limpe os filtros.</p>
-                <button class="btn btn-secondary" onclick="clearFilters()">Limpar filtros</button>
-            </div>
         </div>
 
     </main>
@@ -473,37 +475,6 @@
             reader.readAsDataURL(file);
         }
 
-        let currentFilter = 'all';
-        function setFilter(el) {
-            currentFilter = el.dataset.filter;
-            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-            el.classList.add('active');
-            applyFilters();
-        }
-
-        function filterRows() { 
-            applyFilters(); 
-        }
-
-        function applyFilters() {
-            const q = document.getElementById('searchInput').value.toLowerCase().trim();
-            const rows = document.querySelectorAll('#tableBody tr');
-            let visible = 0;
-            rows.forEach(row => {
-                const ok = (currentFilter==='all'||row.dataset.perfil===currentFilter) && (!q||row.dataset.search.includes(q));
-                row.style.display = ok ? '' : 'none';
-                if(ok) visible++;
-            });
-            document.getElementById('emptyState').style.display = visible===0 ? '' : 'none';
-        }
-        
-        function clearFilters() {
-            document.getElementById('searchInput').value='';
-            currentFilter='all';
-            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-            document.querySelector('[data-filter="all"]').classList.add('active');
-            applyFilters();
-        }
         document.addEventListener('keydown',e=>{ if(e.key==='Escape'){['create','edit','delete'].forEach(closeModal);document.body.style.overflow='';} });
     </script>
 </body>

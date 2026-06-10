@@ -42,8 +42,10 @@ class AdmCarroController extends Controller
         ];
 
         $marcas = MarcaCarros::orderBy('nome')->get();
+        $q = (string) $request->get('q', '');
+        $status = (string) $request->get('status', 'all');
 
-        return view('adm.admGerCar', compact('carros', 'kpis', 'marcas'));
+        return view('adm.admGerCar', compact('carros', 'kpis', 'marcas', 'q', 'status'));
     }
 
     public function store(Request $request)

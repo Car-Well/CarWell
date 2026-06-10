@@ -82,19 +82,22 @@
             </div>
         </div>
 
-        <div class="toolbar">
+        <form class="toolbar" method="GET" action="{{ route('adm.pedidos.index') }}">
+            @if($status && $status !== 'all')
+                <input type="hidden" name="status" value="{{ $status }}">
+            @endif
             <div class="search-wrap">
                 <svg class="search-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <input type="text" class="search-input" id="searchInput" placeholder="Buscar cliente, carro ou nº do pedido..." oninput="filterRows()">
+                <input type="text" class="search-input" name="q" value="{{ $q }}" placeholder="Buscar cliente, carro ou nº do pedido...">
             </div>
             <div class="filter-group">
-                <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">Todos</button>
-                <button class="filter-btn" data-filter="em_separacao" onclick="setFilter(this)">Em separação</button>
-                <button class="filter-btn" data-filter="a_caminho" onclick="setFilter(this)">A caminho</button>
-                <button class="filter-btn" data-filter="entregue" onclick="setFilter(this)">Entregues</button>
-                <button class="filter-btn" data-filter="finalizado" onclick="setFilter(this)">Finalizados</button>
+                <a href="{{ route('adm.pedidos.index', array_filter(['q' => $q])) }}" class="filter-btn {{ $status === 'all' ? 'active' : '' }}" style="text-decoration:none;">Todos</a>
+                <a href="{{ route('adm.pedidos.index', array_filter(['status' => 'em_separacao', 'q' => $q])) }}" class="filter-btn {{ $status === 'em_separacao' ? 'active' : '' }}" style="text-decoration:none;">Em separação</a>
+                <a href="{{ route('adm.pedidos.index', array_filter(['status' => 'a_caminho', 'q' => $q])) }}" class="filter-btn {{ $status === 'a_caminho' ? 'active' : '' }}" style="text-decoration:none;">A caminho</a>
+                <a href="{{ route('adm.pedidos.index', array_filter(['status' => 'entregue', 'q' => $q])) }}" class="filter-btn {{ $status === 'entregue' ? 'active' : '' }}" style="text-decoration:none;">Entregues</a>
+                <a href="{{ route('adm.pedidos.index', array_filter(['status' => 'finalizado', 'q' => $q])) }}" class="filter-btn {{ $status === 'finalizado' ? 'active' : '' }}" style="text-decoration:none;">Finalizados</a>
             </div>
-        </div>
+        </form>
 
         <div class="table-card">
             <table class="data-table">
@@ -131,8 +134,7 @@
                         $veiculo  = ($p->carro->marca ?? '').' '.($p->carro->modelo ?? '');
                         $numero   = '#'.str_pad($p->id, 4, '0', STR_PAD_LEFT);
                     @endphp
-                    <tr data-status="{{ $p->status }}"
-                        data-search="{{ strtolower($numero.' '.$nomeCliente.' '.$veiculo) }}">
+                    <tr>
                         <td><span class="order-num">{{ $numero }}</span></td>
                         <td>
                             <div class="user-cell">
@@ -175,18 +177,18 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" style="text-align:center;color:#9EA19C;padding:2rem;">Nenhum pedido cadastrado</td>
+                        <td colspan="8" style="text-align:center;color:#9EA19C;padding:2rem;">
+                            @if($q || $status !== 'all')
+                                Nenhum resultado. <a href="{{ route('adm.pedidos.index') }}" style="color:#0F6E56;">Limpar filtros</a>
+                            @else
+                                Nenhum pedido cadastrado
+                            @endif
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
 
-            <div class="empty-state" id="emptyState" style="display:none;">
-                <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <h3>Nenhum resultado</h3>
-                <p>Tente outro termo ou limpe os filtros.</p>
-                <button class="btn btn-secondary" onclick="clearFilters()">Limpar filtros</button>
-            </div>
         </div>
 
     </main>
@@ -580,33 +582,6 @@
             setTimeout(()=>btn.textContent='Copiar código',2000); 
         }
 
-        let currentFilter = 'all';
-        function setFilter(el) { 
-            currentFilter=el.dataset.filter; 
-            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); 
-            el.classList.add('active'); 
-            applyFilters(); 
-        }
-
-        function filterRows() { 
-            applyFilters(); 
-        }
-        
-        function applyFilters() {
-            const q=document.getElementById('searchInput').value.toLowerCase().trim();
-            const rows=document.querySelectorAll('#tableBody tr');
-            let visible=0;
-            rows.forEach(row=>{ const ok=(currentFilter==='all'||row.dataset.status===currentFilter)&&(!q||row.dataset.search.includes(q)); row.style.display=ok?'':'none'; if(ok) visible++; });
-            document.getElementById('emptyState').style.display=visible===0?'':'none';
-        }
-
-        function clearFilters() { 
-            document.getElementById('searchInput').value=''; 
-            currentFilter='all'; 
-            document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active')); 
-            document.querySelector('[data-filter="all"]').classList.add('active'); applyFilters(); 
-        }
-        
         document.addEventListener('keydown',e=>{ if(e.key==='Escape'){['create','edit','delete'].forEach(closePopUp);document.body.style.overflow='';} });
     </script>
 </body>
