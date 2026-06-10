@@ -1,7 +1,19 @@
 <?php
 
 return [
-    'titulo_login'           => 'Carwell – Login',
+    'titulo_login'           => 'CarWell — Sign in',
+    'titulo_login_adm'       => 'CarWell — Admin Access',
+    // login-cliente
+    'bemvindo'               => 'Welcome back',
+    'entre_conta'            => 'Sign in to your account to continue',
+    'hero_titulo'            => 'Your dream car is waiting.',
+    'hero_subtitulo'         => 'Find premium vehicles with transparency, security and the best car buying experience.',
+    'label_senha'            => 'Password',
+    'lembrar'                => 'Remember me',
+    'entrar_conta'           => 'Sign in to my account',
+    'voltar_site'            => '← Back to site',
+    'criar_conta'            => 'Create free account',
+    'titulo_login_original'  => 'Carwell – Login',
     'titulo_registrar'       => 'Carwell – Create Account',
     'titulo_confirmar'       => 'Carwell – Confirm Email',
     'ola_bem_vindo'          => 'HELLO , WELCOME',

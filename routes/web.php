@@ -15,6 +15,7 @@ use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CarroController;
 use App\Http\Controllers\PedidoClienteController;
+use App\Http\Controllers\CarrinhoController;
 use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
 
@@ -118,8 +119,11 @@ Route::middleware('cliente.autenticado')->group(function () {
     Route::post('/perfil/endereco', [PerfilController::class, 'updateEndereco'])->name('perfil.endereco.update');
     Route::post('/logout', [PerfilController::class, 'logout'])->name('cliente.logout');
 
-    Route::get('/carrinho', fn() => view('cliente.carrinho'))->name('carrinho');
-    Route::get('/checkout', fn() => view('cliente.checkout'))->name('checkout');
+    Route::get('/carrinho',                    [CarrinhoController::class, 'index'])->name('carrinho');
+    Route::post('/carrinho/{carro}/adicionar', [CarrinhoController::class, 'adicionar'])->name('carrinho.adicionar');
+    Route::post('/carrinho/{carro}/remover',   [CarrinhoController::class, 'remover'])->name('carrinho.remover');
+    Route::post('/carrinho/limpar',            [CarrinhoController::class, 'limpar'])->name('carrinho.limpar');
+    Route::get('/checkout',                    [CarrinhoController::class, 'checkout'])->name('checkout');
 
     Route::get('/meus-pedidos', [PedidoClienteController::class, 'index'])->name('pedidos.index');
     Route::post('/pedido', [PedidoClienteController::class, 'store'])->name('pedido.store');

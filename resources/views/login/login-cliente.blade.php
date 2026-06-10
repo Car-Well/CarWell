@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>CarWell — Entrar</title>
+      <title>{{ __('login.titulo_login') }}</title>
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -19,34 +19,34 @@
         </div>
 
         <div class="visual-hero">
-            <h2>O carro dos seus<br><span>sonhos te espera.</span></h2>
-            <p>Encontre veículos premium com transparência, segurança e a melhor experiência de compra do Brasil.</p>
+            <h2>{{ __('login.hero_titulo') }}</h2>
+            <p>{{ __('login.hero_subtitulo') }}</p>
         </div>
 
         <div class="visual-stats">
             <div class="visual-stat">
                 <div class="visual-stat-val">+2.400</div>
-                <div class="visual-stat-label">Veículos vendidos</div>
+                <div class="visual-stat-label">{{ __('login.stat_veiculos') }}</div>
             </div>
             <div class="visual-stat">
                 <div class="visual-stat-val">4.9★</div>
-                <div class="visual-stat-label">Avaliação média</div>
+                <div class="visual-stat-label">{{ __('login.stat_avaliacao') }}</div>
             </div>
             <div class="visual-stat">
                 <div class="visual-stat-val">+8.000</div>
-                <div class="visual-stat-label">Clientes satisfeitos</div>
+                <div class="visual-stat-label">{{ __('login.stat_clientes') }}</div>
             </div>
             <div class="visual-stat">
                 <div class="visual-stat-val">100%</div>
-                <div class="visual-stat-label">Seguro e confiável</div>
+                <div class="visual-stat-label">{{ __('login.stat_seguro') }}</div>
             </div>
         </div>
     </div>
 
     <div class="login-form-side">
         <div class="login-box">
-            <h1 class="login-title">Bem-vindo de volta</h1>
-            <p class="login-subtitle">Entre com sua conta para continuar</p>
+            <h1 class="login-title">{{ __('login.bemvindo') }}</h1>
+            <p class="login-subtitle">{{ __('login.entre_conta') }}</p>
 
             @if(session('status'))
                 <div class="alert alert-success">{{ session('status') }}</div>
@@ -60,7 +60,7 @@
                 @csrf
 
                 <div class="form-group">
-                    <label class="form-label">E-mail</label>
+                    <label class="form-label">{{ __('login.placeholder_email') }}</label>
                     <input
                         type="email"
                         name="email"
@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Senha</label>
+                    <label class="form-label">{{ __('login.label_senha') }}</label>
                     <div class="input-wrap">
                         <input
                             type="password"
@@ -96,24 +96,24 @@
                 <div class="form-row">
                     <label class="remember-wrap">
                         <input type="checkbox" name="remember">
-                        Lembrar de mim
+                        {{ __('login.lembrar') }}
                     </label>
-                    <a href="{{ route('esqueci-senha') }}" class="forgot-link">Esqueci a senha</a>
+                    <a href="{{ route('esqueci-senha') }}" class="forgot-link">{{ __('login.esqueci_senha') }}</a>
                 </div>
 
-                <button type="submit" class="btn-submit">Entrar na minha conta</button>
+                <button type="submit" class="btn-submit">{{ __('login.entrar_conta') }}</button>
             </form>
 
-            <a href="{{ route('home') }}" class="btn-back">← Voltar ao site</a>
+            <a href="{{ route('home') }}" class="btn-back">{{ __('login.voltar_site') }}</a>
 
             <div class="divider">
                 <div class="divider-line"></div>
-                <span class="divider-text">Não tem uma conta?</span>
+                <span class="divider-text">{{ __('login.nao_tem_conta') }}</span>
                 <div class="divider-line"></div>
             </div>
 
             <p class="signup-row">
-                <a href="{{ route('registrar') }}">Criar conta gratuita</a>
+                <a href="{{ route('registrar') }}">{{ __('login.criar_conta') }}</a>
             </p>
         </div>
     </div>

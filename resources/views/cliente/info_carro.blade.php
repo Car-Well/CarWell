@@ -120,7 +120,14 @@
 
       </div>
 
-      <button class="btn-comprar" onclick="addToCart()">{{ __('info_carro.comprar') }}</button>
+      @auth('cliente')
+        <form method="POST" action="{{ route('carrinho.adicionar', $carro->id) }}">
+          @csrf
+          <button type="submit" class="btn-comprar">{{ __('info_carro.comprar') }}</button>
+        </form>
+      @else
+        <a href="{{ route('login-cliente') }}" class="btn-comprar" style="text-align:center; text-decoration:none;">{{ __('info_carro.comprar') }}</a>
+      @endauth
     </div>
 
   </section>
@@ -207,14 +214,6 @@
       }
     }
 
-    function addToCart() {
-      const id = {{ $carro ? $carro->id : 'null' }};
-      if (!id) return;
-      const cart = JSON.parse(localStorage.getItem('carwell_carrinho') || '{}');
-      cart[id] = (cart[id] || 0) + 1;
-      localStorage.setItem('carwell_carrinho', JSON.stringify(cart));
-      window.location.href = "{{ route('carrinho') }}";
-    }
   </script>
 
   @if($carro && $carro->fotos->count() > 1)

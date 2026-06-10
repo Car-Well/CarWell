@@ -13,7 +13,7 @@ class StripeController extends Controller
 {
     public function checkout(Request $request)
     {
-        $carroIds = array_filter(array_map('intval', $request->input('carros', [])));
+        $carroIds = array_filter(array_map('intval', session('carrinho', [])));
         $carros   = Carro::whereIn('id', $carroIds)->get();
 
         if ($carros->isEmpty()) {
@@ -70,6 +70,8 @@ class StripeController extends Controller
 
             $carro->update(['status' => 'reservado']);
         }
+
+        session()->forget('carrinho');
 
         if (! $ultimoPedido) {
             return redirect()->route('home');

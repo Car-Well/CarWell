@@ -30,7 +30,12 @@
       <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'nav-active' : '' }} nav-hover-btn">{{ __('nav.home') }}</a>
       <a href="{{ route('home') }}#marcas" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
       <a href="{{ route('home') }}#por-que" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
-      <a href="{{ route('carrinho') }}" class="{{ request()->routeIs('carrinho') ? 'nav-active' : '' }} nav-hover-btn">{{ __('nav.carrinho') }}</a>
+      <a href="{{ route('carrinho') }}" class="{{ request()->routeIs('carrinho') ? 'nav-active' : '' }} nav-hover-btn">
+      {{ __('nav.carrinho') }}
+      @if(count(session('carrinho', [])) > 0)
+        <span class="cart-badge">{{ count(session('carrinho', [])) }}</span>
+      @endif
+    </a>
       @auth('cliente')
       <a href="{{ route('pedidos.index') }}" class="{{ request()->routeIs('pedidos.index') ? 'nav-active' : '' }} nav-hover-btn">{{ __('nav.meus_pedidos') }}</a>
       @endauth

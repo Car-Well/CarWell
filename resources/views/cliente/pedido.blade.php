@@ -109,8 +109,6 @@
   </main>
 
   <script>
-    localStorage.removeItem('carwell_carrinho');
-
     function toggleMenu() {
       const links = document.querySelector('.nav-links');
       if (links.style.display === 'flex') {
