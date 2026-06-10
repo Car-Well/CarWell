@@ -3,10 +3,11 @@
 namespace App\Http\Controllers\Adm;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin;
 use App\Models\Cliente;
+use App\Services\GcsStorage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Storage;
 
 class AdmClienteController extends Controller
 {
@@ -59,10 +60,17 @@ class AdmClienteController extends Controller
         $data['email_verified_at'] = now();
 
         if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('clientes', 'public');
+            $data['foto'] = GcsStorage::store($request->file('foto'), 'clientes');
         }
 
-        Cliente::create($data);
+        $cliente = Cliente::create($data);
+
+        if (($data['perfil'] ?? '') === 'admin') {
+            Admin::updateOrCreate(
+                ['email' => $data['email']],
+                ['name' => $data['name'], 'password' => $data['password']]
+            );
+        }
 
         return redirect()->route('adm.usuarios.index')->with('success', 'Usuário criado com sucesso.');
     }
@@ -70,14 +78,21 @@ class AdmClienteController extends Controller
     public function update(Request $request, Cliente $cliente)
     {
         $data = $request->validate([
-            'name'       => ['required', 'string', 'max:255'],
-            'email'      => ['required', 'email', 'unique:clientes,email,' . $cliente->id],
-            'password'   => ['nullable', 'string', 'min:6', 'confirmed'],
-            'telefone'   => ['nullable', 'string', 'max:20'],
-            'nascimento' => ['nullable', 'date'],
-            'endereco'   => ['nullable', 'string', 'max:255'],
-            'perfil'     => ['required', 'in:admin,cliente,inativo'],
-            'foto'       => ['nullable', 'image', 'max:2048'],
+            'name'            => ['required', 'string', 'max:255'],
+            'email'           => ['required', 'email', 'unique:clientes,email,' . $cliente->id],
+            'password'        => ['nullable', 'string', 'min:6', 'confirmed'],
+            'telefone'        => ['nullable', 'string', 'max:20'],
+            'nascimento'      => ['nullable', 'date'],
+            'perfil'          => ['required', 'in:admin,cliente,inativo'],
+            'foto'            => ['nullable', 'image', 'max:2048'],
+            'cep'             => ['nullable', 'string', 'max:9'],
+            'rua'             => ['nullable', 'string', 'max:255'],
+            'numero'          => ['nullable', 'string', 'max:20'],
+            'bairro'          => ['nullable', 'string', 'max:100'],
+            'cidade'          => ['nullable', 'string', 'max:100'],
+            'estado'          => ['nullable', 'string', 'size:2'],
+            'complemento'     => ['nullable', 'string', 'max:100'],
+            'ponto_referencia'=> ['nullable', 'string', 'max:255'],
         ]);
 
         if (empty($data['password'])) {
@@ -87,13 +102,20 @@ class AdmClienteController extends Controller
         }
 
         if ($request->hasFile('foto')) {
-            if ($cliente->foto) {
-                Storage::disk('public')->delete($cliente->foto);
-            }
-            $data['foto'] = $request->file('foto')->store('clientes', 'public');
+            GcsStorage::delete($cliente->foto);
+            $data['foto'] = GcsStorage::store($request->file('foto'), 'clientes');
         }
 
         $cliente->update($data);
+
+        if (($data['perfil'] ?? '') === 'admin') {
+            Admin::updateOrCreate(
+                ['email' => $cliente->email],
+                ['name' => $cliente->name, 'password' => $cliente->password]
+            );
+        } else {
+            Admin::where('email', $cliente->email)->delete();
+        }
 
         return redirect()->route('adm.usuarios.index')->with('success', 'Usuário atualizado com sucesso.');
     }

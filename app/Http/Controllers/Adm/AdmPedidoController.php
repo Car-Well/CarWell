@@ -80,8 +80,8 @@ class AdmPedidoController extends Controller
 
         $pedido->update($data);
 
-        if ($data['status'] === 'finalizado') {
-            $pedido->carro?->update(['status' => 'vendido']);
+        if (in_array($data['status'], ['entregue', 'finalizado'])) {
+            $pedido->carro?->update(['status' => 'vendido', 'destacado' => false]);
         }
 
         return redirect()->route('adm.pedidos.index')->with('success', 'Pedido atualizado com sucesso.');

@@ -33,7 +33,7 @@ class HomeController extends Controller
 
         $carros     = $query->latest()->get();
         $marcas     = MarcaCarros::whereNotNull('logo')->orderBy('nome')->get();
-        $destacados = Carro::with('capa')->where('destacado', true)->where('status', '!=', 'vendido')->latest()->get();
+        $destacados = Carro::with('capa')->where('destacado', true)->where('status', 'disponivel')->latest()->get();
 
         return view('cliente.home', compact('carros', 'marcas', 'destacados', 'busca', 'marcaSelecionada', 'categoriaSelecionada'));
     }
