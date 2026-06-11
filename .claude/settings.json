@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php artisan *)",
+      "Bash(php -r \"echo php_ini_loaded_file\\(\\);\")",
+      "Bash(findstr /i \"SESSION_DRIVER SESSION_LIFETIME\" .env)",
+      "Bash(Select-String -Pattern \"SESSION\" .env)",
+      "Bash(php -r \"echo config\\('session.driver'\\);\")",
+      "Bash(grep -n \"pdo_pgsql\\\\|pgsql\" /c/xampp/php/php.ini)",
+      "Read(//c/xampp/php/**)",
+      "Bash(grep -E \"\\\\.\\(css|scss|sass\\)$\")"
+    ],
+    "additionalDirectories": [
+      "C:\\xampp\\php"
+    ]
+  }
+}

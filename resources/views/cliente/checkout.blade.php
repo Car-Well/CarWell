@@ -81,13 +81,13 @@
       @if($metodo === 'pix')
         <div style="display:flex; flex-direction:column; align-items:center; gap:20px; padding:16px 0;">
 
-          <p style="font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:800; text-transform:uppercase; color:#1a2e4a;">Escaneie o QR Code com o app do seu banco</p>
+          <p style="font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:800; text-transform:uppercase; color:#1A1C19;">Escaneie o QR Code com o app do seu banco</p>
 
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=190x190&data=00020126580014BR.GOV.BCB.PIX0136carwell%40pagamento.com.br5204000053039865802BR5907CarWell6009SAOPAULO6304ABCD"
                alt="QR Code Pix"
                style="border:4px solid #f3f4f6; border-radius:12px; padding:8px;">
 
-          <p style="font-size:0.82rem; color:#6b7280;">Chave Pix: <strong style="color:#1a2e4a;">carwell@pagamento.com.br</strong></p>
+          <p style="font-size:0.82rem; color:#6B6E69;">Chave Pix: <strong style="color:#1A1C19;">carwell@pagamento.com.br</strong></p>
 
           <div style="width:100%; max-width:440px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:10px; padding:20px; text-align:center;">
             <p style="font-size:0.8rem; color:#15803d; margin-bottom:14px;">Após o pagamento, clique no botão abaixo para confirmar:</p>

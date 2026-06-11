@@ -11,7 +11,7 @@
     <style>
       .fav-main       { max-width: 1200px; margin: 0 auto; padding: 56px 32px 80px; }
       .fav-header     { margin-bottom: 36px; }
-      .fav-title      { font-family:'Syne',sans-serif; font-size:1.9rem; font-weight:800; color:#1a2e4a; }
+      .fav-title      { font-family:'Syne',sans-serif; font-size:1.9rem; font-weight:800; color:#1A1C19; }
       .fav-title span { color:#0F6E56; }
       .fav-sub        { font-size:0.82rem; color:#9EA19C; margin-top:4px; }
       #fav-grid       { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; }
@@ -103,7 +103,7 @@
           ? `<img src="${STORAGE_URL}${c.capa_path}" alt="${nome}" class="car-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
           : '';
         const placeholderStyle = c.capa_path ? ' style="display:none"' : '';
-        const placeholder = `<div class="car-img-placeholder"${placeholderStyle}><svg viewBox="0 0 120 70" fill="none"><path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1e4d8c" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="10" y="43" width="100" height="16" rx="8" fill="#1a2e4a" opacity="0.7"/><circle cx="28" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="28" cy="60" r="5" fill="#c8daea"/><circle cx="92" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="92" cy="60" r="5" fill="#c8daea"/></svg></div>`;
+        const placeholder = `<div class="car-img-placeholder"${placeholderStyle}><svg viewBox="0 0 120 70" fill="none"><path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1D9E75" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="10" y="43" width="100" height="16" rx="8" fill="#0F6E56" opacity="0.7"/><circle cx="28" cy="60" r="9" fill="#0F6E56" opacity="0.7"/><circle cx="28" cy="60" r="5" fill="#E1F5EE"/><circle cx="92" cy="60" r="9" fill="#0F6E56" opacity="0.7"/><circle cx="92" cy="60" r="5" fill="#E1F5EE"/></svg></div>`;
         const precoHtml = c.preco ? `<p class="car-price">${fmtPreco(c.preco)}</p>` : '';
 
         return `<a href="${c.url}" class="car-card" data-fav-id="${c.id}">

@@ -81,20 +81,19 @@ body {
   width: 100%;
   background: var(--input-bg);
   border: 1.5px solid var(--input-border);
-  border-radius: 30px;
-  padding: 14px 48px 14px 22px;
-  font-family: var(--font-main);
-  font-size: 0.82rem;
-  font-weight: 700;
+  border-radius: 10px;
+  padding: 14px 48px 14px 18px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 400;
   color: var(--dark-navy);
-  letter-spacing: 0.07em;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
  
 .input-group input::placeholder {
-  color: var(--dark-navy);
-  opacity: 0.65;
+  color: var(--text-muted);
+  opacity: 1;
 }
  
 .input-group input:focus {
@@ -136,7 +135,7 @@ body {
   flex: 1;
   padding: 14px 10px;
   border: none;
-  border-radius: 30px;
+  border-radius: 10px;
   font-family: var(--font-main);
   font-size: 0.88rem;
   font-weight: 800;

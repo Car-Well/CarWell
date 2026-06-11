@@ -29,111 +29,6 @@ body {
   color: var(--text-primary);
 }
 
-/* NAV - igual ao home base */
-.main-nav {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  padding: 1rem 2rem;
-  box-sizing: border-box;
-}
-
-.nav-left,
-.nav-right-spacer {
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-
-.nav-logo { width: 5rem; }
-
-.nav-right-spacer { justify-content: flex-end; }
-
-.nav-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.nav-links { display: flex; gap: 1rem; }
-
-.nav-hover-btn {
-  position: relative;
-  margin: 0 1.25rem;
-  font-family: var(--font-display);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  color: var(--text-primary);
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.nav-hover-btn::after {
-  content: "";
-  position: absolute;
-  bottom: -0.125rem;
-  left: 0;
-  height: 0.125rem;
-  width: 100%;
-  background-color: currentColor;
-  transform-origin: bottom right;
-  transform: scaleX(0);
-  transition: transform 300ms cubic-bezier(0.65, 0.05, 0.36, 1);
-}
-
-.nav-hover-btn:hover::after {
-  transition: 0.8s;
-  transform-origin: bottom left;
-  transform: scaleX(1);
-  color: var(--green);
-}
-
-.nav-hover-btn:hover { color: var(--green); }
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.nav-flag { font-size: 1.3rem; cursor: pointer; }
-
-.nav-login {
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  text-decoration: none;
-  transition: color 0.18s;
-}
-
-.nav-login:hover { color: var(--green); }
-
-.nav-profile {
-  width: 32px; height: 32px;
-  background: var(--green-light);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-}
-
-.hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  padding: 4px;
-}
-
-.hamburger span {
-  width: 24px; height: 2.5px;
-  background: var(--text-primary);
-  border-radius: 2px;
-  display: block;
-}
-
 /* ============================================
    ACORDEÃO
    ============================================ */
@@ -365,9 +260,9 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.10);
   transition: background 0.18s, box-shadow 0.18s;
   z-index: 2;
-  color: #1a2e4a;
+  color: var(--text-primary);
 }
-.photo-arrow:hover { background: #f0f0ec; box-shadow: 0 4px 14px rgba(0,0,0,0.14); }
+.photo-arrow:hover { background: var(--bg-secondary); box-shadow: 0 4px 14px rgba(0,0,0,0.14); }
 .photo-arrow-left  { left: 10px; }
 .photo-arrow-right { right: 10px; }
 
@@ -429,7 +324,7 @@ body {
   margin-top: 12px;
   background: none;
   border: 1.5px solid var(--green-dark);
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 7px 16px;
   font-family: var(--font-display);
   font-size: 0.7rem;
@@ -581,7 +476,7 @@ body {
   background: var(--green-dark);
   color: #fff;
   border: none;
-  border-radius: 30px;
+  border-radius: 10px;
   padding: 12px 32px;
   font-family: var(--font-display);
   font-size: 0.82rem;
@@ -730,7 +625,7 @@ body {
 }
 
 .related-img-placeholder.ferrari { background: linear-gradient(135deg, #1a1a2e 0%, #b91c1c 100%); }
-.related-img-placeholder.bmw { background: linear-gradient(135deg, #1a2e4a 0%, #2d4a6e 100%); }
+.related-img-placeholder.bmw { background: linear-gradient(135deg, #1A1C19 0%, #2d3a2e 100%); }
 .related-img-placeholder.mercedes { background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%); }
 .related-img-placeholder.lambo { background: linear-gradient(135deg, #1a1a1a 0%, #f59e0b 100%); }
 .related-img-placeholder.fiat { background: linear-gradient(135deg, #e53e3e 0%, #fc8181 100%); }

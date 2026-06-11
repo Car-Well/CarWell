@@ -20,14 +20,14 @@
 
 <div class="notif-overlay" id="notifOverlay" onclick="closeNotifPopup()"></div>
 
-<nav class="main-nav" style="border-bottom: 1px solid rgba(0,0,0,0.1);">
+<nav class="main-nav">
   <div class="nav-left">
     <img src="{{ asset('img/logo.png') }}" alt="logo" class="nav-logo" />
   </div>
 
   <div class="nav-center">
     <div class="nav-links">
-      <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'nav-active' : '' }} nav-hover-btn">{{ __('nav.home') }}</a>
+      <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'nav-active' : '' }} nav-hover-btn" id="nav-link-home">{{ __('nav.home') }}</a>
       <a href="{{ route('home') }}#marcas" class="nav-hover-btn">{{ __('nav.comprar') }}</a>
       <a href="{{ route('home') }}#por-que" class="nav-hover-btn">{{ __('nav.sobre') }}</a>
       <a href="{{ route('carrinho') }}" class="{{ request()->routeIs('carrinho') ? 'nav-active' : '' }} nav-hover-btn">

@@ -187,11 +187,11 @@
              class="car-img"
              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
         <div class="car-img-placeholder" style="display:none">
-          <svg viewBox="0 0 120 70" fill="none"><path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1e4d8c" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="10" y="43" width="100" height="16" rx="8" fill="#1a2e4a" opacity="0.7"/><circle cx="28" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="28" cy="60" r="5" fill="#c8daea"/><circle cx="92" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="92" cy="60" r="5" fill="#c8daea"/></svg>
+          <svg viewBox="0 0 120 70" fill="none"><path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1D9E75" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="10" y="43" width="100" height="16" rx="8" fill="#0F6E56" opacity="0.5"/><circle cx="28" cy="60" r="9" fill="#0F6E56" opacity="0.5"/><circle cx="28" cy="60" r="5" fill="#E1F5EE"/><circle cx="92" cy="60" r="9" fill="#0F6E56" opacity="0.5"/><circle cx="92" cy="60" r="5" fill="#E1F5EE"/></svg>
         </div>
       @else
         <div class="car-img-placeholder">
-          <svg viewBox="0 0 120 70" fill="none"><path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1e4d8c" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="10" y="43" width="100" height="16" rx="8" fill="#1a2e4a" opacity="0.7"/><circle cx="28" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="28" cy="60" r="5" fill="#c8daea"/><circle cx="92" cy="60" r="9" fill="#1a2e4a" opacity="0.7"/><circle cx="92" cy="60" r="5" fill="#c8daea"/></svg>
+          <svg viewBox="0 0 120 70" fill="none"><path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1D9E75" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="10" y="43" width="100" height="16" rx="8" fill="#0F6E56" opacity="0.5"/><circle cx="28" cy="60" r="9" fill="#0F6E56" opacity="0.5"/><circle cx="28" cy="60" r="5" fill="#E1F5EE"/><circle cx="92" cy="60" r="9" fill="#0F6E56" opacity="0.5"/><circle cx="92" cy="60" r="5" fill="#E1F5EE"/></svg>
         </div>
       @endif
 
@@ -276,14 +276,43 @@
     });
 
     function toggleMenu() {
-      // mobile menu toggle placeholder
       const links = document.querySelector('.nav-links');
       if (links.style.display === 'flex') {
         links.style.display = 'none';
       } else {
-        links.style.cssText = 'display:flex; flex-direction:column; position:absolute; top:60px; left:0; right:0; background:#fff; padding:20px 32px; gap:18px; box-shadow:0 8px 24px rgba(30,77,140,0.1); z-index:99;';
+        links.style.cssText = 'display:flex; flex-direction:column; position:absolute; top:68px; left:0; right:0; background:rgba(255,255,255,0.97); padding:20px 32px; gap:18px; box-shadow:0 8px 24px rgba(0,0,0,0.1); z-index:99;';
       }
     }
+
+    // Scroll-based nav active state for anchor sections
+    (function() {
+      const homeLink   = document.getElementById('nav-link-home');
+      const marcasLink = document.querySelector('.nav-links a[href*="marcas"]');
+      const sobreLink  = document.querySelector('.nav-links a[href*="por-que"]');
+      const all        = [homeLink, marcasLink, sobreLink].filter(Boolean);
+
+      const anchors = [
+        { id: 'por-que', nav: sobreLink  },
+        { id: 'marcas',  nav: marcasLink },
+      ];
+
+      function updateActive() {
+        const trigger = window.scrollY + 140;
+        let active = null;
+        for (let i = anchors.length - 1; i >= 0; i--) {
+          const el = document.getElementById(anchors[i].id);
+          if (el && (el.getBoundingClientRect().top + window.scrollY) <= trigger) {
+            active = anchors[i].nav;
+            break;
+          }
+        }
+        all.forEach(l => l.classList.remove('nav-active'));
+        (active || homeLink) && (active || homeLink).classList.add('nav-active');
+      }
+
+      window.addEventListener('scroll', updateActive, { passive: true });
+      updateActive();
+    })();
   </script>
 
   @include('partials._footer')
