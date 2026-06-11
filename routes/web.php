@@ -117,6 +117,7 @@ Route::middleware('cliente.autenticado')->group(function () {
     Route::get('/perfil', [PerfilController::class, 'show'])->name('perfil');
     Route::post('/perfil', [PerfilController::class, 'update'])->name('perfil.update');
     Route::post('/perfil/endereco', [PerfilController::class, 'updateEndereco'])->name('perfil.endereco.update');
+    Route::delete('/perfil', [PerfilController::class, 'destroy'])->name('perfil.destroy');
     Route::post('/logout', [PerfilController::class, 'logout'])->name('cliente.logout');
 
     Route::get('/carrinho',                    [CarrinhoController::class, 'index'])->name('carrinho');
