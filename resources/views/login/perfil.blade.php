@@ -108,6 +108,56 @@
         {{ __('perfil.sair') }}
       </button>
     </form>
+
+    <!-- Excluir conta -->
+    <div style="text-align:center; margin-top:6px;">
+      <button type="button" onclick="document.getElementById('modal-excluir').style.display='flex'"
+              style="background:none;border:none;color:#9EA19C;font-size:11px;
+                     font-family:inherit;font-weight:500;cursor:pointer;letter-spacing:0.5px;
+                     text-decoration:underline;text-underline-offset:2px;">
+        Excluir conta
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal de confirmação -->
+  <div id="modal-excluir"
+       style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.4);
+              z-index:9999; align-items:center; justify-content:center; padding:24px;">
+    <div style="background:#fff; border-radius:16px; padding:28px 24px; max-width:320px;
+                width:100%; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+      <div style="width:48px;height:48px;background:#fef2f2;border-radius:50%;
+                  display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b91c1c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          <path d="M10 11v6M14 11v6"/>
+        </svg>
+      </div>
+      <p style="font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:800;color:#1A1C19;margin-bottom:8px;">
+        Excluir conta?
+      </p>
+      <p style="font-size:0.8rem;color:#6B6E69;line-height:1.5;margin-bottom:24px;">
+        Todos os seus dados serão apagados permanentemente. Esta ação não pode ser desfeita.
+      </p>
+      <div style="display:flex;gap:10px;">
+        <button type="button" onclick="document.getElementById('modal-excluir').style.display='none'"
+                style="flex:1;padding:11px;border:1.5px solid #e5e7eb;border-radius:10px;
+                       background:#fff;font-family:inherit;font-size:0.8rem;font-weight:600;
+                       cursor:pointer;color:#6B6E69;">
+          Cancelar
+        </button>
+        <form method="POST" action="{{ route('perfil.destroy') }}" style="flex:1;">
+          @csrf
+          @method('DELETE')
+          <button type="submit"
+                  style="width:100%;padding:11px;border:none;border-radius:10px;
+                         background:#b91c1c;color:#fff;font-family:inherit;
+                         font-size:0.8rem;font-weight:700;cursor:pointer;letter-spacing:0.02em;">
+            Sim, excluir
+          </button>
+        </form>
+      </div>
+    </div>
   </div>
 
   <!-- Modal de Endereço -->

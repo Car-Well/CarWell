@@ -83,6 +83,19 @@ class PerfilController extends Controller
         return back()->with('success_endereco', 'Endereço salvo com sucesso!');
     }
 
+    public function destroy(Request $request)
+    {
+        $cliente = Auth::guard('cliente')->user();
+
+        Auth::guard('cliente')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        $cliente->delete();
+
+        return redirect()->route('login-cliente')->with('success', 'Sua conta foi excluída.');
+    }
+
     public function logout(Request $request)
     {
         Auth::guard('cliente')->logout();
