@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Admin;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Database\Seeders\MarcaCarrosSeeder;
+use Database\Seeders\CarroSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -15,10 +17,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Admin::create([
-            'name' => 'Admin',
-            'email' => 'admin@carwell.com',
-            'password' => Hash::make('admin123'),
+        Admin::firstOrCreate(
+            ['email' => 'admin@carwell.com'],
+            ['name' => 'Admin', 'password' => Hash::make('admin123')]
+        );
+
+        $this->call([
+            MarcaCarrosSeeder::class,
+            CarroSeeder::class,
         ]);
     }
 }
