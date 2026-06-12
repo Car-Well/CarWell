@@ -51,6 +51,10 @@
             <script>window.addEventListener('DOMContentLoaded', () => openModal('create'));</script>
         @endif
 
+        @if($errors->hasBag('logo') && $errors->getBag('logo')->any())
+            <script>window.addEventListener('DOMContentLoaded', () => openModal('logo'));</script>
+        @endif
+
         <div class="page-header">
             <div>
                 <h1 class="page-title">{{ __('adm.car_titulo') }}</h1>
@@ -475,8 +479,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Fotos da galeria atuais</label>
-                        <div id="editGaleriaAtual" class="gallery-preview-container" style="margin-bottom:8px;"></div>
                         <label class="form-label" style="font-size:0.7rem; color:#9EA19C;">Adicionar mais fotos</label>
                         <div class="upload-area">
                             <input type="file" name="fotos[]" accept="image/*" multiple onchange="previewGallery(event, 'galleryEdit', 'galleryEditContent')">
@@ -488,6 +490,13 @@
                         </div>
                     </div>
                 </form>
+            </div>
+            {{-- galeria atual FORA do formEdit para evitar forms aninhados com _method=DELETE --}}
+            <div class="modal-body" style="padding-top:0;">
+                <div class="form-group">
+                    <label class="form-label">Fotos da galeria atuais</label>
+                    <div id="editGaleriaAtual" class="gallery-preview-container" style="margin-bottom:8px;"></div>
+                </div>
             </div>
             {{-- form oculto para destacar via POST --}}
             <form id="formDestacar" action="#" method="POST" style="display:none;">
@@ -571,6 +580,9 @@
                 </button>
             </div>
             <div class="modal-body">
+                @if($errors->hasBag('logo') && $errors->getBag('logo')->any())
+                    <div class="alert alert-danger" style="margin-bottom:12px;">{{ $errors->getBag('logo')->first() }}</div>
+                @endif
                 @if($marcas->count())
                 <form action="#" method="POST" id="formLogo" enctype="multipart/form-data">
                     @csrf
@@ -617,7 +629,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal('logo')">Cancelar</button>
-                <button class="btn btn-primary" onclick="document.getElementById('formLogo').submit()">
+                <button class="btn btn-primary" onclick="submitLogoForm()">
                     <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
                     Salvar logo
                 </button>
@@ -658,9 +670,13 @@
     </div>
 
     <script>
-        function openModal(name) { 
-            document.getElementById('modal-'+name).classList.add('open'); 
-            document.body.style.overflow='hidden'; 
+        function openModal(name) {
+            document.getElementById('modal-'+name).classList.add('open');
+            document.body.style.overflow='hidden';
+            if (name === 'logo') {
+                const sel = document.getElementById('logoMarcaSelect');
+                if (sel) updateLogoAction(sel);
+            }
         }
 
         function closeModal(name) { 
@@ -771,6 +787,15 @@
         function updateLogoAction(select) {
             const opt = select.options[select.selectedIndex];
             document.getElementById('formLogo').action = opt.dataset.action || '#';
+        }
+
+        function submitLogoForm() {
+            const sel = document.getElementById('logoMarcaSelect');
+            if (!sel || !sel.value) {
+                alert('Selecione uma marca antes de salvar.');
+                return;
+            }
+            document.getElementById('formLogo').submit();
         }
 
         document.addEventListener('keydown',e=>{ if(e.key==='Escape'){

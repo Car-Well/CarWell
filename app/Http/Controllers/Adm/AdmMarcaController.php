@@ -22,7 +22,7 @@ class AdmMarcaController extends Controller
 
     public function updateLogo(Request $request, MarcaCarros $marca)
     {
-        $request->validate([
+        $request->validateWithBag('logo', [
             'logo' => ['required', 'image', 'max:2048'],
         ]);
 
