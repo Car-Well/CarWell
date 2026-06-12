@@ -70,7 +70,8 @@
         <div class="form-group">
           <label class="form-label">{{ __('login.placeholder_telefone') }}</label>
           <input type="tel" name="telefone" class="form-control {{ $errors->has('telefone') ? 'is-invalid' : '' }}"
-                 placeholder="(11) 99999-9999" value="{{ old('telefone') }}" autocomplete="tel"/>
+                 placeholder="(11) 99999-9999" value="{{ old('telefone') }}" autocomplete="tel"
+                 oninput="maskTelefone(this)"/>
           @error('telefone') <span class="error-text">{{ $message }}</span> @enderror
         </div>
 
@@ -131,6 +132,20 @@
   </div>
 
   <script>
+  function maskTelefone(input) {
+    let v = input.value.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 10) {
+      v = '(' + v.slice(0,2) + ') ' + v.slice(2,7) + '-' + v.slice(7);
+    } else if (v.length > 6) {
+      v = '(' + v.slice(0,2) + ') ' + v.slice(2,6) + '-' + v.slice(6);
+    } else if (v.length > 2) {
+      v = '(' + v.slice(0,2) + ') ' + v.slice(2);
+    } else if (v.length > 0) {
+      v = '(' + v;
+    }
+    input.value = v;
+  }
+
   function toggleSenha(inputId, iconId) {
     const input = document.getElementById(inputId);
     const icon  = document.getElementById(iconId);

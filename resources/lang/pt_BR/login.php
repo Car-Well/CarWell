@@ -32,8 +32,9 @@ return [
     'ja_tem_conta'           => 'Já tem uma conta?',
     'crie_uma'               => 'CRIE UMA',
     'termos'                 => 'Ao prosseguir você está ciente e concorda em receber comunicações da CARWELL',
-    'ola_confirme'           => 'OLÁ , CONFIRME O SEU EMAIL',
-    'escreva_codigo'         => 'Escreva aqui o código que chegou no seu email',
+    'ola_confirme'           => 'Confirme seu e-mail',
+    'escreva_codigo'         => 'Escreva aqui o código que chegou no seu e-mail',
+    'confirmar_codigo'       => 'Confirmar código',
     'codigo_nao_chegou'      => 'O código não chegou?',
     'reenviar_codigo'        => 'REENVIAR CÓDIGO',
     // esqueci-senha

@@ -32,8 +32,9 @@ return [
     'ja_tem_conta'           => 'Already have an account?',
     'crie_uma'               => 'CREATE ONE',
     'termos'                 => 'By proceeding you acknowledge and agree to receive communications from CARWELL',
-    'ola_confirme'           => 'HELLO , CONFIRM YOUR EMAIL',
-    'escreva_codigo'         => 'Enter the code that was sent to your email',
+    'ola_confirme'           => 'Confirm your e-mail',
+    'escreva_codigo'         => 'Enter the code that was sent to your e-mail',
+    'confirmar_codigo'       => 'Confirm code',
     'codigo_nao_chegou'      => "Didn't receive the code?",
     'reenviar_codigo'        => 'RESEND CODE',
     // forgot password
