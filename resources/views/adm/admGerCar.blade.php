@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="csrf-token" content="{{ csrf_token() }}">
-        <title>CarWell — {{ __('adm.car_titulo') }}</title>
+        <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}"/>
+      <title>CarWell — {{ __('adm.car_titulo') }}</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
@@ -161,7 +162,6 @@
                             data-descricao="{{ addslashes(str_replace(["\r","\n","'"], ['',' ',''], $carro->descricao ?? '')) }}"
                             data-categoria="{{ $carro->categoria ?? '' }}"
                             data-capa="{{ $carro->capa_path ? storage_url($carro->capa_path) : '' }}"
-                            data-galeria="{{ e(json_encode($carro->fotos->where('is_capa', false)->map(fn($f) => storage_url($f->path))->values())) }}"
                             onclick="openEditFromBtn(this)">
                             <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                             Editar
@@ -192,6 +192,24 @@
         </div>
 
     </main>
+
+    {{-- Galerias renderizadas server-side — usadas pelo modal de edição --}}
+    @foreach($carros as $carro)
+    <div id="galeria-{{ $carro->id }}" style="display:none">
+        @forelse($carro->fotos->where('is_capa', false) as $foto)
+        <div class="gallery-item-wrapper">
+            <img src="{{ storage_url($foto->path) }}" class="gallery-preview-item" alt="Foto">
+            <form method="POST" action="{{ route('adm.carros.fotos.destroy', $foto->id) }}">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="gallery-remove-btn"
+                        onclick="return confirm('Remover esta foto da galeria?')">&times;</button>
+            </form>
+        </div>
+        @empty
+        @endforelse
+    </div>
+    @endforeach
 
     <div class="modal-overlay" id="modal-create" onclick="closeOnBackdrop(event,'create')">
         <div class="modal">
@@ -656,16 +674,14 @@
 
         function openEditFromBtn(btn) {
             const d = btn.dataset;
-            let galeria = [];
-            try { galeria = JSON.parse(d.galeria || '[]'); } catch(err) { console.error('galeria parse error:', err, d.galeria); }
             openEdit(
                 d.id, d.marca, d.modelo, d.ano, d.preco, d.status,
                 d.km, d.cor, d.combustivel, d.cambio, d.descricao,
-                d.categoria, d.capa, galeria
+                d.categoria, d.capa
             );
         }
 
-        function openEdit(id,marca,modelo,ano,preco,status,km,cor,combustivel,cambio,descricao,categoria,capaUrl,galeriaUrls) {
+        function openEdit(id,marca,modelo,ano,preco,status,km,cor,combustivel,cambio,descricao,categoria,capaUrl) {
             document.getElementById('editId').value = id;
             document.getElementById('editMarca').value = marca;
             document.getElementById('editModelo').value = modelo;
@@ -695,20 +711,10 @@
             document.getElementById('previewEdit').style.display = 'none';
             document.getElementById('uploadEditContent').style.display = 'flex';
 
-            // Fotos da galeria atuais
+            // Fotos da galeria atuais (HTML renderizado server-side pelo Blade)
             const galeriaAtual = document.getElementById('editGaleriaAtual');
-            galeriaAtual.innerHTML = '';
-            if (galeriaUrls && galeriaUrls.length) {
-                galeriaUrls.forEach(url => {
-                    const wrapper = document.createElement('div');
-                    wrapper.className = 'gallery-item-wrapper';
-                    const img = document.createElement('img');
-                    img.src = url;
-                    img.className = 'gallery-preview-item';
-                    wrapper.appendChild(img);
-                    galeriaAtual.appendChild(wrapper);
-                });
-            }
+            const galeriaSource = document.getElementById('galeria-' + id);
+            galeriaAtual.innerHTML = galeriaSource ? galeriaSource.innerHTML : '';
             // Limpa preview de novas fotos
             document.getElementById('galleryEdit').innerHTML = '';
             document.getElementById('galleryEditContent').style.display = 'flex';
@@ -770,6 +776,7 @@
         document.addEventListener('keydown',e=>{ if(e.key==='Escape'){
             ['create','edit','delete','marca','logo'].forEach(closeModal);document.body.style.overflow='';
         }});
+
         </script>
     </body>
 </html>

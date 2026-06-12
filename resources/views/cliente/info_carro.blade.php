@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
   <head>
     <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Carwell – {{ $carro ? strtoupper($carro->veiculo_nome) : 'Veículo' }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="{{ asset('css/info_carro.css') }}">
+   <link rel="stylesheet" href="{{ asset('css/info_carro.css') }}?v=2">
   </head>
 <body>
 
