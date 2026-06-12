@@ -22,23 +22,26 @@
     </div>
 
     <div class="perfil-avatar-area">
-      <div class="perfil-avatar" id="photo-circle" onclick="if(editing) document.getElementById('photo-input').click()">
-        @if($cliente->foto)
-          <img id="preview-img" src="{{ asset('storage/' . $cliente->foto) }}" alt="Foto">
-        @else
-          <img id="preview-img" src="" alt="Foto" style="display:none">
-          <svg id="avatar-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
-          </svg>
-        @endif
-        <div class="perfil-avatar-overlay" id="avatar-overlay">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-            <circle cx="12" cy="13" r="4"/>
-          </svg>
+      <form method="POST" action="{{ route('perfil.foto.update') }}" enctype="multipart/form-data" id="foto-form">
+        @csrf
+        <div class="perfil-avatar" id="photo-circle" onclick="document.getElementById('photo-input').click()" style="cursor:pointer">
+          @if($cliente->foto)
+            <img id="preview-img" src="{{ storage_url($cliente->foto) }}" alt="Foto">
+          @else
+            <img id="preview-img" src="" alt="Foto" style="display:none">
+            <svg id="avatar-icon" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.5">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+          @endif
+          <div class="perfil-avatar-overlay" id="avatar-overlay">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+          </div>
         </div>
-      </div>
-      <input type="file" id="photo-input" name="foto" accept="image/*" onchange="previewPhoto(event)" style="display:none" form="perfil-form"/>
+        <input type="file" id="photo-input" name="foto" accept="image/*" onchange="previewPhoto(event)" style="display:none"/>
+      </form>
 
       <p class="perfil-nome-left">{{ $cliente->name ?? 'Meu Perfil' }}</p>
       <p class="perfil-email-left">{{ $cliente->email }}</p>
@@ -289,6 +292,7 @@
         img.style.display = 'block';
         const icon = document.getElementById('avatar-icon');
         if (icon) icon.style.display = 'none';
+        document.getElementById('foto-form').submit();
       };
       reader.readAsDataURL(file);
     }
