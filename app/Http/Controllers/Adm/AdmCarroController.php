@@ -5,11 +5,16 @@ namespace App\Http\Controllers\Adm;
 use App\Http\Controllers\Controller;
 use App\Models\Carro;
 use App\Models\CarroFoto;
+use App\Models\MarcaCarros;
+use App\Services\GcsStorage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class AdmCarroController extends Controller
 {
+    public function __construct(){
+        $this->middleware('admin.autenticado');
+    }
+    
     public function index(Request $request)
     {
         $query = Carro::orderBy('id', 'desc');
@@ -27,7 +32,7 @@ class AdmCarroController extends Controller
             $query->where('status', $request->get('status'));
         }
 
-        $carros = $query->with(['capa'])->get();
+        $carros = $query->with(['capa', 'fotos'])->get();
 
         $kpis = [
             'total' => (int) Carro::count(),
@@ -36,7 +41,11 @@ class AdmCarroController extends Controller
             'vendido' => (int) Carro::where('status', 'vendido')->count(),
         ];
 
-        return view('adm.admGerCar', compact('carros', 'kpis'));
+        $marcas = MarcaCarros::orderBy('nome')->get();
+        $q = (string) $request->get('q', '');
+        $status = (string) $request->get('status', 'all');
+
+        return view('adm.admGerCar', compact('carros', 'kpis', 'marcas', 'q', 'status'));
     }
 
     public function store(Request $request)
@@ -51,41 +60,39 @@ class AdmCarroController extends Controller
             'combustivel' => ['nullable', 'in:flex,gasolina,diesel,eletrico,hibrido'],
             'cambio' => ['nullable', 'in:manual,automatico,cvt'],
             'status' => ['required', 'in:disponivel,reservado,vendido'],
+            'categoria' => ['nullable', 'string', 'max:100'],
+            'destacado' => ['nullable', 'boolean'],
             'descricao' => ['nullable', 'string'],
             'capa' => ['nullable', 'image', 'max:4096'],
             'fotos' => ['nullable', 'array'],
             'fotos.*' => ['image', 'max:4096'],
         ]);
 
-        $carro = Carro::create($data);
-
-        $dir = storage_path('app/public/carros');
-        if (!is_dir($dir)) {
-            @mkdir($dir, 0775, true);
+        if (!empty($data['destacado'])) {
+            Carro::query()->update(['destacado' => false]);
         }
 
-        // capa
+        $carro = Carro::create($data);
+
         if ($request->hasFile('capa')) {
-            $path = $request->file('capa')->store('carros', 'public');
+            $path = GcsStorage::store($request->file('capa'), 'carros');
             CarroFoto::create([
                 'carro_id' => $carro->id,
                 'path' => $path,
                 'is_capa' => true,
                 'ordem' => 0,
             ]);
-            // compatibilidade: coluna antiga
             $carro->foto = $path;
             $carro->save();
         }
 
-        // fotos adicionais
         if ($request->hasFile('fotos')) {
             $ordem = 1;
             foreach ((array) $request->file('fotos') as $file) {
                 if (!$file) {
                     continue;
                 }
-                $path = $file->store('carros', 'public');
+                $path = GcsStorage::store($file, 'carros');
                 CarroFoto::create([
                     'carro_id' => $carro->id,
                     'path' => $path,
@@ -110,26 +117,21 @@ class AdmCarroController extends Controller
             'combustivel' => ['nullable', 'in:flex,gasolina,diesel,eletrico,hibrido'],
             'cambio' => ['nullable', 'in:manual,automatico,cvt'],
             'status' => ['required', 'in:disponivel,reservado,vendido'],
+            'categoria' => ['nullable', 'string', 'max:100'],
             'descricao' => ['nullable', 'string'],
             'capa' => ['nullable', 'image', 'max:4096'],
             'fotos' => ['nullable', 'array'],
             'fotos.*' => ['image', 'max:4096'],
         ]);
 
-        $carro->update($data);
+        $carro->update(collect($data)->except(['capa', 'fotos'])->toArray());
 
-        $dir = storage_path('app/public/carros');
-        if (!is_dir($dir)) {
-            @mkdir($dir, 0775, true);
-        }
-
-        // trocar capa
         if ($request->hasFile('capa')) {
-            $path = $request->file('capa')->store('carros', 'public');
+            $path = GcsStorage::store($request->file('capa'), 'carros');
 
             $capaAtual = $carro->capa()->first();
             if ($capaAtual) {
-                Storage::disk('public')->delete($capaAtual->path);
+                GcsStorage::delete($capaAtual->path);
                 $capaAtual->update(['path' => $path]);
             } else {
                 CarroFoto::create([
@@ -140,22 +142,20 @@ class AdmCarroController extends Controller
                 ]);
             }
 
-            // compatibilidade: coluna antiga
             if ($carro->foto && $carro->foto !== $path) {
-                Storage::disk('public')->delete($carro->foto);
+                GcsStorage::delete($carro->foto);
             }
             $carro->foto = $path;
             $carro->save();
         }
 
-        // adicionar fotos na galeria
         if ($request->hasFile('fotos')) {
             $ordem = (int) ($carro->fotos()->max('ordem') ?? 0);
             foreach ((array) $request->file('fotos') as $file) {
                 if (!$file) {
                     continue;
                 }
-                $path = $file->store('carros', 'public');
+                $path = GcsStorage::store($file, 'carros');
                 CarroFoto::create([
                     'carro_id' => $carro->id,
                     'path' => $path,
@@ -168,15 +168,39 @@ class AdmCarroController extends Controller
         return redirect()->route('adm.carros.index')->with('success', 'Carro atualizado com sucesso.');
     }
 
+    public function destroyFoto(CarroFoto $foto)
+    {
+        if ($foto->is_capa) {
+            return back()->with('error', 'Use "Trocar foto de capa" para alterar a capa.');
+        }
+
+        GcsStorage::delete($foto->path);
+        $foto->delete();
+
+        return back()->with('success', 'Foto removida com sucesso.');
+    }
+
+    public function destacar(Carro $carro)
+    {
+        $carro->update(['destacado' => !$carro->destacado]);
+
+        $msg = $carro->destacado
+            ? '"' . $carro->marca . ' ' . $carro->modelo . '" adicionado ao destaque da home.'
+            : '"' . $carro->marca . ' ' . $carro->modelo . '" removido do destaque.';
+
+        return redirect()->route('adm.carros.index')->with('success', $msg);
+    }
+
     public function destroy(Carro $carro)
     {
         foreach ($carro->fotos()->get() as $foto) {
-            Storage::disk('public')->delete($foto->path);
+            GcsStorage::delete($foto->path);
         }
 
         $carro->delete();
 
         return redirect()->route('adm.carros.index')->with('success', 'Carro excluído com sucesso.');
     }
+
 }
 

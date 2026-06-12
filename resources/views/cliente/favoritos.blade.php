@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+  <head>
+    <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="{{ asset('img/logo.png') }}"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>{{ __('favoritos.titulo') }}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/home/home.css') }}">
+    <style>
+      .fav-main       { max-width: 1200px; margin: 0 auto; padding: 56px 32px 80px; }
+      .fav-header     { margin-bottom: 36px; }
+      .fav-title      { font-family:'Syne',sans-serif; font-size:1.9rem; font-weight:800; color:#1A1C19; }
+      .fav-title span { color:#0F6E56; }
+      .fav-sub        { font-size:0.82rem; color:#9EA19C; margin-top:4px; }
+      #fav-grid       { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; }
+      .fav-empty      { text-align:center; padding:80px 0; color:#9EA19C; }
+      .fav-empty svg  { width:56px; height:56px; margin-bottom:16px; display:block; margin-left:auto; margin-right:auto; }
+      .fav-empty h3   { font-family:'Syne',sans-serif; font-size:0.9rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; color:#6b7280; }
+      .fav-empty p    { font-size:0.82rem; }
+      .fav-empty a    { display:inline-block; margin-top:20px; background:#0F6E56; color:#fff; font-family:'Syne',sans-serif; font-size:0.78rem; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; padding:10px 24px; border-radius:8px; text-decoration:none; }
+      .fav-loading    { text-align:center; padding:60px 0; font-size:0.85rem; color:#9EA19C; }
+    </style>
+  </head>
+  <body>
+
+  @include('partials._nav')
+
+    <main class="fav-main">
+      <div class="fav-header">
+        <h1 class="fav-title">{{ __('favoritos.titulo_h1') }} <span>{{ __('favoritos.titulo_span') }}</span></h1>
+        <p class="fav-sub">{{ __('favoritos.subtitulo') }}</p>
+      </div>
+
+      <div id="fav-loading" class="fav-loading">{{ __('favoritos.carregando') }}</div>
+
+      <div id="fav-empty" class="fav-empty" style="display:none;">
+        <svg fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <h3>{{ __('favoritos.nenhum_titulo') }}</h3>
+        <p>{{ __('favoritos.nenhum_texto') }}</p>
+        <a href="{{ route('home') }}">{{ __('favoritos.ver_carros') }}</a>
+      </div>
+
+      <div id="fav-grid" style="display:none;"></div>
+    </main>
+
+    <script>
+      const FAV_KEY    = 'carwell_favs';
+      const STORAGE_URL = '{{ storage_base_url() }}/';
+      const POR_IDS_URL = '{{ route("carros.por-ids") }}';
+
+      function getFavs()         { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); }
+      function saveFavs(favs)    { localStorage.setItem(FAV_KEY, JSON.stringify(favs)); }
+
+      function toggleHeart(el, carroId) {
+        el.classList.toggle('liked');
+        let favs = getFavs();
+        if (el.classList.contains('liked')) {
+          if (!favs.includes(carroId)) favs.push(carroId);
+        } else {
+          favs = favs.filter(id => id !== carroId);
+          // remove card from grid with animation
+          const card = document.querySelector(`[data-fav-id="${carroId}"]`);
+          if (card) {
+            card.style.transition = 'opacity 0.25s, transform 0.25s';
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+              card.remove();
+              if (!document.querySelectorAll('#fav-grid .car-card').length) showEmpty();
+            }, 260);
+          }
+        }
+        saveFavs(favs);
+        updateFavBadge();
+      }
+
+      function updateFavBadge() {
+        const badge = document.getElementById('fav-badge');
+        if (!badge) return;
+        const count = getFavs().length;
+        badge.textContent = count;
+        badge.style.display = count ? 'flex' : 'none';
+      }
+
+      function showEmpty() {
+        document.getElementById('fav-grid').style.display  = 'none';
+        document.getElementById('fav-empty').style.display = 'block';
+        updateFavBadge();
+      }
+
+      function fmtPreco(preco) {
+        return 'R$ ' + parseFloat(preco).toLocaleString('pt-BR', {minimumFractionDigits:0, maximumFractionDigits:0});
+      }
+
+      function buildCard(c) {
+        const nome = (c.nome || '').toUpperCase();
+        const spec = [c.ano, c.combustivel ? c.combustivel.toUpperCase() : null, c.cambio ? c.cambio.toUpperCase() : null].filter(Boolean).join(' · ');
+        const imgTag = c.capa_path
+          ? `<img src="${STORAGE_URL}${c.capa_path}" alt="${nome}" class="car-img" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+          : '';
+        const placeholderStyle = c.capa_path ? ' style="display:none"' : '';
+        const placeholder = `<div class="car-img-placeholder"${placeholderStyle}><svg viewBox="0 0 120 70" fill="none"><path d="M15 45 Q30 18 60 18 Q90 18 105 45" stroke="#1D9E75" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="10" y="43" width="100" height="16" rx="8" fill="#0F6E56" opacity="0.7"/><circle cx="28" cy="60" r="9" fill="#0F6E56" opacity="0.7"/><circle cx="28" cy="60" r="5" fill="#E1F5EE"/><circle cx="92" cy="60" r="9" fill="#0F6E56" opacity="0.7"/><circle cx="92" cy="60" r="5" fill="#E1F5EE"/></svg></div>`;
+        const precoHtml = c.preco ? `<p class="car-price">${fmtPreco(c.preco)}</p>` : '';
+
+        return `<a href="${c.url}" class="car-card" data-fav-id="${c.id}">
+          ${imgTag}${placeholder}
+          <div class="car-heart liked" data-id="${c.id}" onclick="event.preventDefault(); toggleHeart(this, ${c.id})">
+            <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </div>
+          <div class="car-info">
+            <p class="car-name">${nome}</p>
+            <p class="car-spec">${spec}</p>
+            ${precoHtml}
+          </div>
+          <div class="car-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
+        </a>`;
+      }
+
+      async function loadFavoritos() {
+        const favs = getFavs();
+        const loading = document.getElementById('fav-loading');
+        const empty   = document.getElementById('fav-empty');
+        const grid    = document.getElementById('fav-grid');
+
+        if (!favs.length) {
+          loading.style.display = 'none';
+          empty.style.display   = 'block';
+          updateFavBadge();
+          return;
+        }
+
+        try {
+          const params = favs.map(id => `ids[]=${id}`).join('&');
+          const res    = await fetch(`${POR_IDS_URL}?${params}`);
+          const carros = await res.json();
+
+          loading.style.display = 'none';
+
+          if (!carros.length) {
+            empty.style.display = 'block';
+            return;
+          }
+
+          // render in the same order as localStorage
+          const map = Object.fromEntries(carros.map(c => [c.id, c]));
+          grid.innerHTML = favs.filter(id => map[id]).map(id => buildCard(map[id])).join('');
+          grid.style.display = 'grid';
+          updateFavBadge();
+        } catch(e) {
+          loading.textContent = '{{ __("favoritos.erro_carregar") }}';
+        }
+      }
+
+      document.addEventListener('DOMContentLoaded', loadFavoritos);
+
+      function toggleMenu() {
+        const links = document.querySelector('.nav-links');
+        if (links.style.display === 'flex') {
+          links.style.display = 'none';
+        } else {
+          links.style.cssText = 'display:flex; flex-direction:column; position:absolute; top:60px; left:0; right:0; background:#fff; padding:20px 32px; gap:18px; box-shadow:0 8px 24px rgba(30,77,140,0.1); z-index:99;';
+        }
+      }
+    </script>
+
+    @include('partials._footer')
+    @include('partials._cookies')
+  </body>
+</html>

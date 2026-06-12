@@ -43,22 +43,39 @@ class AdmUserController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'foto' => ['nullable', 'image', 'max:2048'],
-            'nome' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:clientes,email'],
-            'senha' => ['required', 'string', 'min:6', 'confirmed'],
-            'nascimento' => ['nullable', 'date'],
-            'perfil' => ['required', 'in:cliente,admin,inativo'],
-            'endereco' => ['nullable', 'string', 'max:255'],
+            'foto'             => ['nullable', 'image', 'max:2048'],
+            'nome'             => ['required', 'string', 'max:255'],
+            'email'            => ['required', 'email', 'max:255', 'unique:clientes,email'],
+            'telefone'         => ['nullable', 'string', 'max:20'],
+            'senha'            => ['required', 'string', 'min:6', 'confirmed'],
+            'nascimento'       => ['nullable', 'date'],
+            'perfil'           => ['required', 'in:cliente,admin,inativo'],
+            'cep'              => ['nullable', 'string', 'max:9'],
+            'rua'              => ['nullable', 'string', 'max:255'],
+            'numero'           => ['nullable', 'string', 'max:20'],
+            'bairro'           => ['nullable', 'string', 'max:100'],
+            'cidade'           => ['nullable', 'string', 'max:100'],
+            'estado'           => ['nullable', 'string', 'max:2'],
+            'complemento'      => ['nullable', 'string', 'max:100'],
+            'ponto_referencia' => ['nullable', 'string', 'max:255'],
         ]);
 
         $cliente = new Cliente();
-        $cliente->name = $data['nome'];
-        $cliente->email = $data['email'];
-        $cliente->password = Hash::make($data['senha']);
-        $cliente->nascimento = $data['nascimento'] ?? null;
-        $cliente->perfil = $data['perfil'] ?? 'cliente';
-        $cliente->endereco = $data['endereco'] ?? null;
+        $cliente->name           = $data['nome'];
+        $cliente->email          = $data['email'];
+        $cliente->telefone       = $data['telefone'] ?? null;
+        $cliente->password       = Hash::make($data['senha']);
+        $cliente->nascimento     = $data['nascimento'] ?? null;
+        $cliente->perfil         = $data['perfil'] ?? 'cliente';
+        $cliente->cep            = $data['cep'] ?? null;
+        $cliente->rua            = $data['rua'] ?? null;
+        $cliente->numero         = $data['numero'] ?? null;
+        $cliente->bairro         = $data['bairro'] ?? null;
+        $cliente->cidade         = $data['cidade'] ?? null;
+        $cliente->estado         = $data['estado'] ?? null;
+        $cliente->complemento    = $data['complemento'] ?? null;
+        $cliente->ponto_referencia = $data['ponto_referencia'] ?? null;
+        $cliente->endereco       = collect([$data['rua'] ?? null, $data['numero'] ?? null, $data['bairro'] ?? null, $data['cidade'] ?? null])->filter()->implode(', ');
 
         if ($request->hasFile('foto')) {
             $cliente->foto = $request->file('foto')->store('clientes', 'public');
@@ -72,25 +89,42 @@ class AdmUserController extends Controller
     public function update(Request $request, Cliente $cliente)
     {
         $data = $request->validate([
-            'foto' => ['nullable', 'image', 'max:2048'],
-            'nome' => ['required', 'string', 'max:255'],
-            'email' => [
+            'foto'             => ['nullable', 'image', 'max:2048'],
+            'nome'             => ['required', 'string', 'max:255'],
+            'email'            => [
                 'required',
                 'email',
                 'max:255',
                 Rule::unique('clientes', 'email')->ignore($cliente->id),
             ],
-            'senha' => ['nullable', 'string', 'min:6', 'confirmed'],
-            'nascimento' => ['nullable', 'date'],
-            'perfil' => ['required', 'in:cliente,admin,inativo'],
-            'endereco' => ['nullable', 'string', 'max:255'],
+            'telefone'         => ['nullable', 'string', 'max:20'],
+            'senha'            => ['nullable', 'string', 'min:6', 'confirmed'],
+            'nascimento'       => ['nullable', 'date'],
+            'perfil'           => ['required', 'in:cliente,admin,inativo'],
+            'cep'              => ['nullable', 'string', 'max:9'],
+            'rua'              => ['nullable', 'string', 'max:255'],
+            'numero'           => ['nullable', 'string', 'max:20'],
+            'bairro'           => ['nullable', 'string', 'max:100'],
+            'cidade'           => ['nullable', 'string', 'max:100'],
+            'estado'           => ['nullable', 'string', 'max:2'],
+            'complemento'      => ['nullable', 'string', 'max:100'],
+            'ponto_referencia' => ['nullable', 'string', 'max:255'],
         ]);
 
-        $cliente->name = $data['nome'];
-        $cliente->email = $data['email'];
-        $cliente->nascimento = $data['nascimento'] ?? null;
-        $cliente->perfil = $data['perfil'];
-        $cliente->endereco = $data['endereco'] ?? null;
+        $cliente->name           = $data['nome'];
+        $cliente->email          = $data['email'];
+        $cliente->telefone       = $data['telefone'] ?? null;
+        $cliente->nascimento     = $data['nascimento'] ?? null;
+        $cliente->perfil         = $data['perfil'];
+        $cliente->cep            = $data['cep'] ?? null;
+        $cliente->rua            = $data['rua'] ?? null;
+        $cliente->numero         = $data['numero'] ?? null;
+        $cliente->bairro         = $data['bairro'] ?? null;
+        $cliente->cidade         = $data['cidade'] ?? null;
+        $cliente->estado         = $data['estado'] ?? null;
+        $cliente->complemento    = $data['complemento'] ?? null;
+        $cliente->ponto_referencia = $data['ponto_referencia'] ?? null;
+        $cliente->endereco       = collect([$data['rua'] ?? null, $data['numero'] ?? null, $data['bairro'] ?? null, $data['cidade'] ?? null])->filter()->implode(', ');
 
         if (!empty($data['senha'])) {
             $cliente->password = Hash::make($data['senha']);

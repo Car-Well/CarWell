@@ -18,6 +18,9 @@ class CreateClientesTable extends Migration
             $table->string('email_verification_code', 6)->nullable();
             $table->timestamp('email_verification_expires_at')->nullable();
             $table->timestamp('email_verified_at')->nullable();
+            $table->string('telefone')->nullable()->after('name');
+            $table->date('nascimento')->nullable()->after('foto');
+            $table->string('perfil')->default('cliente')->after('nascimento');
             $table->rememberToken();
             $table->timestamps();
         });
@@ -25,6 +28,8 @@ class CreateClientesTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('clientes');
+        Schema::table('clientes', function (Blueprint $table) {
+            $table->dropColumn(['telefone', 'nascimento', 'perfil']);
+        });
     }
 }

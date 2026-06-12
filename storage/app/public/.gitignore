@@ -1,2 +1,8 @@
 *
 !.gitignore
+!carros/
+!carros/**
+!fotos/
+!fotos/**
+!marcas/
+!marcas/**

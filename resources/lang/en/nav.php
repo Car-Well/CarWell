@@ -6,5 +6,6 @@ return [
     'sobre'         => 'ABOUT US',
     'ajuda'         => 'HELP',
     'carrinho'      => 'CART',
+    'meus_pedidos'  => 'MY ORDERS',
     'login'         => 'LOGIN',
 ];

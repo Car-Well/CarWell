@@ -31,26 +31,46 @@ body {
 }
 
 .main-nav {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: linear-gradient(90deg, #0d1520 0%, #0c1a12 100%);
+    border-bottom: 2px solid var(--green);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
     display: flex;
-    width: 100%;
     align-items: center;
-    padding: 1rem 2rem;
+    padding: 0 2rem;
+    height: 64px;
+    width: 100%;
     box-sizing: border-box;
 }
 
-.nav-left, 
-.nav-right-spacer {
-    flex: 1; 
+.nav-left,
+.nav-right {
+    flex: 1;
     display: flex;
     align-items: center;
 }
 
-.nav-logo {
-    width: 5rem;
+.nav-right {
+    justify-content: flex-end;
+}
+
+.nav-left,
+.nav-right-spacer {
+    flex: 1;
+    display: flex;
+    align-items: center;
 }
 
 .nav-right-spacer {
     justify-content: flex-end;
+}
+
+.nav-logo {
+    height: 40px;
+    width: auto;
+    filter: brightness(0) invert(1);
 }
 
 .nav-center {
@@ -61,53 +81,78 @@ body {
 
 .nav-links {
     display: flex;
-    gap: 1rem; 
+    align-items: center;
+}
+
+.btn-logout {
+    background: transparent;
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
+    padding: 7px 18px;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.65);
+    cursor: pointer;
+    transition: all 0.18s;
+}
+
+.btn-logout:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.45);
 }
 
 .nav-hover-btn {
     position: relative;
-    margin: 0 1.25rem; 
+    padding: 6px 2px;
+    margin: 0 16px;
     font-family: var(--font-display);
-    font-size: 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 700;
     text-transform: uppercase;
-    color: var(--text-primary); 
+    letter-spacing: 0.06em;
+    color: rgba(255, 255, 255, 0.55);
     text-decoration: none;
     cursor: pointer;
+    transition: color 0.18s;
+    white-space: nowrap;
+    background: none;
+    border: none;
 }
 
 .nav-hover-btn::after {
-    content: "";
+    content: '';
     position: absolute;
-    bottom: -0.125rem;
+    bottom: -2px;
     left: 0;
-    height: 0.125rem;
     width: 100%;
-    background-color: currentColor;
-    transform-origin: bottom right;
+    height: 2px;
+    background: var(--green);
     transform: scaleX(0);
-    transition: transform 300ms cubic-bezier(0.65, 0.05, 0.36, 1);
+    transform-origin: right;
+    transition: transform 0.28s cubic-bezier(0.65, 0.05, 0.36, 1);
+    border-radius: 2px;
+}
+
+.nav-hover-btn:hover {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .nav-hover-btn:hover::after {
-    transition: 0.8s;
-    transform-origin: bottom left;
     transform: scaleX(1);
-    color: var(--green);
+    transform-origin: left;
 }
 
-.nav-hover-btn:hover{
-    color: var(--green);
+.nav-active {
+    color: var(--green) !important;
 }
 
-.nav-active{
-    color: var(--green-dark);
-}
-
-.nav-active::after{
-    transition: 0.8s;
-    transform-origin: bottom left;
-    transform: scaleX(1);
-    color: var(--green-dark);
+.nav-active::after {
+    transform: scaleX(1) !important;
+    background: var(--green);
 }
 
 .main {
@@ -276,6 +321,37 @@ body {
 }
 .btn-secondary:hover { background: #E4E5E3; }
 
+.marcas-dropdown { position: relative; list-style: none; }
+.marcas-dropdown summary { list-style: none; cursor: pointer; }
+.marcas-dropdown summary::-webkit-details-marker { display: none; }
+.marcas-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    min-width: 170px;
+    z-index: 50;
+    overflow: hidden;
+}
+.marcas-dropdown-item {
+    width: 100%;
+    text-align: left;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: #1a2e4a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.marcas-dropdown-item:hover { background: #f9fafb; }
+.marcas-dropdown-item--border { border-top: 1px solid #f3f4f6; }
+
 .btn-danger {
     background: #FEF2F2;
     color: #B91C1C;
@@ -311,6 +387,23 @@ body {
 .badge-success { background: #E1F5EE; color: #0F6E56; }
 .badge-warning { background: #FEF3C7; color: #92400E; }
 .badge-danger  { background: #FEF2F2; color: #B91C1C; }
+.badge-destaque {
+    position: absolute; top: 10px; left: 10px;
+    background: #1a2e4a; color: #FFD700;
+    font-size: 0.6rem; font-weight: 800; border-radius: 20px;
+    padding: 3px 8px; letter-spacing: 0.04em;
+}
+.btn-destacar {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #FFF8E1; color: #92400E;
+    border: 1.5px solid #FDE68A;
+    font-family: var(--font-display); font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 8px 14px; border-radius: 8px; cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+.btn-destacar svg { width: 14px; height: 14px; }
+.btn-destacar:hover { background: #FEF3C7; border-color: #F59E0B; }
 
 .cars-grid {
     display: grid;
@@ -645,6 +738,7 @@ textarea.form-control { resize: vertical; }
     flex-wrap: wrap;
     gap: 8px;
     padding: 8px;
+    min-height: 40px;
 }
 
 .gallery-item-wrapper {

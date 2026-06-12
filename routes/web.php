@@ -1,18 +1,26 @@
 <?php
 
 use App\Http\Controllers\Auth\ConfirmarEmailController;
-use App\Http\Controllers\Auth\LoginClienteController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LoginAdmController;
+use App\Http\Controllers\Auth\EsqueciSenhaController;
 use App\Http\Controllers\Auth\RegistrarClienteController;
 use App\Http\Controllers\Adm\AdmCarroController;
+use App\Http\Controllers\Adm\AdmMarcaController;
 use App\Http\Controllers\Adm\AdmPedidoController;
 use App\Http\Controllers\Adm\AdmUserController;
+use App\Http\Controllers\Adm\AdmClienteController;
+use App\Http\Controllers\Adm\AdmDashboardController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CarroController;
+use App\Http\Controllers\PedidoClienteController;
+use App\Http\Controllers\CarrinhoController;
+use App\Http\Controllers\StripeController;
 use Illuminate\Support\Facades\Route;
 
 // Rota TESTE
-Route::get('/teste', function(){
-    return view('teste');
-});
+Route::get('/admHome', [AdmDashboardController::class, 'index'])->middleware('admin.autenticado')->name('admHome');
 
 // Troca de idioma
 Route::get('/locale/{lang}', function ($lang) {
@@ -23,64 +31,62 @@ Route::get('/locale/{lang}', function ($lang) {
 })->name('locale.set');
 
 // Páginas públicas do site
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', fn() => redirect()->route('home'));
 
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
-
-Route::get('/storage', function () {
-    return view('storage');
-});
-
-Route::get('/services', function () {
-    return view('services');
-});
-
-Route::get('/about', function () {
-    return view('aboutUs');
-});
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::get('/infocar', function () {
-    return view('info_carro');
+    return view('cliente.info_carro', ['carro' => null, 'relacionados' => collect()]);
 })->name('info-carro');
 
-// Área administrativa
-Route::get('/admHome', function () {
-    return view('adm/admHome');
-})->name('admHome');
+Route::get('/carro/{carro}', [CarroController::class, 'show'])->name('carro.show');
+Route::get('/carros/por-ids', [CarroController::class, 'porIds'])->name('carros.por-ids');
+Route::get('/favoritos', fn() => view('cliente.favoritos'))->name('favoritos');
 
-Route::get('/login-adm', function () {
-    return view('login/login-adm');
-})->name('login-adm');
+// Login unificado
+Route::get('/login',  [LoginController::class, 'showLogin'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 
-Route::get('/login-cliente', [LoginClienteController::class, 'showLogin'])->name('login-cliente');
+// Aliases para compatibilidade com middlewares e links existentes
+Route::get('/login-adm',     fn() => redirect()->route('login'))->name('login-adm');
+Route::get('/login-cliente', fn() => redirect()->route('login'))->name('login-cliente');
 
-Route::get('/admGerCar', function () {
-    return view('/adm/admGerCar');
-});
+Route::post('/logout-adm', [LoginAdmController::class, 'logout'])->name('adm.logout');
 
-Route::get('/confirmar-email', function () {
-    return view('/login/confirmar-email');
-});
+// Painel admin (protegido)
+Route::prefix('adm')->name('adm.')->middleware('admin.autenticado')->group(function () {
 
-Route::prefix('adm')->name('adm.')->group(function () {
-    Route::get('/carros', [AdmCarroController::class, 'index'])->name('carros.index');
-    Route::post('/carros', [AdmCarroController::class, 'store'])->name('carros.store');
-    Route::put('/carros/{carro}', [AdmCarroController::class, 'update'])->name('carros.update');
-    Route::delete('/carros/{carro}', [AdmCarroController::class, 'destroy'])->name('carros.destroy');
+    Route::get('/', [AdmDashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/usuarios', [AdmUserController::class, 'index'])->name('usuarios.index');
-    Route::post('/usuarios', [AdmUserController::class, 'store'])->name('usuarios.store');
-    Route::put('/usuarios/{cliente}', [AdmUserController::class, 'update'])->name('usuarios.update');
-    Route::delete('/usuarios/{cliente}', [AdmUserController::class, 'destroy'])->name('usuarios.destroy');
+    Route::prefix('marcas')->name('marcas.')->group(function () {
+        Route::post('/',                       [AdmMarcaController::class, 'store'])->name('store');
+        Route::post('/{marca}/logo',           [AdmMarcaController::class, 'updateLogo'])->name('logo');
+        Route::delete('/{marca}',              [AdmMarcaController::class, 'destroy'])->name('destroy');
+    });
 
-    Route::get('/pedidos', [AdmPedidoController::class, 'index'])->name('pedidos.index');
-    Route::post('/pedidos', [AdmPedidoController::class, 'store'])->name('pedidos.store');
-    Route::put('/pedidos/{pedido}', [AdmPedidoController::class, 'update'])->name('pedidos.update');
-    Route::delete('/pedidos/{pedido}', [AdmPedidoController::class, 'destroy'])->name('pedidos.destroy');
+    Route::prefix('carros')->name('carros.')->group(function () {
+        Route::get('/',                    [AdmCarroController::class, 'index'])->name('index');
+        Route::post('/',                   [AdmCarroController::class, 'store'])->name('store');
+        Route::put('/{carro}',             [AdmCarroController::class, 'update'])->name('update');
+        Route::post('/{carro}/destacar',   [AdmCarroController::class, 'destacar'])->name('destacar');
+        Route::delete('/fotos/{foto}',     [AdmCarroController::class, 'destroyFoto'])->name('fotos.destroy');
+        Route::delete('/{carro}',          [AdmCarroController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('usuarios')->name('usuarios.')->group(function () {
+        Route::get('/',              [AdmClienteController::class, 'index'])->name('index');
+        Route::post('/',             [AdmClienteController::class, 'store'])->name('store');
+        Route::put('/{cliente}',     [AdmClienteController::class, 'update'])->name('update');
+        Route::delete('/{cliente}',  [AdmClienteController::class, 'destroy'])->name('destroy');
+    });
+
+    Route::prefix('pedidos')->name('pedidos.')->group(function () {
+        Route::get('/',             [AdmPedidoController::class, 'index'])->name('index');
+        Route::post('/',            [AdmPedidoController::class, 'store'])->name('store');
+        Route::put('/{pedido}',     [AdmPedidoController::class, 'update'])->name('update');
+        Route::delete('/{pedido}',  [AdmPedidoController::class, 'destroy'])->name('destroy');
+    });
+
 });
 
 // Alias p/ não quebrar os links atuais das views
@@ -89,9 +95,12 @@ Route::get('/admGerUser', function () { return redirect()->route('adm.usuarios.i
 Route::get('/admGerPed', function () { return redirect()->route('adm.pedidos.index'); })->name('admGerPed');
 
 
-// Login
-Route::get('/login-cliente', [LoginClienteController::class, 'showLogin'])->name('login-cliente');
-Route::post('/login-cliente', [LoginClienteController::class, 'login']);
+
+// Recuperação de senha
+Route::get('/esqueci-senha', [EsqueciSenhaController::class, 'showForm'])->name('esqueci-senha');
+Route::post('/esqueci-senha', [EsqueciSenhaController::class, 'enviarLink'])->name('esqueci-senha.enviar');
+Route::get('/redefinir-senha/{token}', [EsqueciSenhaController::class, 'showReset'])->name('senha.redefinir.form');
+Route::post('/redefinir-senha', [EsqueciSenhaController::class, 'redefinir'])->name('senha.redefinir');
 
 // Cadastro
 Route::get('/registrar', [RegistrarClienteController::class, 'showRegistrar'])->name('registrar');
@@ -108,18 +117,23 @@ Route::middleware('cliente.autenticado')->group(function () {
 
     Route::get('/perfil', [PerfilController::class, 'show'])->name('perfil');
     Route::post('/perfil', [PerfilController::class, 'update'])->name('perfil.update');
+    Route::post('/perfil/foto', [PerfilController::class, 'updateFoto'])->name('perfil.foto.update');
+    Route::post('/perfil/endereco', [PerfilController::class, 'updateEndereco'])->name('perfil.endereco.update');
+    Route::delete('/perfil', [PerfilController::class, 'destroy'])->name('perfil.destroy');
     Route::post('/logout', [PerfilController::class, 'logout'])->name('cliente.logout');
 
-    Route::get('/carrinho', function () {
-        return view('carrinho');
-    })->name('carrinho');
+    Route::get('/carrinho',                    [CarrinhoController::class, 'index'])->name('carrinho');
+    Route::post('/carrinho/{carro}/adicionar', [CarrinhoController::class, 'adicionar'])->name('carrinho.adicionar');
+    Route::post('/carrinho/{carro}/remover',   [CarrinhoController::class, 'remover'])->name('carrinho.remover');
+    Route::post('/carrinho/limpar',            [CarrinhoController::class, 'limpar'])->name('carrinho.limpar');
+    Route::get('/checkout',                    [CarrinhoController::class, 'checkout'])->name('checkout');
 
-    Route::get('/checkout', function () {
-        return view('checkout');
-    })->name('checkout');
+    Route::get('/meus-pedidos', [PedidoClienteController::class, 'index'])->name('pedidos.index');
+    Route::post('/pedido', [PedidoClienteController::class, 'store'])->name('pedido.store');
+    Route::get('/pedido/{pedido}', [PedidoClienteController::class, 'show'])->name('pedido.show');
 
-    Route::get('/pedido', function () {
-        return view('pedido');
-    })->name('pedido');
+    Route::post('/stripe/checkout', [StripeController::class, 'checkout'])->name('stripe.checkout');
+    Route::get('/stripe/success',   [StripeController::class, 'success'])->name('stripe.success');
+    Route::get('/stripe/cancel',    [StripeController::class, 'cancel'])->name('stripe.cancel');
 
 });
