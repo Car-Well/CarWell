@@ -53,6 +53,29 @@ class PerfilController extends Controller
         return back()->with('success', 'Informações salvas com sucesso!');
     }
 
+    public function updateFoto(Request $request)
+    {
+        $request->validate([
+            'foto' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ], [
+            'foto.required' => 'Selecione uma imagem.',
+            'foto.image'    => 'O arquivo deve ser uma imagem.',
+            'foto.mimes'    => 'Formatos aceitos: jpg, jpeg, png, webp.',
+            'foto.max'      => 'A imagem deve ter no máximo 2MB.',
+        ]);
+
+        $cliente = Auth::guard('cliente')->user();
+
+        if ($cliente->foto) {
+            GcsStorage::delete($cliente->foto);
+        }
+
+        $path = GcsStorage::store($request->file('foto'), 'fotos');
+        $cliente->update(['foto' => $path]);
+
+        return back()->with('success', 'Foto atualizada com sucesso!');
+    }
+
     public function updateEndereco(Request $request)
     {
         $cliente = Auth::guard('cliente')->user();

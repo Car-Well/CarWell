@@ -69,6 +69,7 @@ Route::prefix('adm')->name('adm.')->middleware('admin.autenticado')->group(funct
         Route::post('/',                   [AdmCarroController::class, 'store'])->name('store');
         Route::put('/{carro}',             [AdmCarroController::class, 'update'])->name('update');
         Route::post('/{carro}/destacar',   [AdmCarroController::class, 'destacar'])->name('destacar');
+        Route::delete('/fotos/{foto}',     [AdmCarroController::class, 'destroyFoto'])->name('fotos.destroy');
         Route::delete('/{carro}',          [AdmCarroController::class, 'destroy'])->name('destroy');
     });
 
@@ -116,6 +117,7 @@ Route::middleware('cliente.autenticado')->group(function () {
 
     Route::get('/perfil', [PerfilController::class, 'show'])->name('perfil');
     Route::post('/perfil', [PerfilController::class, 'update'])->name('perfil.update');
+    Route::post('/perfil/foto', [PerfilController::class, 'updateFoto'])->name('perfil.foto.update');
     Route::post('/perfil/endereco', [PerfilController::class, 'updateEndereco'])->name('perfil.endereco.update');
     Route::delete('/perfil', [PerfilController::class, 'destroy'])->name('perfil.destroy');
     Route::post('/logout', [PerfilController::class, 'logout'])->name('cliente.logout');

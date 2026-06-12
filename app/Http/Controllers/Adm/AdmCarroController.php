@@ -168,6 +168,18 @@ class AdmCarroController extends Controller
         return redirect()->route('adm.carros.index')->with('success', 'Carro atualizado com sucesso.');
     }
 
+    public function destroyFoto(CarroFoto $foto)
+    {
+        if ($foto->is_capa) {
+            return back()->with('error', 'Use "Trocar foto de capa" para alterar a capa.');
+        }
+
+        GcsStorage::delete($foto->path);
+        $foto->delete();
+
+        return back()->with('success', 'Foto removida com sucesso.');
+    }
+
     public function destacar(Carro $carro)
     {
         $carro->update(['destacado' => !$carro->destacado]);

@@ -125,7 +125,7 @@ class AdmClienteController extends Controller
     public function destroy(Cliente $cliente)
     {
         if ($cliente->foto) {
-            Storage::disk('public')->delete($cliente->foto);
+            GcsStorage::delete($cliente->foto);
         }
 
         $cliente->delete();
