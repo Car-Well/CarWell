@@ -188,10 +188,10 @@ body {
 /* Product Image Area */
 .product-image-area {
   flex: 1.2;
-  background: var(--bg-card);
+  background: transparent;
   border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: none;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -230,8 +230,9 @@ body {
 
 .product-main-img {
   width: 100%;
-  max-width: 380px;
-  object-fit: contain;
+  max-width: 460px;
+  object-fit: cover;
+  border-radius: 12px;
   filter: drop-shadow(0 12px 24px rgba(0,0,0,0.12));
 }
 
